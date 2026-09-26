@@ -56,65 +56,67 @@
     if (!host) return;
 
     const loggedIn = isLoggedIn();
+    const lang = window.ShowLinkLanguage?.getLanguage?.() || localStorage.getItem("showlink-language") || "id";
+    const T = (key) => (window.ShowLinkLanguage?.t?.(key) || key);
 
     const guestLinks = `
       <a class="sl-nav-link" href="${CONFIG.platform}">
-        ${icon("sl-icon-blue","fa-circle-info")} Informasi Platform
+        ${icon("sl-icon-blue","fa-circle-info")} <span data-i18n="platformInfo">${T("platformInfo")}</span>
       </a>
       <a class="sl-nav-link" href="${CONFIG.how}">
-        ${icon("sl-icon-orange","fa-route")} Cara Kerja
+        ${icon("sl-icon-orange","fa-route")} <span data-i18n="howItWorks">${T("howItWorks")}</span>
       </a>
       <a class="sl-nav-link" href="${CONFIG.help}">
-        ${icon("sl-icon-purple","fa-circle-question")} Bantuan
+        ${icon("sl-icon-purple","fa-circle-question")} <span data-i18n="help">${T("help")}</span>
       </a>`;
 
     const authLinks = `
       <a class="sl-nav-link" href="${CONFIG.dashboard}">
-        ${icon("sl-icon-blue","fa-house")} Dashboard
+        ${icon("sl-icon-blue","fa-house")} <span data-i18n="dashboard">${T("dashboard")}</span>
       </a>
       <a class="sl-nav-link" href="${CONFIG.createPasteLink}">
-        ${icon("sl-icon-purple","fa-file-circle-plus")} PasteLink
+        ${icon("sl-icon-purple","fa-file-circle-plus")} <span data-i18n="pasteLink">${T("pasteLink")}</span>
       </a>
       <a class="sl-nav-link" href="${CONFIG.createPaymentLink}">
-        ${icon("sl-icon-pink","fa-credit-card")} Payment Link
+        ${icon("sl-icon-pink","fa-credit-card")} <span data-i18n="paymentLink">${T("paymentLink")}</span>
       </a>
       <a class="sl-nav-link" href="${CONFIG.dashboard}#analytics">
-        ${icon("sl-icon-green","fa-chart-line")} Analytics
+        ${icon("sl-icon-green","fa-chart-line")} <span data-i18n="analytics">${T("analytics")}</span>
       </a>`;
 
     host.innerHTML = `
       <div class="sl-shared">
         <header class="sl-navbar" id="showlink-navbar">
           <div class="sl-container sl-navbar-inner">
+            <button class="sl-nav-menu" type="button"
+              aria-label="${T("openMenu")}" aria-expanded="false"
+              data-showlink-menu>${icon("","fa-bars")}</button>
+
             <a class="sl-brand" href="${CONFIG.home}" aria-label="ShowLink">
               <span class="sl-brand-mark">${icon("","fa-link")}</span>
               <span class="sl-brand-text">Show<span>Link</span></span>
             </a>
 
-            <nav class="sl-nav-links" aria-label="Navigasi utama">
+            <nav class="sl-nav-links" aria-label="${T("mainNavigation")}">
               ${loggedIn ? authLinks : guestLinks}
-            <div data-showlink-tools class="showlink-tools" aria-label="ShowLink tools"></div></nav>
+            </nav>
 
             <div class="sl-nav-actions">
+              <div data-showlink-tools class="showlink-tools" aria-label="${T("displayOptions")}"></div>
               ${
                 loggedIn
-                  ? `<a class="sl-btn sl-btn-primary" href="${CONFIG.dashboard}">
-                       ${icon("","fa-gauge-high")} Dashboard
+                  ? `<a class="sl-btn sl-btn-primary sl-desktop-action" href="${CONFIG.dashboard}">
+                       ${icon("","fa-gauge-high")} <span data-i18n="dashboard">${T("dashboard")}</span>
                      </a>`
                   : `
-                    <a class="sl-btn sl-btn-ghost" href="${CONFIG.login}">
-                      ${icon("sl-icon-green","fa-right-to-bracket")} Login
+                    <a class="sl-btn sl-btn-ghost sl-desktop-action" href="${CONFIG.login}">
+                      ${icon("sl-icon-green","fa-right-to-bracket")} <span data-i18n="login">${T("login")}</span>
                     </a>
-                    <a class="sl-btn sl-btn-primary" href="${CONFIG.register}">
-                      ${icon("","fa-user-plus")} Register
+                    <a class="sl-btn sl-btn-primary sl-desktop-action" href="${CONFIG.register}">
+                      ${icon("","fa-user-plus")} <span data-i18n="register">${T("register")}</span>
                     </a>
                   `
               }
-              <button class="sl-nav-menu" type="button"
-                aria-label="Buka menu" aria-expanded="false"
-                data-showlink-menu>
-                ${icon("","fa-bars")}
-              </button>
             </div>
           </div>
 
@@ -124,14 +126,14 @@
                 loggedIn
                   ? `${authLinks}
                      <a class="sl-mobile-link" href="${CONFIG.dashboard}#settings">
-                       ${icon("sl-icon-yellow","fa-gear")} Settings
+                       ${icon("sl-icon-yellow","fa-gear")} <span data-i18n="settings">${T("settings")}</span>
                      </a>`
                   : `${guestLinks}
                      <a class="sl-mobile-link" href="${CONFIG.login}">
-                       ${icon("sl-icon-green","fa-right-to-bracket")} Login
+                       ${icon("sl-icon-green","fa-right-to-bracket")} <span data-i18n="login">${T("login")}</span>
                      </a>
                      <a class="sl-mobile-link" href="${CONFIG.register}">
-                       ${icon("sl-icon-yellow","fa-user-plus")} Register
+                       ${icon("sl-icon-yellow","fa-user-plus")} <span data-i18n="register">${T("register")}</span>
                      </a>`
               }
             </div>
@@ -163,6 +165,7 @@
     if (!host) return;
 
     const year = new Date().getFullYear();
+    const T = (key) => (window.ShowLinkLanguage?.t?.(key) || key);
 
     host.innerHTML = `
       <div class="sl-shared">
@@ -172,20 +175,19 @@
               <span class="sl-brand-mark">${icon("","fa-link")}</span>
               <span class="sl-footer-brand-text">
                 <strong>ShowLink</strong>
-                <small>Simple digital links.</small>
+                <small data-i18n="footerTagline">${T("footerTagline")}</small>
               </span>
             </a>
 
-            <nav class="sl-footer-links" aria-label="Footer">
-              <a href="${CONFIG.terms}">Terms of Service</a>
-              <a href="${CONFIG.privacy}">Privacy Policy</a>
-              <a href="${CONFIG.contact}">Contact Person</a>
+            <nav class="sl-footer-links" aria-label="${T("footerNavigation")}">
+              <a href="${CONFIG.terms}" data-i18n="terms">${T("terms")}</a>
+              <a href="${CONFIG.privacy}" data-i18n="privacy">${T("privacy")}</a>
+              <a href="${CONFIG.contact}" data-i18n="contact">${T("contact")}</a>
             </nav>
           </div>
 
           <div class="sl-container sl-footer-bottom">
-            <span>Copyright © ${year} <strong>ShowLink</strong>. All Rights Reserved.</span>
-            <span>${icon("sl-icon-green","fa-shield-halved")} Secure digital platform</span>
+            <span data-i18n="copyright">Copyright © ${year} ShowLink. All Rights Reserved.</span>
           </div>
         </footer>
       </div>
@@ -231,217 +233,369 @@
 /* ============================================================
    ShowLink Theme + Language Manager
    ============================================================ */
-(function () {
+(() => {
+  "use strict";
+
   const THEME_KEY = "showlink-theme";
   const LANG_KEY = "showlink-language";
 
   const translations = {
     id: {
-      platformInfo: "Informasi Platform",
-      howItWorks: "Cara Kerja",
-      help: "Bantuan",
-      login: "Login",
-      register: "Register",
-      theme: "Tema",
-      light: "Terang",
-      dark: "Gelap",
-      language: "Bahasa",
-      indonesia: "Indonesia",
-      english: "Inggris",
-      terms: "Ketentuan Layanan",
-      privacy: "Kebijakan Privasi",
-      contact: "Kontak",
-      allRights: "Hak cipta dilindungi.",
-      create: "Buat sekarang",
-      pasteLink: "PasteLink",
-      paymentLink: "Payment Link"
+      platformInfo:"Informasi Platform", howItWorks:"Cara Kerja", help:"Bantuan",
+      login:"Login", register:"Register", dashboard:"Dashboard", pasteLink:"PasteLink",
+      paymentLink:"Payment Link", analytics:"Analytics", settings:"Pengaturan",
+      openMenu:"Buka menu", mainNavigation:"Navigasi utama", displayOptions:"Opsi tampilan",
+      theme:"Tema", light:"Terang", dark:"Gelap", language:"Bahasa",
+      indonesia:"Indonesia", english:"Inggris", terms:"Terms of Service",
+      privacy:"Privacy Policy", contact:"Contact Person", footerNavigation:"Navigasi footer",
+      footerTagline:"Simple digital links.", copyright:"Copyright © {year} ShowLink. All Rights Reserved.",
+      themeLight:"Tema terang", themeDark:"Tema gelap", chooseLanguage:"Pilih bahasa"
     },
     en: {
-      platformInfo: "Platform Information",
-      howItWorks: "How It Works",
-      help: "Help",
-      login: "Login",
-      register: "Register",
-      theme: "Theme",
-      light: "Light",
-      dark: "Dark",
-      language: "Language",
-      indonesia: "Indonesian",
-      english: "English",
-      terms: "Terms of Service",
-      privacy: "Privacy Policy",
-      contact: "Contact",
-      allRights: "All rights reserved.",
-      create: "Create now",
-      pasteLink: "PasteLink",
-      paymentLink: "Payment Link"
+      platformInfo:"Platform Information", howItWorks:"How It Works", help:"Help",
+      login:"Login", register:"Register", dashboard:"Dashboard", pasteLink:"PasteLink",
+      paymentLink:"Payment Link", analytics:"Analytics", settings:"Settings",
+      openMenu:"Open menu", mainNavigation:"Main navigation", displayOptions:"Display options",
+      theme:"Theme", light:"Light", dark:"Dark", language:"Language",
+      indonesia:"Indonesian", english:"English", terms:"Terms of Service",
+      privacy:"Privacy Policy", contact:"Contact Person", footerNavigation:"Footer navigation",
+      footerTagline:"Simple digital links.", copyright:"Copyright © {year} ShowLink. All Rights Reserved.",
+      themeLight:"Light theme", themeDark:"Dark theme", chooseLanguage:"Choose language"
+    }
+  };
+
+  const pageTranslations = {
+    id: {
+      "SHOWLINK • SIMPLE DIGITAL LINKS":"SHOWLINK • SIMPLE DIGITAL LINKS",
+      "Buat link yang":"Buat link yang", "punya tujuan.":"punya tujuan.",
+      "Bagikan konten lewat":"Bagikan konten lewat",
+      "atau buat":"atau buat",
+      "untuk menjual akses. Satu link, satu pengalaman yang simpel.":"untuk menjual akses. Satu link, satu pengalaman yang simpel.",
+      "Buat PasteLink":"Buat PasteLink","Buat Payment Link":"Buat Payment Link",
+      "Mudah dibuat":"Mudah dibuat","Akses terkontrol":"Akses terkontrol","Mobile friendly":"Mobile friendly",
+      "Your content.":"Your content.","Your link.":"Your link.","Live":"Live",
+      "PUBLIC LINK":"PUBLIC LINK","Share your content":"Share your content","Sell access":"Sell access",
+      "views":"views","sales":"sales","growth":"growth",
+      "Publish content instantly":"Publish content instantly","Sell access with one URL":"Sell access with one URL",
+      "See views & transactions":"See views & transactions","Manage your balance":"Manage your balance",
+      "Satu halaman untuk semua kontenmu.":"Satu halaman untuk semua kontenmu.",
+      "Buat halaman yang berisi teks, link, informasi, panduan, atau konten lain. Setelah selesai, ShowLink memberikan URL pendek yang mudah dibagikan.":"Buat halaman yang berisi teks, link, informasi, panduan, atau konten lain. Setelah selesai, ShowLink memberikan URL pendek yang mudah dibagikan.",
+      "Edit seluruh isi":"Edit seluruh isi","Konten, judul, deskripsi, dan pengaturan tetap bisa dikelola setelah dibuat.":"Konten, judul, deskripsi, dan pengaturan tetap bisa dikelola setelah dibuat.",
+      "URL pendek":"URL pendek","Statistik":"Statistik","Pantau kunjungan dan performa halaman.":"Pantau kunjungan dan performa halaman.",
+      "Mulai membuat PasteLink":"Mulai membuat PasteLink",
+      "Jual akses dengan satu link pembayaran.":"Jual akses dengan satu link pembayaran.",
+      "Buat Payment Link, tentukan harga, lalu bagikan link. Pengunjung akan diarahkan ke pembayaran terlebih dahulu. Konten dibuka setelah pembayaran berhasil diverifikasi.":"Buat Payment Link, tentukan harga, lalu bagikan link. Pengunjung akan diarahkan ke pembayaran terlebih dahulu. Konten dibuka setelah pembayaran berhasil diverifikasi.",
+      "Tentukan harga":"Tentukan harga","Atur harga produk atau akses sesuai kebutuhanmu.":"Atur harga produk atau akses sesuai kebutuhanmu.",
+      "Konten terlindungi":"Konten terlindungi","Konten tidak dibuka sebelum status pembayaran valid.":"Konten tidak dibuka sebelum status pembayaran valid.",
+      "Akses otomatis":"Akses otomatis","Setelah pembayaran terverifikasi, sistem memberikan akses.":"Setelah pembayaran terverifikasi, sistem memberikan akses.",
+      "Secure checkout":"Secure checkout","DIGITAL CONTENT":"DIGITAL CONTENT","Premium Content":"Premium Content",
+      "Access after payment":"Access after payment","Total":"Total","Bayar & Buka Konten":"Bayar & Buka Konten",
+      "Payment verified before content access":"Payment verified before content access",
+      "Semudah membuat dan membagikan link.":"Semudah membuat dan membagikan link.",
+      "ShowLink dibuat supaya creator tidak perlu melewati alur yang rumit.":"ShowLink dibuat supaya creator tidak perlu melewati alur yang rumit.",
+      "Buat":"Buat","Pilih PasteLink atau Payment Link lalu isi konten yang ingin kamu publikasikan.":"Pilih PasteLink atau Payment Link lalu isi konten yang ingin kamu publikasikan.",
+      "Dapatkan Link":"Dapatkan Link","Setelah dibuat, kamu mendapatkan URL pendek ShowLink yang mudah dibagikan.":"Setelah dibuat, kamu mendapatkan URL pendek ShowLink yang mudah dibagikan.",
+      "Bagikan":"Bagikan","Kirim link ke WhatsApp, Telegram, Instagram, website, atau platform lainnya.":"Kirim link ke WhatsApp, Telegram, Instagram, website, atau platform lainnya.",
+      "Kelola":"Kelola","Lihat performa, transaksi, dan penghasilan dari dashboard akunmu.":"Lihat performa, transaksi, dan penghasilan dari dashboard akunmu.",
+      "Fokus pada link yang benar-benar berguna.":"Fokus pada link yang benar-benar berguna.",
+      "Tidak perlu puluhan menu. ShowLink dibuat untuk dua kebutuhan utama: membagikan konten dan menjual akses.":"Tidak perlu puluhan menu. ShowLink dibuat untuk dua kebutuhan utama: membagikan konten dan menjual akses.",
+      "Simple":"Simple","Flow singkat dari pembuatan sampai link siap dibagikan.":"Flow singkat dari pembuatan sampai link siap dibagikan.",
+      "Beautiful":"Beautiful","Halaman link dibuat bersih, modern, dan nyaman di mobile.":"Halaman link dibuat bersih, modern, dan nyaman di mobile.",
+      "Controlled":"Controlled","Payment Link menggunakan status transaksi sebagai dasar pemberian akses.":"Payment Link menggunakan status transaksi sebagai dasar pemberian akses.",
+      "Trackable":"Trackable","Performa link dan transaksi bisa dipantau dari dashboard.":"Performa link dan transaksi bisa dipantau dari dashboard.",
+      "Pertanyaan umum.":"Pertanyaan umum.","Informasi dasar sebelum kamu mulai menggunakan ShowLink.":"Informasi dasar sebelum kamu mulai menggunakan ShowLink.",
+      "Apakah PasteLink bisa dibuka tanpa login?":"Apakah PasteLink bisa dibuka tanpa login?",
+      "Ya. Link publik dapat dibuka melalui URL ShowLink. Login digunakan untuk membuat dan mengelola konten.":"Ya. Link publik dapat dibuka melalui URL ShowLink. Login digunakan untuk membuat dan mengelola konten.",
+      "Bagaimana Payment Link bekerja?":"Bagaimana Payment Link bekerja?",
+      "Pengunjung membuka Payment Link, melihat informasi checkout, melakukan pembayaran, lalu konten diberikan setelah pembayaran berhasil diverifikasi.":"Pengunjung membuka Payment Link, melihat informasi checkout, melakukan pembayaran, lalu konten diberikan setelah pembayaran berhasil diverifikasi.",
+      "Apakah saya bisa mengedit PasteLink?":"Apakah saya bisa mengedit PasteLink?",
+      "Konten yang dibuat disimpan sebagai satu kesatuan sehingga nantinya dapat diedit kembali, bukan hanya judulnya.":"Konten yang dibuat disimpan sebagai satu kesatuan sehingga nantinya dapat diedit kembali, bukan hanya judulnya.",
+      "Seperti apa URL ShowLink?":"Seperti apa URL ShowLink?",
+      "Mulai dengan satu link.":"Mulai dengan satu link.",
+      "Buat PasteLink untuk berbagi konten atau Payment Link untuk menjual akses.":"Buat PasteLink untuk berbagi konten atau Payment Link untuk menjual akses.",
+      "Mulai Gratis":"Mulai Gratis","READY TO CREATE?":"READY TO CREATE?"
+    },
+    en: {
+      "SHOWLINK • SIMPLE DIGITAL LINKS":"SHOWLINK • SIMPLE DIGITAL LINKS",
+      "Buat link yang":"Create a link with a", "punya tujuan.":"purpose.",
+      "Bagikan konten lewat":"Share content with", "atau buat":"or create a",
+      "untuk menjual akses. Satu link, satu pengalaman yang simpel.":"to sell access. One link, one simple experience.",
+      "Buat PasteLink":"Create PasteLink","Buat Payment Link":"Create Payment Link",
+      "Mudah dibuat":"Easy to create","Akses terkontrol":"Controlled access","Mobile friendly":"Mobile friendly",
+      "Your content.":"Your content.","Your link.":"Your link.","Live":"Live",
+      "PUBLIC LINK":"PUBLIC LINK","Share your content":"Share your content","Sell access":"Sell access",
+      "views":"views","sales":"sales","growth":"growth",
+      "Publish content instantly":"Publish content instantly","Sell access with one URL":"Sell access with one URL",
+      "See views & transactions":"See views & transactions","Manage your balance":"Manage your balance",
+      "Satu halaman untuk semua kontenmu.":"One page for all your content.",
+      "Buat halaman yang berisi teks, link, informasi, panduan, atau konten lain. Setelah selesai, ShowLink memberikan URL pendek yang mudah dibagikan.":"Create a page with text, links, information, guides, or other content. When finished, ShowLink gives you a short URL that is easy to share.",
+      "Edit seluruh isi":"Edit everything","Konten, judul, deskripsi, dan pengaturan tetap bisa dikelola setelah dibuat.":"Content, title, description, and settings can still be managed after creation.",
+      "URL pendek":"Short URL","Statistik":"Analytics","Pantau kunjungan dan performa halaman.":"Track visits and page performance.",
+      "Mulai membuat PasteLink":"Start creating PasteLink",
+      "Jual akses dengan satu link pembayaran.":"Sell access with one payment link.",
+      "Buat Payment Link, tentukan harga, lalu bagikan link. Pengunjung akan diarahkan ke pembayaran terlebih dahulu. Konten dibuka setelah pembayaran berhasil diverifikasi.":"Create a Payment Link, set a price, and share it. Visitors are sent to checkout first. Content opens after payment is successfully verified.",
+      "Tentukan harga":"Set a price","Atur harga produk atau akses sesuai kebutuhanmu.":"Set the product or access price you need.",
+      "Konten terlindungi":"Protected content","Konten tidak dibuka sebelum status pembayaran valid.":"Content stays locked until payment is valid.",
+      "Akses otomatis":"Automatic access","Setelah pembayaran terverifikasi, sistem memberikan akses.":"Access is granted automatically after payment is verified.",
+      "Secure checkout":"Secure checkout","DIGITAL CONTENT":"DIGITAL CONTENT","Premium Content":"Premium Content",
+      "Access after payment":"Access after payment","Total":"Total","Bayar & Buka Konten":"Pay & Open Content",
+      "Payment verified before content access":"Payment verified before content access",
+      "Semudah membuat dan membagikan link.":"As easy as creating and sharing a link.",
+      "ShowLink dibuat supaya creator tidak perlu melewati alur yang rumit.":"ShowLink keeps the creator flow simple.",
+      "Buat":"Create","Pilih PasteLink atau Payment Link lalu isi konten yang ingin kamu publikasikan.":"Choose PasteLink or Payment Link and add the content you want to publish.",
+      "Dapatkan Link":"Get the Link","Setelah dibuat, kamu mendapatkan URL pendek ShowLink yang mudah dibagikan.":"After creation, you get a short ShowLink URL that is easy to share.",
+      "Bagikan":"Share","Kirim link ke WhatsApp, Telegram, Instagram, website, atau platform lainnya.":"Send the link to WhatsApp, Telegram, Instagram, your website, or other platforms.",
+      "Kelola":"Manage","Lihat performa, transaksi, dan penghasilan dari dashboard akunmu.":"View performance, transactions, and earnings from your dashboard.",
+      "Fokus pada link yang benar-benar berguna.":"Focus on links that matter.",
+      "Tidak perlu puluhan menu. ShowLink dibuat untuk dua kebutuhan utama: membagikan konten dan menjual akses.":"No need for dozens of menus. ShowLink focuses on two core needs: sharing content and selling access.",
+      "Simple":"Simple","Flow singkat dari pembuatan sampai link siap dibagikan.":"A short flow from creation to a shareable link.",
+      "Beautiful":"Beautiful","Halaman link dibuat bersih, modern, dan nyaman di mobile.":"Link pages are clean, modern, and mobile friendly.",
+      "Controlled":"Controlled","Payment Link menggunakan status transaksi sebagai dasar pemberian akses.":"Payment Links use transaction status as the basis for access.",
+      "Trackable":"Trackable","Performa link dan transaksi bisa dipantau dari dashboard.":"Link and transaction performance can be tracked from the dashboard.",
+      "Pertanyaan umum.":"Frequently asked questions.","Informasi dasar sebelum kamu mulai menggunakan ShowLink.":"Basic information before you start using ShowLink.",
+      "Apakah PasteLink bisa dibuka tanpa login?":"Can PasteLink be opened without login?",
+      "Ya. Link publik dapat dibuka melalui URL ShowLink. Login digunakan untuk membuat dan mengelola konten.":"Yes. Public links can be opened through their ShowLink URL. Login is used to create and manage content.",
+      "Bagaimana Payment Link bekerja?":"How does Payment Link work?",
+      "Pengunjung membuka Payment Link, melihat informasi checkout, melakukan pembayaran, lalu konten diberikan setelah pembayaran berhasil diverifikasi.":"Visitors open a Payment Link, view checkout information, pay, and receive the content after payment is verified.",
+      "Apakah saya bisa mengedit PasteLink?":"Can I edit a PasteLink?",
+      "Konten yang dibuat disimpan sebagai satu kesatuan sehingga nantinya dapat diedit kembali, bukan hanya judulnya.":"Created content is stored as one complete piece so it can be edited later, not just the title.",
+      "Seperti apa URL ShowLink?":"What does a ShowLink URL look like?",
+      "Mulai dengan satu link.":"Start with one link.",
+      "Buat PasteLink untuk berbagi konten atau Payment Link untuk menjual akses.":"Create a PasteLink to share content or a Payment Link to sell access.",
+      "Mulai Gratis":"Start Free","READY TO CREATE?":"READY TO CREATE?"
     }
   };
 
   function getTheme() {
-    const saved = localStorage.getItem(THEME_KEY);
-    if (saved === "dark" || saved === "light") return saved;
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark" : "light";
+    const v = localStorage.getItem(THEME_KEY);
+    if (v === "dark" || v === "light") return v;
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
 
   function getLanguage() {
-    const saved = localStorage.getItem(LANG_KEY);
-    return saved === "en" ? "en" : "id";
+    return localStorage.getItem(LANG_KEY) === "en" ? "en" : "id";
   }
 
-  function applyTheme(theme, persist = true) {
+  function t(key) {
+    const lang = getLanguage();
+    let value = translations[lang][key] ?? key;
+    if (key === "copyright") value = value.replace("{year}", new Date().getFullYear());
+    return value;
+  }
+
+  function applyTheme(theme, persist=true) {
+    theme = theme === "dark" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.style.colorScheme = theme;
     if (persist) localStorage.setItem(THEME_KEY, theme);
 
     document.querySelectorAll("[data-theme-label]").forEach(el => {
-      el.textContent = theme === "dark"
-        ? (translations[getLanguage()].dark || "Dark")
-        : (translations[getLanguage()].light || "Light");
+      el.textContent = theme === "dark" ? t("dark") : t("light");
     });
-
     document.querySelectorAll("[data-theme-icon]").forEach(el => {
-      el.textContent = theme === "dark" ? "☀️" : "🌙";
+      el.innerHTML = theme === "dark" ? "☀️" : "🌙";
+    });
+    document.querySelectorAll("[data-theme-option]").forEach(el => {
+      const active = el.dataset.themeOption === theme;
+      el.classList.toggle("is-active", active);
+      const c = el.querySelector(".sl-check"); if (c) c.textContent = active ? "✓" : "";
     });
   }
 
-  function applyLanguage(lang, persist = true) {
-    lang = lang === "en" ? "en" : "id";
-    document.documentElement.setAttribute("lang", lang);
-    if (persist) localStorage.setItem(LANG_KEY, lang);
-
-    const t = translations[lang];
+  function translatePage() {
+    const lang = getLanguage();
+    document.documentElement.lang = lang;
 
     document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      if (Object.prototype.hasOwnProperty.call(t, key)) {
-        if (el.dataset.i18nHtml === "true") el.innerHTML = t[key];
-        else el.textContent = t[key];
+      const key = el.dataset.i18n;
+      if (translations[lang][key] !== undefined) {
+        el.textContent = t(key);
       }
     });
 
-    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-      const key = el.getAttribute("data-i18n-placeholder");
-      if (Object.prototype.hasOwnProperty.call(t, key)) {
-        el.setAttribute("placeholder", t[key]);
-      }
+    // Translate static index text nodes without forcing page authors to duplicate markup.
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      if (n.parentElement?.closest("[data-no-translate]")) continue;
+      if (n.parentElement?.matches("script,style")) continue;
+      nodes.push(n);
+    }
+    const map = pageTranslations[lang];
+    nodes.forEach(n => {
+      const original = n.nodeValue.trim();
+      if (!original || !map[original]) return;
+      const leading = n.nodeValue.match(/^\s*/)?.[0] || "";
+      const trailing = n.nodeValue.match(/\s*$/)?.[0] || "";
+      n.nodeValue = leading + map[original] + trailing;
     });
 
     document.querySelectorAll("[data-lang-option]").forEach(el => {
-      const active = el.getAttribute("data-lang-option") === lang;
+      const active = el.dataset.langOption === lang;
+      el.classList.toggle("is-active", active);
+      const c = el.querySelector(".sl-check"); if (c) c.textContent = active ? "✓" : "";
+    });
+    document.querySelectorAll("[data-lang-label]").forEach(el => el.textContent = lang === "en" ? "EN" : "ID");
+
+    // Page metadata
+    if (lang === "en") {
+      document.title = "ShowLink — Create. Share. Get Paid.";
+      document.querySelector('meta[name="description"]')?.setAttribute("content",
+        "ShowLink — create PasteLinks and Payment Links. Share content, sell access, and manage earnings in one platform.");
+      document.querySelector('meta[property="og:title"]')?.setAttribute("content","ShowLink — Create. Share. Get Paid.");
+      document.querySelector('meta[property="og:description"]')?.setAttribute("content","Create PasteLinks and Payment Links easily with ShowLink.");
+    } else {
+      document.title = "ShowLink — Create. Share. Get Paid.";
+      document.querySelector('meta[name="description"]')?.setAttribute("content",
+        "ShowLink — buat PasteLink dan Payment Link. Bagikan konten, jual akses, dan kelola penghasilan dalam satu platform.");
+      document.querySelector('meta[property="og:title"]')?.setAttribute("content","ShowLink — Create. Share. Get Paid.");
+      document.querySelector('meta[property="og:description"]')?.setAttribute("content","Buat PasteLink dan Payment Link dengan mudah di ShowLink.");
+    }
+  }
+
+  function closeMenus(except) {
+    document.querySelectorAll(".showlink-tool.is-open").forEach(x => {
+      if (x !== except) {
+        x.classList.remove("is-open");
+        x.querySelector(".showlink-tool-btn")?.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  function syncControlState() {
+    const theme = getTheme();
+    const lang = getLanguage();
+
+    document.querySelectorAll("[data-theme-option]").forEach(el => {
+      const active = el.dataset.themeOption === theme;
       el.classList.toggle("is-active", active);
       const check = el.querySelector(".sl-check");
       if (check) check.textContent = active ? "✓" : "";
     });
-
+    document.querySelectorAll("[data-lang-option]").forEach(el => {
+      const active = el.dataset.langOption === lang;
+      el.classList.toggle("is-active", active);
+      const check = el.querySelector(".sl-check");
+      if (check) check.textContent = active ? "✓" : "";
+    });
+    document.querySelectorAll("[data-theme-label]").forEach(el => {
+      el.textContent = theme === "dark" ? t("dark") : t("light");
+    });
+    document.querySelectorAll("[data-theme-icon]").forEach(el => {
+      el.textContent = theme === "dark" ? "☀️" : "🌙";
+    });
     document.querySelectorAll("[data-lang-label]").forEach(el => {
       el.textContent = lang === "en" ? "EN" : "ID";
-    });
-
-    applyTheme(getTheme(), false);
-  }
-
-  function closeToolMenus(except) {
-    document.querySelectorAll(".showlink-tool.is-open").forEach(tool => {
-      if (tool !== except) tool.classList.remove("is-open");
     });
   }
 
   function buildControls() {
     document.querySelectorAll("[data-showlink-tools]").forEach(container => {
-      if (container.dataset.slToolsReady === "true") return;
       container.dataset.slToolsReady = "true";
-
       container.innerHTML = `
         <div class="showlink-tool" data-theme-tool>
-          <button class="showlink-tool-btn" type="button"
-                  aria-label="Theme" aria-expanded="false"
-                  data-theme-toggle>
-            <span class="sl-tool-icon" data-theme-icon>🌙</span>
-            <span class="showlink-tool-text" data-theme-label>Terang</span>
+          <button class="showlink-tool-btn" type="button" aria-label="${t("theme")}" aria-expanded="false" data-theme-toggle>
+            <span class="sl-tool-icon" data-theme-icon></span><span class="showlink-tool-text" data-theme-label></span>
           </button>
-          <div class="showlink-tool-menu" role="menu">
-            <button class="showlink-tool-option" type="button"
-                    data-theme-option="light">
-              <span>☀️</span><span data-i18n="light">Terang</span>
-              <span class="sl-check"></span>
-            </button>
-            <button class="showlink-tool-option" type="button"
-                    data-theme-option="dark">
-              <span>🌙</span><span data-i18n="dark">Gelap</span>
-              <span class="sl-check"></span>
-            </button>
+          <div class="showlink-tool-menu" role="menu" aria-label="${t("theme")}">
+            <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="light"><span>☀️</span><span data-i18n="light">${t("light")}</span><span class="sl-check"></span></button>
+            <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="dark"><span>🌙</span><span data-i18n="dark">${t("dark")}</span><span class="sl-check"></span></button>
           </div>
         </div>
-
         <div class="showlink-tool" data-language-tool>
-          <button class="showlink-tool-btn" type="button"
-                  aria-label="Language" aria-expanded="false"
-                  data-language-toggle>
-            <span class="sl-tool-icon">🌐</span>
-            <span class="showlink-lang-label" data-lang-label>ID</span>
+          <button class="showlink-tool-btn" type="button" aria-label="${t("language")}" aria-expanded="false" data-language-toggle>
+            <span class="sl-tool-icon">🌐</span><span class="showlink-lang-label" data-lang-label></span>
           </button>
-          <div class="showlink-tool-menu" role="menu">
-            <button class="showlink-tool-option" type="button"
-                    data-lang-option="id">
-              <span>🇮🇩</span><span data-i18n="indonesia">Indonesia</span>
-              <span class="sl-check"></span>
-            </button>
-            <button class="showlink-tool-option" type="button"
-                    data-lang-option="en">
-              <span>🇬🇧</span><span data-i18n="english">Inggris</span>
-              <span class="sl-check"></span>
-            </button>
+          <div class="showlink-tool-menu" role="menu" aria-label="${t("language")} ">
+            <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="id"><span>🇮🇩</span><span data-i18n="indonesia">${t("indonesia")}</span><span class="sl-check"></span></button>
+            <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="en"><span>🇬🇧</span><span data-i18n="english">${t("english")}</span><span class="sl-check"></span></button>
           </div>
-        </div>
-      `;
-
-      const themeTool = container.querySelector("[data-theme-tool]");
-      const langTool = container.querySelector("[data-language-tool]");
-
-      container.querySelector("[data-theme-toggle]").addEventListener("click", (e) => {
-        e.stopPropagation();
-        const open = themeTool.classList.toggle("is-open");
-        langTool.classList.remove("is-open");
-        e.currentTarget.setAttribute("aria-expanded", String(open));
-      });
-
-      container.querySelector("[data-language-toggle]").addEventListener("click", (e) => {
-        e.stopPropagation();
-        const open = langTool.classList.toggle("is-open");
-        themeTool.classList.remove("is-open");
-        e.currentTarget.setAttribute("aria-expanded", String(open));
-      });
-
-      container.querySelectorAll("[data-theme-option]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          applyTheme(btn.getAttribute("data-theme-option"));
-          themeTool.classList.remove("is-open");
-          container.querySelector("[data-theme-toggle]").setAttribute("aria-expanded", "false");
-        });
-      });
-
-      container.querySelectorAll("[data-lang-option]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          applyLanguage(btn.getAttribute("data-lang-option"));
-          langTool.classList.remove("is-open");
-          container.querySelector("[data-language-toggle]").setAttribute("aria-expanded", "false");
-        });
-      });
+        </div>`;
     });
+    syncControlState();
+  }
+
+  // Delegated click handler: survives navbar/footer re-rendering and works on
+  // both desktop and mobile without relying on stale element listeners.
+  function initControlEvents() {
+    if (window.__showLinkControlEventsReady) return;
+    window.__showLinkControlEventsReady = true;
+
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
+
+      const themeToggle = target.closest("[data-theme-toggle]");
+      if (themeToggle) {
+        event.preventDefault();
+        event.stopPropagation();
+        const tool = themeToggle.closest("[data-theme-tool]");
+        const open = !tool?.classList.contains("is-open");
+        closeMenus(tool);
+        tool?.classList.toggle("is-open", open);
+        themeToggle.setAttribute("aria-expanded", String(open));
+        return;
+      }
+
+      const languageToggle = target.closest("[data-language-toggle]");
+      if (languageToggle) {
+        event.preventDefault();
+        event.stopPropagation();
+        const tool = languageToggle.closest("[data-language-tool]");
+        const open = !tool?.classList.contains("is-open");
+        closeMenus(tool);
+        tool?.classList.toggle("is-open", open);
+        languageToggle.setAttribute("aria-expanded", String(open));
+        return;
+      }
+
+      const themeOption = target.closest("[data-theme-option]");
+      if (themeOption) {
+        event.preventDefault();
+        event.stopPropagation();
+        applyTheme(themeOption.dataset.themeOption);
+        closeMenus();
+        return;
+      }
+
+      const languageOption = target.closest("[data-lang-option]");
+      if (languageOption) {
+        event.preventDefault();
+        event.stopPropagation();
+        localStorage.setItem(LANG_KEY, languageOption.dataset.langOption === "en" ? "en" : "id");
+        closeMenus();
+        window.ShowLinkUI?.refresh();
+        buildControls();
+        translatePage();
+        applyTheme(getTheme(), false);
+        syncControlState();
+        return;
+      }
+
+      if (!target.closest(".showlink-tool")) closeMenus();
+    }, true);
   }
 
   function boot() {
+    initControlEvents();
     applyTheme(getTheme(), false);
-    applyLanguage(getLanguage(), false);
+    // Navbar/footer are rendered first, then controls are attached.
+    window.ShowLinkUI?.refresh();
     buildControls();
-    applyLanguage(getLanguage(), false);
+    translatePage();
+    applyTheme(getTheme(), false);
+    syncControlState();
   }
 
-  document.addEventListener("click", () => closeToolMenus());
-  document.addEventListener("DOMContentLoaded", boot);
+  window.ShowLinkLanguage = { getLanguage, applyLanguage(lang) {
+    localStorage.setItem(LANG_KEY, lang === "en" ? "en" : "id");
+    window.ShowLinkUI?.refresh();
+    translatePage();
+    buildControls();
+  }, t, translations };
 
-  window.ShowLinkTheme = { applyTheme, getTheme };
-  window.ShowLinkLanguage = { applyLanguage, getLanguage, translations };
+  window.ShowLinkTheme = { getTheme, applyTheme };
+
+  document.addEventListener("DOMContentLoaded", boot);
 })();
