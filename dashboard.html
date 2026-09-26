@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<meta name="description" content="Dashboard akun ShowLink.">
+<title>Dashboard — ShowLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/assets/css/showlink-components.css"><link rel="stylesheet" href="/css/dashboard.css">
+<link rel="icon" href="/assets/icons/favicon.ico">
+<script>(function(){try{var t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}})();</script>
+</head>
+<body class="dashboard-page" data-page-title-id="Dashboard — ShowLink" data-page-title-en="Dashboard — ShowLink">
+<div data-showlink-navbar></div>
+<main class="dash-main">
+  <div class="sl-container">
+    <section class="dash-hero">
+      <div>
+        <span class="dash-kicker"><i class="fa-solid fa-gauge-high"></i> SHOWLINK DASHBOARD</span>
+        <h1><span data-i18n="dashboardWelcome">Selamat datang</span>, <strong data-user-name>—</strong></h1>
+        <p data-i18n="dashboardIntro">Kelola akun dan aktivitas ShowLink kamu dari satu tempat.</p>
+      </div>
+      <button class="dash-logout" type="button" data-logout><i class="fa-solid fa-right-from-bracket"></i><span data-i18n="signOut">Keluar</span></button>
+    </section>
+
+    <section class="dash-grid">
+      <article class="dash-card profile-card">
+        <div class="dash-card-head"><div><span class="dash-label" data-i18n="accountOverview">Ringkasan akun</span><h2 data-user-name>—</h2></div><div class="dash-avatar" data-avatar><i class="fa-solid fa-user"></i></div></div>
+        <div class="profile-list">
+          <div><span data-i18n="accountEmail">Email akun</span><strong data-user-email>—</strong></div>
+          <div><span data-i18n="accountPlan">Paket</span><strong data-user-plan>Free</strong></div>
+          <div><span data-i18n="accountCreated">Bergabung sejak</span><strong data-user-created>—</strong></div>
+        </div>
+        <a class="dash-outline" href="#settings"><i class="fa-solid fa-user-pen"></i><span data-i18n="editProfile">Edit profil</span></a>
+      </article>
+
+      <article class="dash-card plan-card">
+        <div class="dash-card-head"><div><span class="dash-label" data-i18n="accountPlan">Paket</span><h2 data-user-plan>Free</h2></div><i class="fa-solid fa-crown dash-big-icon"></i></div>
+        <p data-i18n="dashboardIntro">Kelola akun dan aktivitas ShowLink kamu dari satu tempat.</p>
+        <a class="dash-primary" href="/"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="platformInfo">Informasi Platform</span></a>
+      </article>
+    </section>
+
+    <section class="dash-stats">
+      <article class="dash-stat"><i class="fa-solid fa-link"></i><div><span data-i18n="totalLinks">Total link</span><strong>0</strong></div></article>
+      <article class="dash-stat"><i class="fa-solid fa-eye"></i><div><span data-i18n="totalViews">Total views</span><strong>0</strong></div></article>
+      <article class="dash-stat"><i class="fa-solid fa-cart-shopping"></i><div><span data-i18n="totalSales">Total penjualan</span><strong>0</strong></div></article>
+    </section>
+
+    <section class="dash-section">
+      <div class="dash-section-head"><div><span class="dash-label" data-i18n="quickActions">Aksi cepat</span><h2>ShowLink</h2></div></div>
+      <div class="dash-actions">
+        <a class="dash-action" href="/create-pastelink.html"><i class="fa-solid fa-file-circle-plus"></i><span><b data-i18n="createPasteLink">Buat PasteLink</b><small>PasteLink</small></span><i class="fa-solid fa-chevron-right"></i></a>
+        <a class="dash-action" href="/create-payment-link.html"><i class="fa-solid fa-credit-card"></i><span><b data-i18n="createPaymentLink">Buat Payment Link</b><small>Payment Link</small></span><i class="fa-solid fa-chevron-right"></i></a>
+      </div>
+    </section>
+
+    <section class="dash-section" id="settings">
+      <div class="dash-section-head"><div><span class="dash-label" data-i18n="settings">Pengaturan</span><h2 data-i18n="accountOverview">Ringkasan akun</h2></div></div>
+      <div class="dash-card settings-card">
+        <div class="settings-row"><span><i class="fa-solid fa-envelope"></i><b data-i18n="accountEmail">Email akun</b></span><strong data-user-email>—</strong></div>
+        <div class="settings-row"><span><i class="fa-solid fa-language"></i><b data-i18n="language">Bahasa</b></span><strong data-current-language>ID</strong></div>
+        <div class="settings-row"><span><i class="fa-solid fa-palette"></i><b data-i18n="theme">Tema</b></span><strong data-current-theme>—</strong></div>
+      </div>
+    </section>
+  </div>
+</main>
+<div data-showlink-footer></div>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-client.js"></script>
+<script src="/assets/js/showlink-components.js" defer></script>
+<script src="/assets/js/dashboard.js" defer></script>
+</body></html>
