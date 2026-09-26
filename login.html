@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<meta name="description" content="Masuk ke akun ShowLink untuk mengelola konten dan link.">
+<title>Login — ShowLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/assets/css/showlink-components.css">
+<link rel="stylesheet" href="/css/auth.css">
+<link rel="icon" href="/assets/icons/favicon.ico">
+<script>(function(){try{var t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}})();</script>
+</head>
+<body class="auth-page" data-page-title-id="Login — ShowLink" data-page-title-en="Login — ShowLink" data-page-description-id="Masuk ke akun ShowLink untuk mengelola konten dan link." data-page-description-en="Sign in to your ShowLink account to manage content and links.">
+<div data-showlink-navbar></div>
+<main class="auth-main">
+  <div class="sl-container auth-wrap">
+    <aside class="auth-intro">
+      <div class="auth-intro-top">
+        <a href="/" class="auth-brand"><span class="brand-mark"><i class="fa-solid fa-link"></i></span>ShowLink</a>
+        <div class="auth-kicker"><i class="fa-solid fa-shield-halved"></i> SHOWLINK ACCOUNT</div>
+        <h1 data-i18n="authWelcome">Selamat datang kembali</h1>
+        <p data-i18n="authWelcomeSub">Masuk untuk melanjutkan ke akun ShowLink.</p>
+        <div class="auth-points">
+          <div class="auth-point"><i class="fa-solid fa-link"></i><span data-i18n="authManage">Kelola PasteLink dan Payment Link</span></div>
+          <div class="auth-point"><i class="fa-solid fa-chart-line"></i><span data-i18n="authAnalytics">Lihat performa dan aktivitas akun</span></div>
+          <div class="auth-point"><i class="fa-solid fa-lock"></i><span data-i18n="authSecure">Akses akun dengan aman</span></div>
+        </div>
+      </div>
+      <div class="auth-art" aria-hidden="true">
+        <div class="auth-art-card main"><div class="auth-art-icon"><i class="fa-solid fa-chart-line"></i></div><div class="auth-art-line long"></div><div class="auth-art-line"></div><div class="auth-art-line short"></div></div>
+        <div class="auth-art-card small"><div class="auth-art-icon"><i class="fa-solid fa-link"></i></div><div class="auth-art-line"></div><div class="auth-art-line short"></div></div>
+      </div>
+    </aside>
+
+    <section class="auth-card" aria-labelledby="login-heading">
+      <div class="auth-head">
+        <div class="auth-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+        <h2 id="login-heading" data-i18n="login">Login</h2>
+        <p data-i18n="authWelcomeSub">Masuk untuk melanjutkan ke akun ShowLink.</p>
+      </div>
+
+      <div class="auth-alert" data-auth-alert role="alert"></div>
+
+      <form class="auth-form" data-auth-form="login" novalidate>
+        <div class="auth-field">
+          <label for="login-email" data-i18n="email">Email</label>
+          <div class="auth-input-wrap">
+            <i class="fa-regular fa-envelope"></i>
+            <input class="auth-input" id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="login-password" data-i18n="password">Password</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input class="auth-input" id="login-password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+            <button class="auth-password-toggle" type="button" data-password-toggle data-target="login-password" aria-label="Show password"><i class="fa-regular fa-eye"></i></button>
+          </div>
+        </div>
+
+        <div class="auth-row">
+          <label class="auth-check"><input type="checkbox" name="remember"> <span data-i18n="rememberMe">Ingat saya</span></label>
+          <a class="auth-link" href="#" data-i18n="forgotPassword">Lupa password?</a>
+        </div>
+
+        <button class="auth-submit" type="submit"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="signIn">Masuk</span></button>
+
+        <div class="auth-divider"><span data-i18n="orContinue">atau lanjutkan dengan</span></div>
+        <button class="auth-google" type="button" data-google-login><i class="fa-brands fa-google"></i><span data-i18n="google">Google</span></button>
+      </form>
+
+      <div class="auth-bottom">
+        <span data-i18n="noAccount">Belum punya akun?</span>
+        <a class="auth-link" href="/register.html" data-i18n="signUp">Daftar</a>
+      </div>
+      <p class="auth-terms" data-i18n="authTerms">Dengan melanjutkan, kamu menyetujui Ketentuan Layanan dan Kebijakan Privasi ShowLink.</p>
+      <a class="auth-back" href="/"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="backHome">Kembali ke beranda</span></a>
+    </section>
+  </div>
+</main>
+<div data-showlink-footer></div>
+<script src="/assets/js/showlink-components.js" defer></script>
+<script src="/assets/js/auth-pages.js" defer></script>
+</body>
+</html>
