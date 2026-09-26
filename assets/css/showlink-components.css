@@ -518,3 +518,242 @@ html[data-theme="dark"] .showlink-tool-menu {
   .showlink-tool-btn { min-height: 40px; }
   .showlink-tool-menu { position: absolute; }
 }
+
+
+/* ============================================================
+   SHOWLINK V7 — COMPLETE DARK SURFACE + FONT AWESOME CONTROLS
+   ============================================================ */
+
+/* Theme and language controls share one consistent component shape. */
+.showlink-tools{
+  align-items:center;
+  gap:8px;
+}
+.showlink-tool{
+  position:relative;
+}
+.showlink-tool-btn{
+  min-width:92px;
+  height:40px;
+  padding:0 12px;
+  border-radius:12px;
+  gap:8px;
+  line-height:1;
+}
+[data-language-tool] .showlink-tool-btn{
+  min-width:74px;
+}
+.showlink-tool-btn .sl-tool-icon{
+  width:18px;
+  height:18px;
+  font-size:15px;
+}
+.showlink-tool-btn .sl-tool-icon i,
+.showlink-tool-option i{
+  line-height:1;
+}
+.showlink-tool-option{
+  min-height:40px;
+  padding:9px 10px;
+}
+.sl-option-icon{
+  width:19px;
+  min-width:19px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+}
+.sl-option-sun{color:#f59e0b}
+.sl-option-moon{color:#6366f1}
+.sl-check{
+  width:18px;
+  min-width:18px;
+  display:inline-flex;
+  justify-content:center;
+  color:var(--primary,#6d5dfc);
+  font-size:12px;
+}
+.showlink-lang-label{
+  font-size:12px;
+  font-weight:800;
+}
+
+/* Dark mode for the shared component: no leftover white surfaces. */
+html[data-theme="dark"] .showlink-tool-btn,
+html[data-theme="dark"] .showlink-tool-menu{
+  background:#121a2c!important;
+  color:#f1f5f9!important;
+  border-color:#29344a!important;
+}
+html[data-theme="dark"] .showlink-tool-option{
+  color:#e2e8f0!important;
+}
+html[data-theme="dark"] .showlink-tool-option:hover,
+html[data-theme="dark"] .showlink-tool-option.is-active{
+  background:#202944!important;
+}
+html[data-theme="dark"] .showlink-tool-menu{
+  box-shadow:0 18px 45px rgba(0,0,0,.45);
+}
+html[data-theme="dark"] .showlink-tool-btn:hover{
+  background:#171f35!important;
+  border-color:#5966a0!important;
+}
+html[data-theme="dark"] .sl-option-icon{
+  color:#c4b5fd;
+}
+
+/* Mobile: both controls remain equal, compact and tappable. */
+@media(max-width:820px){
+  .showlink-tools{gap:6px}
+  .showlink-tool-btn,
+  [data-language-tool] .showlink-tool-btn{
+    width:40px;
+    min-width:40px;
+    height:40px;
+    padding:0;
+  }
+  .showlink-tool-btn .showlink-tool-text,
+  .showlink-tool-btn .showlink-lang-label{
+    display:none;
+  }
+}
+
+/* ============================================================
+   PAGE DARK MODE — cover hard-coded light backgrounds/borders
+   ============================================================ */
+html[data-theme="dark"] .sl-nav,
+html[data-theme="dark"] .desktop-nav a:hover,
+html[data-theme="dark"] .desktop-nav a.active{
+  background:transparent;
+}
+html[data-theme="dark"] .desktop-nav a:hover,
+html[data-theme="dark"] .desktop-nav a.active{
+  background:#202944;
+  color:#a99fff;
+}
+html[data-theme="dark"] .btn-white{
+  background:#121a2c!important;
+  color:#f8fafc!important;
+  border:1px solid #29344a;
+  box-shadow:0 12px 28px rgba(0,0,0,.25);
+}
+html[data-theme="dark"] .btn-ghost{
+  color:#cbd5e1;
+}
+html[data-theme="dark"] .preview-window,
+html[data-theme="dark"] .quick-stats,
+html[data-theme="dark"] .art-badge,
+html[data-theme="dark"] .art-sheet,
+html[data-theme="dark"] .floating-note,
+html[data-theme="dark"] .checkout-card,
+html[data-theme="dark"] .step,
+html[data-theme="dark"] .why-section,
+html[data-theme="dark"] .why-grid article,
+html[data-theme="dark"] .faq-list details{
+  background:#121a2c!important;
+  color:#f1f5f9;
+  border-color:#29344a!important;
+}
+html[data-theme="dark"] .preview-window{
+  box-shadow:0 24px 70px rgba(0,0,0,.38);
+}
+html[data-theme="dark"] .window-head{
+  background:#0f172a!important;
+  color:#94a3b8;
+}
+html[data-theme="dark"] .preview-url,
+html[data-theme="dark"] .payment-url,
+html[data-theme="dark"] .product-preview{
+  background:#0f172a!important;
+  color:#f1f5f9;
+  border-color:#29344a!important;
+}
+html[data-theme="dark"] .preview-stats span{
+  background:#0f172a!important;
+  color:#f1f5f9;
+  border-color:#29344a!important;
+}
+html[data-theme="dark"] .purple-card span{
+  background:#272044!important;
+}
+html[data-theme="dark"] .pink-card span{
+  background:#3a2032!important;
+}
+html[data-theme="dark"] .stat-icon.blue,
+html[data-theme="dark"] .list-icon.blue,
+html[data-theme="dark"] .why-icon.blue,
+html[data-theme="dark"] .step-icon.blue{
+  background:#172b49!important;
+}
+html[data-theme="dark"] .stat-icon.pink,
+html[data-theme="dark"] .list-icon.pink,
+html[data-theme="dark"] .why-icon.pink,
+html[data-theme="dark"] .step-icon.pink{
+  background:#382034!important;
+}
+html[data-theme="dark"] .stat-icon.green,
+html[data-theme="dark"] .list-icon.green,
+html[data-theme="dark"] .why-icon.green,
+html[data-theme="dark"] .step-icon.green{
+  background:#15352c!important;
+}
+html[data-theme="dark"] .stat-icon.orange,
+html[data-theme="dark"] .list-icon.orange,
+html[data-theme="dark"] .why-icon.orange{
+  background:#39291e!important;
+}
+html[data-theme="dark"] .stat-icon.purple,
+html[data-theme="dark"] .list-icon.purple,
+html[data-theme="dark"] .why-icon.purple,
+html[data-theme="dark"] .step-icon.purple{
+  background:#292244!important;
+}
+html[data-theme="dark"] .section-soft,
+html[data-theme="dark"] .faq-section,
+html[data-theme="dark"] .final-cta{
+  background:#0f172a!important;
+}
+html[data-theme="dark"] .sheet-buttons span{
+  background:#202944!important;
+}
+html[data-theme="dark"] .product-thumb{
+  background:#252044!important;
+}
+html[data-theme="dark"] .secure{
+  color:#6ee7b7;
+}
+html[data-theme="dark"] .mobile-menu{
+  background:#121a2c!important;
+  border-color:#29344a!important;
+  color:#e2e8f0;
+}
+html[data-theme="dark"] .mobile-menu a:hover{
+  background:#202944!important;
+}
+html[data-theme="dark"] .footer{
+  background:#080c16!important;
+  color:#f8fafc;
+}
+html[data-theme="dark"] .footer-grid b,
+html[data-theme="dark"] .footer .brand{
+  color:#f8fafc;
+}
+html[data-theme="dark"] .footer-bottom{
+  border-color:#29344a;
+}
+html[data-theme="dark"] .footer-grid a{
+  color:#94a3b8;
+}
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select{
+  background:#0f172a!important;
+  color:#f1f5f9!important;
+  border-color:#29344a!important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{
+  color:#64748b!important;
+}
