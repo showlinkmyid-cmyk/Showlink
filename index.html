@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<meta name="description" content="ShowLink — buat PasteLink dan Payment Link. Bagikan konten, jual akses, dan kelola penghasilan dalam satu platform.">
+<meta property="og:title" content="ShowLink — Create. Share. Get Paid.">
+<meta property="og:description" content="Buat PasteLink dan Payment Link dengan mudah di ShowLink.">
+<meta property="og:url" content="https://showlink.my.id/">
+<title>ShowLink — Create. Share. Get Paid.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+</head>
+<body>
+<header class="sl-nav" id="top">
+  <div class="sl-container nav-inner">
+    <a class="brand" href="/" aria-label="ShowLink home">
+      <span class="brand-mark"><i class="fa-solid fa-link"></i></span>
+      <span>Show<span>Link</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Navigasi utama">
+      <a class="active" href="#home"><i class="fa-solid fa-house"></i> Beranda</a>
+      <a href="#pastelink"><i class="fa-solid fa-file-lines"></i> PasteLink</a>
+      <a href="#payment"><i class="fa-solid fa-credit-card"></i> Payment Link</a>
+      <a href="#how"><i class="fa-solid fa-route"></i> Cara Kerja</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Ganti tema"><i class="fa-solid fa-moon"></i></button>
+      <a class="btn btn-ghost" href="login.html">Login</a>
+      <a class="btn btn-primary" href="register.html"><i class="fa-solid fa-user-plus"></i> Mulai Gratis</a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home"><i class="fa-solid fa-house c-blue"></i> Beranda</a>
+    <a href="#pastelink"><i class="fa-solid fa-file-lines c-purple"></i> PasteLink</a>
+    <a href="#payment"><i class="fa-solid fa-credit-card c-pink"></i> Payment Link</a>
+    <a href="#how"><i class="fa-solid fa-route c-orange"></i> Cara Kerja</a>
+    <a href="login.html"><i class="fa-solid fa-right-to-bracket c-green"></i> Login</a>
+    <a href="register.html"><i class="fa-solid fa-user-plus c-yellow"></i> Daftar</a>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="glow glow-a"></div><div class="glow glow-b"></div><div class="glow glow-c"></div>
+  <div class="sl-container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><i class="fa-solid fa-wand-magic-sparkles c-purple"></i> SHOWLINK • SIMPLE DIGITAL LINKS</div>
+      <h1>Buat link yang<br><span>punya tujuan.</span></h1>
+      <p class="hero-lead">Bagikan konten lewat <b>PasteLink</b> atau buat <b>Payment Link</b> untuk menjual akses. Satu link, satu pengalaman yang simpel.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="create-pastelink.html"><i class="fa-solid fa-file-circle-plus"></i> Buat PasteLink</a>
+        <a class="btn btn-white btn-lg" href="#payment"><i class="fa-solid fa-credit-card c-pink"></i> Buat Payment Link</a>
+      </div>
+      <div class="trust-row">
+        <span><i class="fa-solid fa-circle-check c-green"></i> Mudah dibuat</span>
+        <span><i class="fa-solid fa-shield-halved c-blue"></i> Akses terkontrol</span>
+        <span><i class="fa-solid fa-mobile-screen-button c-purple"></i> Mobile friendly</span>
+      </div>
+    </div>
+
+    <div class="hero-preview" aria-label="Preview ShowLink">
+      <div class="preview-window">
+        <div class="window-head"><div class="window-dots"><i></i><i></i><i></i></div><span>showlink.my.id</span><i class="fa-solid fa-ellipsis"></i></div>
+        <div class="preview-body">
+          <div class="preview-brand"><span class="brand-mark small"><i class="fa-solid fa-link"></i></span><b>ShowLink</b><span class="live-pill"><i class="fa-solid fa-circle"></i> Live</span></div>
+          <div class="preview-title">Your content.<br><span>Your link.</span></div>
+          <div class="preview-url"><span class="url-icon"><i class="fa-solid fa-link"></i></span><div><small>PUBLIC LINK</small><b>showlink.my.id/p/Hb3</b></div><button type="button" aria-label="Copy link"><i class="fa-regular fa-copy"></i></button></div>
+          <div class="preview-cards">
+            <div class="mini-card purple-card"><span><i class="fa-solid fa-file-lines"></i></span><b>PasteLink</b><small>Share your content</small></div>
+            <div class="mini-card pink-card"><span><i class="fa-solid fa-credit-card"></i></span><b>Payment</b><small>Sell access</small></div>
+          </div>
+          <div class="preview-stats"><span><i class="fa-solid fa-eye c-blue"></i><b>1,284</b><small>views</small></span><span><i class="fa-solid fa-bag-shopping c-orange"></i><b>86</b><small>sales</small></span><span><i class="fa-solid fa-chart-line c-green"></i><b>+24%</b><small>growth</small></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quick-stats">
+  <div class="sl-container stats-grid">
+    <div class="stat"><span class="stat-icon blue"><i class="fa-solid fa-link"></i></span><div><b>PasteLink</b><small>Publish content instantly</small></div></div>
+    <div class="stat"><span class="stat-icon pink"><i class="fa-solid fa-credit-card"></i></span><div><b>Payment Link</b><small>Sell access with one URL</small></div></div>
+    <div class="stat"><span class="stat-icon green"><i class="fa-solid fa-chart-simple"></i></span><div><b>Analytics</b><small>See views & transactions</small></div></div>
+    <div class="stat"><span class="stat-icon orange"><i class="fa-solid fa-wallet"></i></span><div><b>Earnings</b><small>Manage your balance</small></div></div>
+  </div>
+</section>
+
+<section class="section" id="pastelink">
+  <div class="sl-container feature-layout">
+    <div class="feature-art pastelink-art">
+      <div class="art-badge"><i class="fa-solid fa-file-lines"></i> PASTELINK</div>
+      <div class="art-sheet">
+        <div class="sheet-top"><span></span><span></span><span></span></div>
+        <div class="sheet-cover"><i class="fa-solid fa-link"></i></div>
+        <div class="sheet-line long"></div><div class="sheet-line"></div><div class="sheet-line short"></div>
+        <div class="sheet-buttons"><span><i class="fa-solid fa-link"></i></span><span><i class="fa-solid fa-share-nodes"></i></span><span><i class="fa-solid fa-lock"></i></span></div>
+      </div>
+      <div class="floating-note note-a"><i class="fa-solid fa-pen"></i> Edit content</div>
+      <div class="floating-note note-b"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</div>
+    </div>
+    <div class="feature-copy">
+      <div class="section-kicker"><i class="fa-solid fa-file-lines c-purple"></i> PASTELINK</div>
+      <h2>Satu halaman untuk semua kontenmu.</h2>
+      <p>Buat halaman yang berisi teks, link, informasi, panduan, atau konten lain. Setelah selesai, ShowLink memberikan URL pendek yang mudah dibagikan.</p>
+      <div class="feature-list">
+        <div><span class="list-icon purple"><i class="fa-solid fa-pen-to-square"></i></span><div><b>Edit seluruh isi</b><small>Konten, judul, deskripsi, dan pengaturan tetap bisa dikelola setelah dibuat.</small></div></div>
+        <div><span class="list-icon blue"><i class="fa-solid fa-link"></i></span><div><b>URL pendek</b><small>Contoh: <strong>showlink.my.id/p/Hb3</strong></small></div></div>
+        <div><span class="list-icon green"><i class="fa-solid fa-chart-line"></i></span><div><b>Statistik</b><small>Pantau kunjungan dan performa halaman.</small></div></div>
+      </div>
+      <a class="text-link purple-link" href="create-pastelink.html">Mulai membuat PasteLink <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft" id="payment">
+  <div class="sl-container feature-layout reverse">
+    <div class="feature-copy">
+      <div class="section-kicker"><i class="fa-solid fa-credit-card c-pink"></i> PAYMENT LINK</div>
+      <h2>Jual akses dengan satu link pembayaran.</h2>
+      <p>Buat Payment Link, tentukan harga, lalu bagikan link. Pengunjung akan diarahkan ke pembayaran terlebih dahulu. Konten dibuka setelah pembayaran berhasil diverifikasi.</p>
+      <div class="feature-list">
+        <div><span class="list-icon pink"><i class="fa-solid fa-tags"></i></span><div><b>Tentukan harga</b><small>Atur harga produk atau akses sesuai kebutuhanmu.</small></div></div>
+        <div><span class="list-icon orange"><i class="fa-solid fa-lock"></i></span><div><b>Konten terlindungi</b><small>Konten tidak dibuka sebelum status pembayaran valid.</small></div></div>
+        <div><span class="list-icon green"><i class="fa-solid fa-circle-check"></i></span><div><b>Akses otomatis</b><small>Setelah pembayaran terverifikasi, sistem memberikan akses.</small></div></div>
+      </div>
+      <div class="payment-url"><span class="payment-icon"><i class="fa-solid fa-credit-card"></i></span><div><small>PAYMENT LINK</small><b>showlink.my.id/d/K6bN</b></div><span class="secure"><i class="fa-solid fa-shield-halved"></i> Secure</span></div>
+    </div>
+    <div class="feature-art payment-art">
+      <div class="checkout-card">
+        <div class="checkout-top"><span class="checkout-logo"><i class="fa-solid fa-link"></i></span><div><b>ShowLink</b><small>Secure checkout</small></div><i class="fa-solid fa-lock c-green"></i></div>
+        <div class="product-preview"><div class="product-thumb"><i class="fa-solid fa-file-lines"></i></div><div><small>DIGITAL CONTENT</small><b>Premium Content</b><span>Access after payment</span></div></div>
+        <div class="price-row"><span>Total</span><strong>Rp 25.000</strong></div>
+        <button class="fake-pay" type="button"><i class="fa-solid fa-bolt"></i> Bayar & Buka Konten</button>
+        <div class="secure-line"><i class="fa-solid fa-shield-halved"></i> Payment verified before content access</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="sl-container">
+    <div class="section-heading center"><div class="section-kicker"><i class="fa-solid fa-route c-orange"></i> CARA KERJA</div><h2>Semudah membuat dan membagikan link.</h2><p>ShowLink dibuat supaya creator tidak perlu melewati alur yang rumit.</p></div>
+    <div class="steps">
+      <article class="step"><div class="step-number">01</div><span class="step-icon purple"><i class="fa-solid fa-pen-to-square"></i></span><h3>Buat</h3><p>Pilih PasteLink atau Payment Link lalu isi konten yang ingin kamu publikasikan.</p></article>
+      <article class="step"><div class="step-number">02</div><span class="step-icon blue"><i class="fa-solid fa-link"></i></span><h3>Dapatkan Link</h3><p>Setelah dibuat, kamu mendapatkan URL pendek ShowLink yang mudah dibagikan.</p></article>
+      <article class="step"><div class="step-number">03</div><span class="step-icon pink"><i class="fa-solid fa-share-nodes"></i></span><h3>Bagikan</h3><p>Kirim link ke WhatsApp, Telegram, Instagram, website, atau platform lainnya.</p></article>
+      <article class="step"><div class="step-number">04</div><span class="step-icon green"><i class="fa-solid fa-chart-line"></i></span><h3>Kelola</h3><p>Lihat performa, transaksi, dan penghasilan dari dashboard akunmu.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section why-section">
+  <div class="sl-container">
+    <div class="section-heading center"><div class="section-kicker"><i class="fa-solid fa-sparkles c-yellow"></i> WHY SHOWLINK</div><h2>Fokus pada link yang benar-benar berguna.</h2><p>Tidak perlu puluhan menu. ShowLink dibuat untuk dua kebutuhan utama: membagikan konten dan menjual akses.</p></div>
+    <div class="why-grid">
+      <article><span class="why-icon blue"><i class="fa-solid fa-bolt"></i></span><h3>Simple</h3><p>Flow singkat dari pembuatan sampai link siap dibagikan.</p></article>
+      <article><span class="why-icon purple"><i class="fa-solid fa-palette"></i></span><h3>Beautiful</h3><p>Halaman link dibuat bersih, modern, dan nyaman di mobile.</p></article>
+      <article><span class="why-icon pink"><i class="fa-solid fa-lock"></i></span><h3>Controlled</h3><p>Payment Link menggunakan status transaksi sebagai dasar pemberian akses.</p></article>
+      <article><span class="why-icon green"><i class="fa-solid fa-chart-pie"></i></span><h3>Trackable</h3><p>Performa link dan transaksi bisa dipantau dari dashboard.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section faq-section" id="faq">
+  <div class="sl-container faq-layout">
+    <div class="section-heading"><div class="section-kicker"><i class="fa-solid fa-circle-question c-blue"></i> FAQ</div><h2>Pertanyaan umum.</h2><p>Informasi dasar sebelum kamu mulai menggunakan ShowLink.</p></div>
+    <div class="faq-list">
+      <details open><summary>Apakah PasteLink bisa dibuka tanpa login?<i class="fa-solid fa-chevron-down"></i></summary><p>Ya. Link publik dapat dibuka melalui URL ShowLink. Login digunakan untuk membuat dan mengelola konten.</p></details>
+      <details><summary>Bagaimana Payment Link bekerja?<i class="fa-solid fa-chevron-down"></i></summary><p>Pengunjung membuka Payment Link, melihat informasi checkout, melakukan pembayaran, lalu konten diberikan setelah pembayaran berhasil diverifikasi.</p></details>
+      <details><summary>Apakah saya bisa mengedit PasteLink?<i class="fa-solid fa-chevron-down"></i></summary><p>Ya. Konten yang dibuat disimpan sebagai satu kesatuan sehingga nantinya dapat diedit kembali, bukan hanya judulnya.</p></details>
+      <details><summary>Seperti apa URL ShowLink?<i class="fa-solid fa-chevron-down"></i></summary><p>PasteLink menggunakan format <b>showlink.my.id/p/XXXX</b>, sedangkan Payment Link menggunakan <b>showlink.my.id/d/XXXX</b>.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="sl-container final-card">
+    <div class="final-icon"><i class="fa-solid fa-link"></i></div>
+    <div><div class="section-kicker light"><i class="fa-solid fa-wand-magic-sparkles"></i> READY TO CREATE?</div><h2>Mulai dengan satu link.</h2><p>Buat PasteLink untuk berbagi konten atau Payment Link untuk menjual akses.</p></div>
+    <div class="final-actions"><a class="btn btn-white btn-lg" href="create-pastelink.html"><i class="fa-solid fa-file-lines c-purple"></i> PasteLink</a><a class="btn btn-outline-white btn-lg" href="register.html"><i class="fa-solid fa-arrow-right"></i> Mulai Gratis</a></div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="sl-container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark"><i class="fa-solid fa-link"></i></span><span>Show<span>Link</span></span></a><p>Platform sederhana untuk membuat PasteLink dan Payment Link.</p></div>
+    <div><b>Produk</b><a href="#pastelink">PasteLink</a><a href="#payment">Payment Link</a><a href="#how">Cara Kerja</a></div>
+    <div><b>Akun</b><a href="login.html">Login</a><a href="register.html">Daftar</a><a href="dashboard.html">Dashboard</a></div>
+    <div><b>Info</b><a href="#faq">FAQ</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+  </div>
+  <div class="sl-container footer-bottom"><span>© <span id="year"></span> ShowLink. All rights reserved.</span><span><i class="fa-solid fa-shield-halved c-green"></i> Secure digital platform</span></div>
+</footer>
+
+<script>
+(() => {
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const themeBtn = document.getElementById('themeBtn');
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
+  menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('open'));
+  mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+  const saved = localStorage.getItem('showlink-theme');
+  if (saved === 'dark') document.documentElement.classList.add('dark');
+  themeBtn?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('showlink-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    themeBtn.innerHTML = document.documentElement.classList.contains('dark') ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+  });
+  if (document.documentElement.classList.contains('dark') && themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+})();
+</script>
+</body>
+</html>
