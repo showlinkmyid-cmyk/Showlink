@@ -249,7 +249,7 @@
       indonesia:"Indonesia", english:"Inggris", terms:"Terms of Service",
       privacy:"Privacy Policy", contact:"Contact Person", footerNavigation:"Navigasi footer",
       footerTagline:"Simple digital links.", copyright:"Copyright © {year} ShowLink. All Rights Reserved.",
-      themeLight:"Tema terang", themeDark:"Tema gelap", chooseLanguage:"Pilih bahasa"
+      themeLight:"Tema terang", themeDark:"Tema gelap", chooseLanguage:"Pilih bahasa", authWelcome:"Selamat datang kembali", authWelcomeSub:"Masuk untuk melanjutkan ke akun ShowLink.", authCreate:"Buat akun ShowLink", authCreateSub:"Daftar untuk mulai membuat dan mengelola link.", email:"Email", password:"Password", confirmPassword:"Konfirmasi password", rememberMe:"Ingat saya", forgotPassword:"Lupa password?", signIn:"Masuk", signUp:"Daftar", noAccount:"Belum punya akun?", haveAccount:"Sudah punya akun?", createAccount:"Buat akun", backHome:"Kembali ke beranda", orContinue:"atau lanjutkan dengan", google:"Google", secureAuth:"Akses akun yang aman", authTerms:"Dengan melanjutkan, kamu menyetujui Ketentuan Layanan dan Kebijakan Privasi ShowLink.", authManage:"Kelola PasteLink dan Payment Link", authAnalytics:"Lihat performa dan aktivitas akun", authSecure:"Akses akun dengan aman", passwordHint:"Minimal 8 karakter", passwordMismatch:"Password tidak sama.", invalidEmail:"Masukkan email yang valid.", requiredField:"Kolom ini wajib diisi.", showPassword:"Tampilkan password", hidePassword:"Sembunyikan password", loginTitle:"Login — ShowLink", registerTitle:"Register — ShowLink", loginDescription:"Masuk ke akun ShowLink untuk mengelola konten dan link.", registerDescription:"Buat akun ShowLink untuk membuat dan mengelola link."
     },
     en: {
       platformInfo:"Platform Information", howItWorks:"How It Works", help:"Help",
@@ -260,7 +260,7 @@
       indonesia:"Indonesian", english:"English", terms:"Terms of Service",
       privacy:"Privacy Policy", contact:"Contact Person", footerNavigation:"Footer navigation",
       footerTagline:"Simple digital links.", copyright:"Copyright © {year} ShowLink. All Rights Reserved.",
-      themeLight:"Light theme", themeDark:"Dark theme", chooseLanguage:"Choose language"
+      themeLight:"Light theme", themeDark:"Dark theme", chooseLanguage:"Choose language", authWelcome:"Welcome back", authWelcomeSub:"Sign in to continue to your ShowLink account.", authCreate:"Create your ShowLink account", authCreateSub:"Register to start creating and managing links.", email:"Email", password:"Password", confirmPassword:"Confirm password", rememberMe:"Remember me", forgotPassword:"Forgot password?", signIn:"Sign in", signUp:"Sign up", noAccount:"Don't have an account?", haveAccount:"Already have an account?", createAccount:"Create account", backHome:"Back to home", orContinue:"or continue with", google:"Google", secureAuth:"Secure account access", authTerms:"By continuing, you agree to the ShowLink Terms of Service and Privacy Policy.", authManage:"Manage PasteLink and Payment Link", authAnalytics:"View account performance and activity", authSecure:"Secure account access", passwordHint:"At least 8 characters", passwordMismatch:"Passwords do not match.", invalidEmail:"Enter a valid email address.", requiredField:"This field is required.", showPassword:"Show password", hidePassword:"Hide password", loginTitle:"Login — ShowLink", registerTitle:"Register — ShowLink", loginDescription:"Sign in to your ShowLink account to manage content and links.", registerDescription:"Create a ShowLink account to create and manage links."
     }
   };
 
@@ -438,8 +438,16 @@
     });
     document.querySelectorAll("[data-lang-label]").forEach(el => el.textContent = lang === "en" ? "EN" : "ID");
 
-    // Page metadata
-    if (lang === "en") {
+    // Page metadata: auth and future pages can provide their own localized title/description.
+    const pageTitle = document.body?.dataset?.pageTitleId;
+    const pageTitleEn = document.body?.dataset?.pageTitleEn;
+    const pageDesc = document.body?.dataset?.pageDescriptionId;
+    const pageDescEn = document.body?.dataset?.pageDescriptionEn;
+    if (pageTitle || pageTitleEn) {
+      document.title = lang === "en" ? (pageTitleEn || pageTitle) : (pageTitle || pageTitleEn);
+      const desc = lang === "en" ? (pageDescEn || pageDesc) : (pageDesc || pageDescEn);
+      if (desc) document.querySelector('meta[name="description"]')?.setAttribute("content", desc);
+    } else if (lang === "en") {
       document.title = "ShowLink — Create. Share. Get Paid.";
       document.querySelector('meta[name="description"]')?.setAttribute("content",
         "ShowLink — create PasteLinks and Payment Links. Share content, sell access, and manage earnings in one platform.");
@@ -570,6 +578,7 @@
         translatePage();
         applyTheme(getTheme(), false);
         syncControlState();
+        window.dispatchEvent(new CustomEvent("showlink:language-change", { detail: { language: getLanguage() } }));
         return;
       }
 
@@ -593,6 +602,7 @@
     window.ShowLinkUI?.refresh();
     translatePage();
     buildControls();
+    window.dispatchEvent(new CustomEvent("showlink:language-change", { detail: { language: getLanguage() } }));
   }, t, translations };
 
   window.ShowLinkTheme = { getTheme, applyTheme };
