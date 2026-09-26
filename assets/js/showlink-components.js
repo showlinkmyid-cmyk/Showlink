@@ -393,7 +393,7 @@
       el.textContent = theme === "dark" ? t("dark") : t("light");
     });
     document.querySelectorAll("[data-theme-icon]").forEach(el => {
-      el.innerHTML = theme === "dark" ? "☀️" : "🌙";
+      el.innerHTML = theme === "dark" ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>' : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
     });
     document.querySelectorAll("[data-theme-option]").forEach(el => {
       const active = el.dataset.themeOption === theme;
@@ -471,19 +471,19 @@
       const active = el.dataset.themeOption === theme;
       el.classList.toggle("is-active", active);
       const check = el.querySelector(".sl-check");
-      if (check) check.textContent = active ? "✓" : "";
+      if (check) check.innerHTML = active ? '<i class="fa-solid fa-check" aria-hidden="true"></i>' : "";
     });
     document.querySelectorAll("[data-lang-option]").forEach(el => {
       const active = el.dataset.langOption === lang;
       el.classList.toggle("is-active", active);
       const check = el.querySelector(".sl-check");
-      if (check) check.textContent = active ? "✓" : "";
+      if (check) check.innerHTML = active ? '<i class="fa-solid fa-check" aria-hidden="true"></i>' : "";
     });
     document.querySelectorAll("[data-theme-label]").forEach(el => {
       el.textContent = theme === "dark" ? t("dark") : t("light");
     });
     document.querySelectorAll("[data-theme-icon]").forEach(el => {
-      el.textContent = theme === "dark" ? "☀️" : "🌙";
+      el.innerHTML = theme === "dark" ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>' : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
     });
     document.querySelectorAll("[data-lang-label]").forEach(el => {
       el.textContent = lang === "en" ? "EN" : "ID";
@@ -499,17 +499,17 @@
             <span class="sl-tool-icon" data-theme-icon></span><span class="showlink-tool-text" data-theme-label></span>
           </button>
           <div class="showlink-tool-menu" role="menu" aria-label="${t("theme")}">
-            <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="light"><span>☀️</span><span data-i18n="light">${t("light")}</span><span class="sl-check"></span></button>
-            <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="dark"><span>🌙</span><span data-i18n="dark">${t("dark")}</span><span class="sl-check"></span></button>
+            <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="light"><span class="sl-option-icon sl-option-sun"><i class="fa-solid fa-sun" aria-hidden="true"></i></span><span data-i18n="light">${t("light")}</span><span class="sl-check" aria-hidden="true"></span></button>
+            <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="dark"><span class="sl-option-icon sl-option-moon"><i class="fa-solid fa-moon" aria-hidden="true"></i></span><span data-i18n="dark">${t("dark")}</span><span class="sl-check" aria-hidden="true"></span></button>
           </div>
         </div>
         <div class="showlink-tool" data-language-tool>
           <button class="showlink-tool-btn" type="button" aria-label="${t("language")}" aria-expanded="false" data-language-toggle>
-            <span class="sl-tool-icon">🌐</span><span class="showlink-lang-label" data-lang-label></span>
+            <span class="sl-tool-icon"><i class="fa-solid fa-language" aria-hidden="true"></i></span><span class="showlink-lang-label" data-lang-label></span>
           </button>
           <div class="showlink-tool-menu" role="menu" aria-label="${t("language")} ">
-            <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="id"><span>🇮🇩</span><span data-i18n="indonesia">${t("indonesia")}</span><span class="sl-check"></span></button>
-            <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="en"><span>🇬🇧</span><span data-i18n="english">${t("english")}</span><span class="sl-check"></span></button>
+            <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="id"><span class="sl-option-icon"><i class="fa-solid fa-flag" aria-hidden="true"></i></span><span data-i18n="indonesia">${t("indonesia")}</span><span class="sl-check" aria-hidden="true"></span></button>
+            <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="en"><span class="sl-option-icon"><i class="fa-solid fa-earth-americas" aria-hidden="true"></i></span><span data-i18n="english">${t("english")}</span><span class="sl-check" aria-hidden="true"></span></button>
           </div>
         </div>`;
     });
