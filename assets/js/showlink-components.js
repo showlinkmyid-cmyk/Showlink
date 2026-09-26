@@ -249,7 +249,20 @@
       indonesia:"Indonesia", english:"Inggris", terms:"Terms of Service",
       privacy:"Privacy Policy", contact:"Contact Person", footerNavigation:"Navigasi footer",
       footerTagline:"Simple digital links.", copyright:"Copyright © {year} ShowLink. All Rights Reserved.",
-      themeLight:"Tema terang", themeDark:"Tema gelap", chooseLanguage:"Pilih bahasa", authWelcome:"Selamat datang kembali", authWelcomeSub:"Masuk untuk melanjutkan ke akun ShowLink.", authCreate:"Buat akun ShowLink", authCreateSub:"Daftar untuk mulai membuat dan mengelola link.", email:"Email", password:"Password", confirmPassword:"Konfirmasi password", rememberMe:"Ingat saya", forgotPassword:"Lupa password?", signIn:"Masuk", signUp:"Daftar", noAccount:"Belum punya akun?", haveAccount:"Sudah punya akun?", createAccount:"Buat akun", backHome:"Kembali ke beranda", orContinue:"atau lanjutkan dengan", google:"Google", secureAuth:"Akses akun yang aman", authTerms:"Dengan melanjutkan, kamu menyetujui Ketentuan Layanan dan Kebijakan Privasi ShowLink.", authManage:"Kelola PasteLink dan Payment Link", authAnalytics:"Lihat performa dan aktivitas akun", authSecure:"Akses akun dengan aman", passwordHint:"Minimal 8 karakter", passwordMismatch:"Password tidak sama.", invalidEmail:"Masukkan email yang valid.", requiredField:"Kolom ini wajib diisi.", showPassword:"Tampilkan password", hidePassword:"Sembunyikan password", loginTitle:"Login — ShowLink", registerTitle:"Register — ShowLink", loginDescription:"Masuk ke akun ShowLink untuk mengelola konten dan link.", registerDescription:"Buat akun ShowLink untuk membuat dan mengelola link."
+      themeLight:"Tema terang", themeDark:"Tema gelap", chooseLanguage:"Pilih bahasa", authWelcome:"Selamat datang kembali", authWelcomeSub:"Masuk untuk melanjutkan ke akun ShowLink.", authCreate:"Buat akun ShowLink", authCreateSub:"Daftar untuk mulai membuat dan mengelola link.", email:"Email", password:"Password", confirmPassword:"Konfirmasi password", rememberMe:"Ingat saya", forgotPassword:"Lupa password?", signIn:"Masuk", signUp:"Daftar", noAccount:"Belum punya akun?", haveAccount:"Sudah punya akun?", createAccount:"Buat akun", backHome:"Kembali ke beranda", orContinue:"atau lanjutkan dengan", google:"Google", secureAuth:"Akses akun yang aman", authTerms:"Dengan melanjutkan, kamu menyetujui Ketentuan Layanan dan Kebijakan Privasi ShowLink.", authManage:"Kelola PasteLink dan Payment Link", authAnalytics:"Lihat performa dan aktivitas akun", authSecure:"Akses akun dengan aman", passwordHint:"Minimal 8 karakter", passwordMismatch:"Password tidak sama.", invalidEmail:"Masukkan email yang valid.", requiredField:"Kolom ini wajib diisi.", showPassword:"Tampilkan password", hidePassword:"Sembunyikan password", loginTitle:"Login — ShowLink", registerTitle:"Register — ShowLink", loginDescription:"Masuk ke akun ShowLink untuk mengelola konten dan link.",
+      loginSuccess:"Login berhasil. Mengalihkan ke dashboard...", loginFailed:"Email atau password salah.",
+      registerSuccess:"Akun berhasil dibuat. Mengalihkan ke dashboard...", registerFailed:"Pendaftaran gagal.",
+      confirmEmail:"Akun berhasil dibuat. Silakan cek email untuk konfirmasi akun sebelum login.",
+      googleFailed:"Login Google gagal.", enterEmailFirst:"Masukkan email terlebih dahulu.",
+      resetSent:"Link reset password telah dikirim ke email.", resetFailed:"Gagal mengirim reset password.",
+      authConfigError:"Supabase belum dikonfigurasi.", dashboardWelcome:"Selamat datang",
+      accountOverview:"Ringkasan akun", accountEmail:"Email akun", accountPlan:"Paket",
+      accountCreated:"Bergabung sejak", signOut:"Keluar", editProfile:"Edit profil",
+      quickActions:"Aksi cepat", createPasteLink:"Buat PasteLink", createPaymentLink:"Buat Payment Link",
+      totalLinks:"Total link", totalViews:"Total views", totalSales:"Total penjualan",
+      recentActivity:"Aktivitas terbaru", noActivity:"Belum ada aktivitas.",
+      dashboardIntro:"Kelola akun dan aktivitas ShowLink kamu dari satu tempat.",
+      freePlan:"Free", registerDescription:"Buat akun ShowLink untuk membuat dan mengelola link."
     },
     en: {
       platformInfo:"Platform Information", howItWorks:"How It Works", help:"Help",
@@ -260,7 +273,20 @@
       indonesia:"Indonesian", english:"English", terms:"Terms of Service",
       privacy:"Privacy Policy", contact:"Contact Person", footerNavigation:"Footer navigation",
       footerTagline:"Simple digital links.", copyright:"Copyright © {year} ShowLink. All Rights Reserved.",
-      themeLight:"Light theme", themeDark:"Dark theme", chooseLanguage:"Choose language", authWelcome:"Welcome back", authWelcomeSub:"Sign in to continue to your ShowLink account.", authCreate:"Create your ShowLink account", authCreateSub:"Register to start creating and managing links.", email:"Email", password:"Password", confirmPassword:"Confirm password", rememberMe:"Remember me", forgotPassword:"Forgot password?", signIn:"Sign in", signUp:"Sign up", noAccount:"Don't have an account?", haveAccount:"Already have an account?", createAccount:"Create account", backHome:"Back to home", orContinue:"or continue with", google:"Google", secureAuth:"Secure account access", authTerms:"By continuing, you agree to the ShowLink Terms of Service and Privacy Policy.", authManage:"Manage PasteLink and Payment Link", authAnalytics:"View account performance and activity", authSecure:"Secure account access", passwordHint:"At least 8 characters", passwordMismatch:"Passwords do not match.", invalidEmail:"Enter a valid email address.", requiredField:"This field is required.", showPassword:"Show password", hidePassword:"Hide password", loginTitle:"Login — ShowLink", registerTitle:"Register — ShowLink", loginDescription:"Sign in to your ShowLink account to manage content and links.", registerDescription:"Create a ShowLink account to create and manage links."
+      themeLight:"Light theme", themeDark:"Dark theme", chooseLanguage:"Choose language", authWelcome:"Welcome back", authWelcomeSub:"Sign in to continue to your ShowLink account.", authCreate:"Create your ShowLink account", authCreateSub:"Register to start creating and managing links.", email:"Email", password:"Password", confirmPassword:"Confirm password", rememberMe:"Remember me", forgotPassword:"Forgot password?", signIn:"Sign in", signUp:"Sign up", noAccount:"Don't have an account?", haveAccount:"Already have an account?", createAccount:"Create account", backHome:"Back to home", orContinue:"or continue with", google:"Google", secureAuth:"Secure account access", authTerms:"By continuing, you agree to the ShowLink Terms of Service and Privacy Policy.", authManage:"Manage PasteLink and Payment Link", authAnalytics:"View account performance and activity", authSecure:"Secure account access", passwordHint:"At least 8 characters", passwordMismatch:"Passwords do not match.", invalidEmail:"Enter a valid email address.", requiredField:"This field is required.", showPassword:"Show password", hidePassword:"Hide password", loginTitle:"Login — ShowLink", registerTitle:"Register — ShowLink", loginDescription:"Sign in to your ShowLink account to manage content and links.",
+      loginSuccess:"Login successful. Redirecting to dashboard...", loginFailed:"Incorrect email or password.",
+      registerSuccess:"Account created. Redirecting to dashboard...", registerFailed:"Registration failed.",
+      confirmEmail:"Account created. Check your email to confirm your account before signing in.",
+      googleFailed:"Google sign-in failed.", enterEmailFirst:"Enter your email first.",
+      resetSent:"Password reset link sent to your email.", resetFailed:"Could not send the password reset link.",
+      authConfigError:"Supabase is not configured.", dashboardWelcome:"Welcome",
+      accountOverview:"Account overview", accountEmail:"Account email", accountPlan:"Plan",
+      accountCreated:"Joined", signOut:"Sign out", editProfile:"Edit profile",
+      quickActions:"Quick actions", createPasteLink:"Create PasteLink", createPaymentLink:"Create Payment Link",
+      totalLinks:"Total links", totalViews:"Total views", totalSales:"Total sales",
+      recentActivity:"Recent activity", noActivity:"No activity yet.",
+      dashboardIntro:"Manage your ShowLink account and activity from one place.",
+      freePlan:"Free", registerDescription:"Create a ShowLink account to create and manage links."
     }
   };
 

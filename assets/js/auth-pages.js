@@ -1,132 +1,138 @@
 (() => {
   "use strict";
 
-  const t = (key) => window.ShowLinkLanguage?.t?.(key) || key;
-  const alertBox = () => document.querySelector("[data-auth-alert]");
+  const $ = (s, root=document) => root.querySelector(s);
+  const t = key => window.ShowLinkLanguage?.t?.(key) || key;
+  const alertBox = () => $("[data-auth-alert]");
 
-  function showAlert(message, success=false) {
-    const el = alertBox();
-    if (!el) return;
-    el.textContent = message;
+  function message(id, fallback) {
+    return t(id) !== id ? t(id) : fallback;
+  }
+  function showAlert(msg, success=false) {
+    const el=alertBox(); if(!el) return;
+    el.textContent=msg;
     el.classList.toggle("auth-success", success);
     el.classList.add("is-visible");
   }
-
-  function hideAlert() {
-    const el = alertBox();
-    if (el) el.classList.remove("is-visible");
-  }
+  function hideAlert(){ alertBox()?.classList.remove("is-visible"); }
 
   function setupPasswordToggles() {
     document.querySelectorAll("[data-password-toggle]").forEach(btn => {
       btn.addEventListener("click", () => {
-        const input = document.getElementById(btn.dataset.target);
-        if (!input) return;
-        const showing = input.type === "text";
-        input.type = showing ? "password" : "text";
-        btn.innerHTML = showing
-          ? '<i class="fa-regular fa-eye" aria-hidden="true"></i>'
-          : '<i class="fa-regular fa-eye-slash" aria-hidden="true"></i>';
-        btn.setAttribute("aria-label", showing ? t("showPassword") : t("hidePassword"));
+        const input=document.getElementById(btn.dataset.target); if(!input) return;
+        const show=input.type==="password";
+        input.type=show?"text":"password";
+        btn.innerHTML=show?'<i class="fa-regular fa-eye-slash" aria-hidden="true"></i>':'<i class="fa-regular fa-eye" aria-hidden="true"></i>';
       });
     });
   }
 
-  function setupRegisterStrength() {
-    const input = document.querySelector("#register-password");
-    const bar = document.querySelector("[data-strength-bar]");
-    if (!input || !bar) return;
-    input.addEventListener("input", () => {
-      const value = input.value;
-      let score = 0;
-      if (value.length >= 8) score++;
-      if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score++;
-      if (/\d/.test(value)) score++;
-      if (/[^A-Za-z0-9]/.test(value)) score++;
-      bar.style.width = `${Math.min(100, score * 25)}%`;
+  function setupStrength() {
+    const input=$("#register-password"), bar=$("[data-strength-bar]");
+    if(!input||!bar) return;
+    input.addEventListener("input",()=>{
+      let score=0,v=input.value;
+      if(v.length>=8)score++;
+      if(/[a-z]/.test(v)&&/[A-Z]/.test(v))score++;
+      if(/\d/.test(v))score++;
+      if(/[^A-Za-z0-9]/.test(v))score++;
+      bar.style.width=`${score*25}%`;
     });
   }
 
-  function setupForms() {
-    document.querySelectorAll("[data-auth-form]").forEach(form => {
-      form.addEventListener("submit", event => {
-        event.preventDefault();
-        hideAlert();
+  async function getClient() {
+    try { return await window.ShowLinkSupabase.load(); }
+    catch(e){ showAlert(e.message || message("authConfigError","Supabase belum dikonfigurasi.")); return null; }
+  }
 
-        const email = form.querySelector('[name="email"]');
-        const password = form.querySelector('[name="password"]');
-        const confirm = form.querySelector('[name="confirmPassword"]');
+  function persistUser(user) {
+    if (!user) return;
+    const profile = {
+      id:user.id, email:user.email || "",
+      user_metadata:user.user_metadata || {}
+    };
+    localStorage.setItem("showlink_user", JSON.stringify(profile));
+    window.dispatchEvent(new CustomEvent("showlink:auth-change",{detail:{user:profile}}));
+  }
 
-        if (!email?.value.trim()) {
-          showAlert(t("requiredField")); email?.focus(); return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-          showAlert(t("invalidEmail")); email.focus(); return;
-        }
-        if (!password?.value) {
-          showAlert(t("requiredField")); password?.focus(); return;
-        }
-        if (form.dataset.authForm === "register") {
-          if (password.value.length < 8) {
-            showAlert(t("passwordHint")); password.focus(); return;
-          }
-          if (password.value !== confirm?.value) {
-            showAlert(t("passwordMismatch")); confirm?.focus(); return;
-          }
-          const terms = form.querySelector('[name="terms"]');
-          if (terms && !terms.checked) {
-            showAlert(t("authTerms")); return;
-          }
-          showAlert(
-            document.documentElement.lang === "en"
-              ? "Registration form is ready. Connect your authentication backend to create the account."
-              : "Form pendaftaran sudah siap. Hubungkan backend autentikasi untuk membuat akun.",
-            true
-          );
-        } else {
-          showAlert(
-            document.documentElement.lang === "en"
-              ? "Login form is ready. Connect your authentication backend to sign in."
-              : "Form login sudah siap. Hubungkan backend autentikasi untuk masuk.",
-            true
-          );
-        }
+  async function login(form) {
+    const email=$('[name="email"]',form)?.value.trim();
+    const password=$('[name="password"]',form)?.value||"";
+    if(!email) return showAlert(message("requiredField","Email wajib diisi."));
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert(message("invalidEmail","Format email tidak valid."));
+    if(!password) return showAlert(message("requiredField","Password wajib diisi."));
+    const sb=await getClient(); if(!sb)return;
+    const btn=$(".auth-submit",form); if(btn) btn.disabled=true;
+    try {
+      const {data,error}=await sb.auth.signInWithPassword({email,password});
+      if(error) throw error;
+      persistUser(data.user);
+      showAlert(message("loginSuccess","Login berhasil. Mengalihkan ke dashboard..."),true);
+      setTimeout(()=>location.href="/dashboard.html",450);
+    } catch(e) {
+      showAlert(e.message || message("loginFailed","Email atau password salah."));
+    } finally { if(btn)btn.disabled=false; }
+  }
+
+  async function register(form) {
+    const email=$('[name="email"]',form)?.value.trim();
+    const password=$('[name="password"]',form)?.value||"";
+    const confirm=$('[name="confirmPassword"]',form)?.value||"";
+    const terms=$('[name="terms"]',form);
+    if(!email) return showAlert(message("requiredField","Email wajib diisi."));
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert(message("invalidEmail","Format email tidak valid."));
+    if(password.length<8) return showAlert(message("passwordHint","Password minimal 8 karakter."));
+    if(password!==confirm) return showAlert(message("passwordMismatch","Konfirmasi password tidak sama."));
+    if(terms&&!terms.checked) return showAlert(message("authTerms","Setujui ketentuan terlebih dahulu."));
+    const sb=await getClient(); if(!sb)return;
+    const btn=$(".auth-submit",form); if(btn)btn.disabled=true;
+    try {
+      const {data,error}=await sb.auth.signUp({email,password,options:{data:{display_name:email.split("@")[0]}}});
+      if(error)throw error;
+      if(data.session) {
+        persistUser(data.user);
+        showAlert(message("registerSuccess","Akun berhasil dibuat. Mengalihkan ke dashboard..."),true);
+        setTimeout(()=>location.href="/dashboard.html",450);
+      } else {
+        showAlert(message("confirmEmail","Akun dibuat. Silakan cek email untuk konfirmasi akun sebelum login."),true);
+      }
+    } catch(e) { showAlert(e.message || message("registerFailed","Pendaftaran gagal.")); }
+    finally { if(btn)btn.disabled=false; }
+  }
+
+  async function google() {
+    const sb=await getClient(); if(!sb)return;
+    try {
+      const {error}=await sb.auth.signInWithOAuth({
+        provider:"google",
+        options:{redirectTo:`${location.origin}/dashboard.html`}
+      });
+      if(error)throw error;
+    } catch(e){showAlert(e.message||message("googleFailed","Login Google gagal."));}
+  }
+
+  async function forgot() {
+    const email=$("#login-email")?.value.trim();
+    if(!email)return showAlert(message("enterEmailFirst","Masukkan email terlebih dahulu."));
+    const sb=await getClient(); if(!sb)return;
+    try{
+      const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:`${location.origin}/login.html`});
+      if(error)throw error;
+      showAlert(message("resetSent","Link reset password telah dikirim ke email."),true);
+    }catch(e){showAlert(e.message||message("resetFailed","Gagal mengirim reset password."));}
+  }
+
+  function setup() {
+    setupPasswordToggles(); setupStrength();
+    document.querySelectorAll("[data-auth-form]").forEach(form=>{
+      form.addEventListener("submit",e=>{
+        e.preventDefault();hideAlert();
+        form.dataset.authForm==="register"?register(form):login(form);
       });
     });
+    document.querySelectorAll("[data-google-login]").forEach(b=>b.addEventListener("click",google));
+    document.querySelectorAll('[data-i18n="forgotPassword"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();forgot();}));
   }
 
-  function setupGoogle() {
-    document.querySelectorAll("[data-google-login]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        showAlert(
-          document.documentElement.lang === "en"
-            ? "Google authentication needs to be connected to your authentication provider."
-            : "Autentikasi Google perlu dihubungkan ke provider autentikasi kamu."
-        );
-      });
-    });
-  }
-
-  function setupForgot() {
-    document.querySelectorAll('[href="#"][data-i18n="forgotPassword"]').forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
-        showAlert(
-          document.documentElement.lang === "en"
-            ? "Password reset needs to be connected to your authentication provider."
-            : "Reset password perlu dihubungkan ke provider autentikasi kamu."
-        );
-      });
-    });
-  }
-
-  function boot() {
-    setupPasswordToggles();
-    setupRegisterStrength();
-    setupForms();
-    setupGoogle();
-    setupForgot();
-  }
-
-  document.addEventListener("DOMContentLoaded", boot);
+  document.addEventListener("DOMContentLoaded",setup);
 })();
