@@ -6,3 +6,128 @@
 html.dark{--bg:#0f1018;--surface:#171823;--text:#f4f4f7;--muted:#a1a5b5;--line:#2a2b39}html.dark .sl-nav{background:rgba(15,16,24,.84)}html.dark .hero{background:linear-gradient(135deg,#11121d,#19162b,#241521)}html.dark .quick-stats,html.dark .why-section{background:#14151f}html.dark .section-soft,html.dark .faq-section{background:#11121c}html.dark .preview-window,html.dark .checkout-card,html.dark .art-sheet,html.dark .step,html.dark .why-grid article,html.dark .faq-list details,html.dark .stat-icon,html.dark .list-icon,html.dark .floating-note{background:#1a1b27}html.dark .preview-url,html.dark .payment-url,html.dark .product-preview,.dark .preview-stats span{background:#14151f;border-color:#2a2b39}html.dark .footer{background:#090a10}
 @media(max-width:1000px){.desktop-nav{display:none}.menu-btn{display:block}.hero-grid,.feature-layout,.faq-layout{grid-template-columns:1fr;gap:45px}.feature-layout.reverse .feature-copy,.feature-layout.reverse .feature-art{order:initial}.hero-copy{text-align:center}.hero-lead{margin:auto}.hero-actions,.trust-row{justify-content:center}.stats-grid{grid-template-columns:repeat(2,1fr)}.steps,.why-grid{grid-template-columns:repeat(2,1fr)}.final-card{grid-template-columns:auto 1fr}.final-actions{grid-column:1/-1}.footer-grid{grid-template-columns:1.5fr repeat(2,1fr)}}
 @media(max-width:650px){.sl-container{width:min(var(--container),calc(100% - 28px))}.nav-inner{height:68px}.nav-actions .btn{display:none}.hero{padding:65px 0}.hero h1{font-size:47px;letter-spacing:-3px}.hero-lead{font-size:14px}.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}.trust-row{gap:9px;font-size:9px}.preview-body{padding:19px}.preview-title{font-size:26px}.stats-grid{grid-template-columns:1fr 1fr;padding:16px 0;gap:6px}.stat{padding:7px 4px}.stat-icon{width:38px;height:38px}.section{padding:75px 0}.feature-art{min-height:360px}.art-sheet{width:240px;min-height:300px}.note-a{right:10px}.note-b{left:10px}.steps,.why-grid{grid-template-columns:1fr}.final-card{padding:30px 22px;grid-template-columns:1fr}.final-icon{display:none}.final-actions{grid-column:auto;flex-direction:column}.footer-grid{grid-template-columns:1fr 1fr;gap:30px}.footer-brand{grid-column:1/-1}.footer-bottom{flex-direction:column;gap:8px}.mobile-menu{position:absolute;left:14px;right:14px;top:75px;background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:8px;box-shadow:var(--shadow);display:none}.mobile-menu.open{display:grid}.mobile-menu a{padding:12px;border-radius:11px;font-size:12px;font-weight:800}.mobile-menu a:hover{background:#f4f2ff}.desktop-nav{display:none}.hero-preview{margin-top:5px}}
+
+
+/* ============================================================
+   SHOWLINK V5 — UNIFIED THEME SYSTEM
+   All page colors are driven by the same theme variables.
+   ============================================================ */
+html[data-theme="light"]{
+  --bg:#f8f9ff;
+  --surface:#ffffff;
+  --surface-2:#f5f3ff;
+  --text:#171827;
+  --muted:#687087;
+  --line:#e9eaf2;
+  --primary:#6d5dfc;
+  --nav-bg:rgba(255,255,255,.88);
+}
+html[data-theme="dark"]{
+  --bg:#0b1020;
+  --surface:#121a2c;
+  --surface-2:#171e32;
+  --text:#f1f5f9;
+  --muted:#a6b1c2;
+  --line:#29344a;
+  --primary:#8b7cff;
+  --nav-bg:rgba(11,16,32,.90);
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] main{background:var(--bg);color:var(--text)}
+html[data-theme="dark"] .sl-navbar,
+html[data-theme="dark"] .sl-nav,
+html[data-theme="dark"] .quick-stats,
+html[data-theme="dark"] .sl-footer{
+  background:var(--nav-bg)!important;
+  color:var(--text);
+  border-color:var(--line)!important;
+}
+html[data-theme="dark"] .hero{
+  background:linear-gradient(135deg,#0d1325 0%,#151331 48%,#201327 100%);
+}
+html[data-theme="dark"] .section-soft{background:var(--surface-2)}
+html[data-theme="dark"] .section,
+html[data-theme="dark"] .why-section,
+html[data-theme="dark"] .faq-section{color:var(--text)}
+html[data-theme="dark"] .hero-lead,
+html[data-theme="dark"] .feature-copy>p,
+html[data-theme="dark"] .section-heading p,
+html[data-theme="dark"] .feature-list small,
+html[data-theme="dark"] .stat small,
+html[data-theme="dark"] .mini-card small,
+html[data-theme="dark"] .preview-stats small,
+html[data-theme="dark"] .trust-row,
+html[data-theme="dark"] .step p,
+html[data-theme="dark"] .why-grid p,
+html[data-theme="dark"] .faq-list p{
+  color:var(--muted);
+}
+html[data-theme="dark"] .sl-nav-link,
+html[data-theme="dark"] .sl-mobile-link{color:#cbd5e1}
+html[data-theme="dark"] .sl-nav-link:hover,
+html[data-theme="dark"] .sl-mobile-link:hover{background:#202944;color:#a99fff}
+html[data-theme="dark"] .sl-btn-ghost,
+html[data-theme="dark"] .sl-nav-menu,
+html[data-theme="dark"] .icon-btn,
+html[data-theme="dark"] .menu-btn{
+  background:#121a2c!important;color:#e2e8f0!important;border-color:var(--line)!important;
+}
+html[data-theme="dark"] .sl-mobile-panel{background:#121a2c!important;border-color:var(--line)!important}
+html[data-theme="dark"] .preview-window,
+html[data-theme="dark"] .art-sheet,
+html[data-theme="dark"] .checkout-card,
+html[data-theme="dark"] .mini-card,
+html[data-theme="dark"] .preview-url,
+html[data-theme="dark"] .payment-url,
+html[data-theme="dark"] .step,
+html[data-theme="dark"] .why-grid article,
+html[data-theme="dark"] .faq-list details{
+  background:#121a2c!important;
+  color:var(--text);
+  border-color:var(--line)!important;
+}
+html[data-theme="dark"] .window-head,
+html[data-theme="dark"] .preview-stats span{
+  border-color:var(--line)!important;
+  background:#0f172a;
+  color:var(--text);
+}
+html[data-theme="dark"] .live-pill{background:#12352a;color:#6ee7b7}
+html[data-theme="dark"] .preview-url small,
+html[data-theme="dark"] .payment-url small,
+html[data-theme="dark"] .section-kicker,
+html[data-theme="dark"] .eyebrow{color:#a6b1c2}
+html[data-theme="dark"] .preview-url b,
+html[data-theme="dark"] .payment-url b,
+html[data-theme="dark"] .stat b,
+html[data-theme="dark"] .feature-list b,
+html[data-theme="dark"] .step h3,
+html[data-theme="dark"] .why-grid h3,
+html[data-theme="dark"] .faq-list summary{
+  color:#f8fafc;
+}
+html[data-theme="dark"] .art-badge{background:#121a2c;color:#a99fff}
+html[data-theme="dark"] .sheet-line{background:#29344a}
+html[data-theme="dark"] .sheet-buttons span{background:#201d3a}
+html[data-theme="dark"] .product-thumb{background:#211d3a}
+html[data-theme="dark"] .final-cta{
+  background:#090d18;
+}
+html[data-theme="dark"] .sl-footer-links a{color:#a6b1c2}
+html[data-theme="dark"] .sl-footer-bottom{border-color:var(--line);color:#94a3b8}
+html[data-theme="dark"] .sl-footer-bottom strong{color:#e2e8f0}
+
+/* Shared controls are inside navbar actions, never inside nav links. */
+.sl-nav-actions{margin-left:auto}
+.sl-nav-actions .showlink-tools{margin-left:0}
+.showlink-tools{display:flex;align-items:center;gap:7px;flex:none}
+.showlink-tool-btn{white-space:nowrap}
+@media (max-width:820px){
+  .sl-navbar-inner{padding-left:56px}
+  .sl-nav-actions .sl-desktop-action{display:none!important}
+  .sl-nav-actions{margin-left:auto}
+  .showlink-tools{margin-left:0}
+  .showlink-tool-btn{width:40px;min-width:40px;padding:0}
+  .showlink-tool-btn .showlink-tool-text{display:none}
+}
