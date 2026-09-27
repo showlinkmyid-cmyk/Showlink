@@ -139,10 +139,6 @@
             ${is ? authMarkup() : guestMarkup()}
           </nav>
 
-          <div class="sl-drawer-divider"></div>
-
-          <div class="sl-drawer-tools" data-showlink-drawer-tools></div>
-
           ${is ? "" : `
             <div class="sl-drawer-divider"></div>
             <nav class="sl-drawer-nav">
@@ -182,15 +178,6 @@
       });
     });
 
-    // Theme/language controls are rendered by showlink-components.js.
-    // Duplicate the controls into the drawer after that script creates them.
-    requestAnimationFrame(()=>{
-      const source=host.querySelector("[data-showlink-tools]");
-      const drawerTools=host.querySelector("[data-showlink-drawer-tools]");
-      if(source && drawerTools && !drawerTools.children.length){
-        drawerTools.innerHTML=source.innerHTML;
-      }
-    });
   }
 
   function logoutReady(){
