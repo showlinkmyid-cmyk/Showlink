@@ -104,3 +104,5 @@ html[data-theme="dark"] .auth-success{background:#102a22;border-color:#1d5b48;co
 html[data-theme="dark"] .showlink-turnstile iframe {
   filter: none;
 }
+
+.auth-google:disabled,.auth-submit:disabled{opacity:.65;cursor:not-allowed;transform:none!important}
