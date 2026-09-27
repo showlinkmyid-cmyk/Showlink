@@ -12,3 +12,42 @@ html[data-theme=dark]{--bg:#111118;--surface:#1b1b26;--surface2:#252534;--text:#
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}.detail-list{margin-top:10px}.detail-list>div{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid var(--line);font-size:11px}.detail-list>div:last-child{border-bottom:0}.detail-list span{display:flex;align-items:center;gap:8px}.detail-list strong{font-size:13px}.icon-link{width:35px;height:35px;display:grid;place-items:center;border-radius:10px;background:var(--surface2);color:var(--primary)}.info-card{display:flex;gap:18px;align-items:flex-start}.info-icon{width:50px;height:50px;flex:0 0 auto;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(139,92,246,.16));color:var(--blue);font-size:20px}.info-card h2{font-size:18px;margin:7px 0}.info-card p{font-size:10px;line-height:1.7;color:var(--muted);margin:0}
 @media(max-width:900px){.dash-balance-grid,.analytics-grid,.detail-grid{grid-template-columns:1fr}.metric-grid.four{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){:root{--top:64px}.sl-main{width:calc(100% - 20px)}.dash-main{padding:28px 0 60px}.dash-welcome{align-items:flex-start;flex-direction:column}.dash-status-pill{align-self:flex-start}.metric-grid.four,.metric-grid.three{grid-template-columns:1fr}.section-title{align-items:flex-start;flex-direction:column}.cpm-chart{gap:4px}.cpm-day b{font-size:7px}.sub-donut-row{grid-template-columns:1fr}.chart-summary{grid-template-columns:1fr}.dash-card{padding:20px}}
+
+
+/* ============================================================
+   DASHBOARD V2 — shared components + real-data visuals
+   ============================================================ */
+[data-showlink-navbar], [data-showlink-footer]{display:block}
+.dash-main{min-height:calc(100vh - 160px)}
+.wrapped-card{margin:0 0 28px;padding:0}
+.wrapped-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px 24px;border:0;background:transparent;color:var(--text);cursor:pointer;text-align:left}
+.wrapped-title{display:flex;align-items:center;gap:13px}
+.wrapped-title>i{font-size:21px}
+.wrapped-title span{display:flex;flex-direction:column;gap:4px}
+.wrapped-title b{font-size:15px}
+.wrapped-title small{font-size:10px;color:var(--muted);font-weight:600}
+.wrapped-chevron{color:var(--muted);transition:transform .2s ease}
+.wrapped-card.is-collapsed .wrapped-chevron{transform:rotate(180deg)}
+.wrapped-body{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 24px 22px}
+.wrapped-item{display:grid;grid-template-columns:26px 1fr auto;gap:9px;align-items:center;padding:13px;border-radius:14px;background:var(--surface2);font-size:10px}
+.wrapped-item i{font-size:14px}
+.wrapped-item span{color:var(--muted)}
+.wrapped-item strong{font-size:12px}
+
+.real-chart{height:210px;margin-top:18px;position:relative;overflow:hidden;border-radius:16px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 49px,var(--line) 50px)}
+.real-chart svg{width:100%;height:100%;display:block}
+.chart-axis-label{fill:var(--muted);font-size:9px}
+.chart-line-short{fill:none;stroke:var(--green);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-line-pay{fill:none;stroke:var(--yellow);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-line-sub{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-point-short{fill:var(--green)}
+.chart-point-pay{fill:var(--yellow)}
+.chart-point-sub{fill:var(--orange)}
+.chart-empty{height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;gap:8px}
+.cpm-day .bar i{transition:height .35s ease}
+.metric-card strong,.balance-value{font-variant-numeric:tabular-nums}
+.dashboard-footer-gap{height:12px}
+@media(max-width:700px){
+  .wrapped-body{grid-template-columns:1fr;padding:0 18px 18px}
+  .wrapped-toggle{padding:18px}
+}
