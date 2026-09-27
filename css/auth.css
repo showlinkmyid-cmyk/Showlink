@@ -81,3 +81,26 @@ html[data-theme="dark"] .auth-success{background:#102a22;border-color:#1d5b48;co
   .auth-head h2{font-size:25px}
   .auth-row{align-items:flex-start}
 }
+
+
+/* Cloudflare Turnstile */
+.showlink-turnstile {
+  min-height: 65px;
+  margin: 2px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+.turnstile-config-warning {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line, rgba(100,116,139,.25));
+  border-radius: 12px;
+  color: var(--muted, #64748b);
+  background: var(--surface-2, rgba(148,163,184,.08));
+  font-size: 12px;
+}
+html[data-theme="dark"] .showlink-turnstile iframe {
+  filter: none;
+}
