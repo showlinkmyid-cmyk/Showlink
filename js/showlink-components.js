@@ -398,31 +398,14 @@
     syncControlState();
   });
 
-  let controlsObserver = null;
-
-  function watchSharedNavbar() {
-    if (controlsObserver) return;
-    controlsObserver = new MutationObserver(() => {
-      const containers = document.querySelectorAll("[data-showlink-tools]");
-      if (!containers.length) return;
-      buildControls();
-      translatePage();
-      syncControlState();
-    });
-    controlsObserver.observe(document.body, { childList: true, subtree: true });
-  }
-
   function boot() {
     initControlEvents();
-    watchSharedNavbar();
     applyTheme(getTheme(), false);
     // Render the shared navbar/footer on every page, then attach the
     // theme/language controls to the top navbar.
     window.ShowLinkNavbar?.refresh();
     window.ShowLinkFooter?.refresh();
-    buildControls();
     translatePage();
-    applyTheme(getTheme(), false);
     syncControlState();
   }
 

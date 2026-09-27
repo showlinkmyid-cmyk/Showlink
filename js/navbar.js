@@ -236,9 +236,5 @@
     if(e.key==="Escape")closeDrawer();
   });
 
-  document.addEventListener("DOMContentLoaded",()=>{
-    authUser=stored();
-    logoutReady();
-    render();
-  });
+  // Render is orchestrated by showlink-components.js to avoid duplicate DOM work.
 })();
