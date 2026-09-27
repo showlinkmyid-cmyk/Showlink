@@ -68,3 +68,6 @@ html[data-theme="dark"] body{
   background:linear-gradient(135deg,#6d5dfc,#ec4899)!important;
   box-shadow:0 10px 28px rgba(109,93,252,.24);
 }
+
+/* Create form */
+.create-form{display:grid;gap:16px}.create-field{display:grid;gap:8px;font-weight:800;font-size:14px}.create-field input,.create-field textarea{width:100%;border:1px solid #e3e7ef;border-radius:14px;padding:13px 14px;font:inherit;background:var(--sl-card,#fff);color:inherit;outline:none}.create-field input:focus,.create-field textarea:focus{border-color:#6d5dfc;box-shadow:0 0 0 4px #6d5dfc18}.sl-primary-btn{border:0;border-radius:14px;padding:14px 18px;background:linear-gradient(135deg,#6d5dfc,#4f46e5);color:#fff;font:inherit;font-weight:900;cursor:pointer}.sl-primary-btn:disabled{opacity:.6}
