@@ -42,6 +42,7 @@
 
 
   let turnstileWidgetId = null;
+  let turnstileToken = "";
 
   function turnstileConfigured() {
     const key = window.SHOWLINK_TURNSTILE?.siteKey || "";
@@ -62,13 +63,16 @@
         turnstileWidgetId = window.turnstile.render(host, {
           sitekey: window.SHOWLINK_TURNSTILE.siteKey,
           theme: document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light",
-          callback: () => {
-            host.classList.add("is-verified");
+          callback: (token) => {
+            turnstileToken = typeof token === "string" ? token : "";
+            host.classList.toggle("is-verified", !!turnstileToken);
           },
           "expired-callback": () => {
+            turnstileToken = "";
             host.classList.remove("is-verified");
           },
           "error-callback": () => {
+            turnstileToken = "";
             host.classList.remove("is-verified");
           }
         });
@@ -103,7 +107,7 @@
       showAlert(message("turnstileLoading","Verifikasi keamanan belum siap. Tunggu sebentar lalu coba lagi."));
       return false;
     }
-    const token = window.turnstile.getResponse(turnstileWidgetId);
+    const token = turnstileToken || window.turnstile.getResponse(turnstileWidgetId) || "";
     if (!token) {
       showAlert(message("turnstileRequired","Selesaikan verifikasi keamanan terlebih dahulu."));
       return false;
@@ -143,6 +147,7 @@
   function resetTurnstile() {
     if (window.turnstile && turnstileWidgetId !== null) {
       try { window.turnstile.reset(turnstileWidgetId); } catch {}
+      turnstileToken = "";
     }
   }
 
