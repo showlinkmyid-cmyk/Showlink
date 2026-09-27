@@ -89,3 +89,20 @@ html[data-theme="dark"] .auth-success{background:#102a22;border-color:#1d5b48;co
 .auth-bottom{margin-top:24px;font-size:14px;font-weight:700;color:var(--text);padding:14px 12px;border-radius:14px;background:var(--surface-2)}
 .auth-bottom .auth-link{font-size:14px;font-weight:900;margin-left:5px}
 @media(max-width:480px){.auth-bottom,.auth-bottom .auth-link{font-size:14px}}
+
+/* Auth success receipt + clearer account switch links */
+.auth-receipt-backdrop{position:fixed;inset:0;z-index:9999;background:rgba(9,8,20,.66);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.auth-receipt-card{width:min(100%,430px);background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.28);text-align:center}
+.auth-receipt-icon{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;margin:0 auto 12px;background:#dcfce7;color:#16a34a;font-size:27px}
+.auth-receipt-card h3{font-size:24px;margin:0 0 6px}.auth-receipt-note{font-size:12px;color:var(--muted);margin:0 0 18px}
+.auth-receipt-row{display:flex;justify-content:space-between;gap:15px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px;text-align:left}.auth-receipt-row span{color:var(--muted)}.auth-receipt-row strong{max-width:62%;overflow:hidden;text-overflow:ellipsis}
+.auth-receipt-safe{font-size:10px;color:var(--muted);margin:13px 0}.auth-receipt-actions{display:grid;gap:9px;margin-top:16px}
+.auth-secondary{height:45px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);font-weight:800;cursor:pointer}
+.auth-bottom{font-size:16px!important;font-weight:800!important}.auth-bottom .auth-link{font-size:16px!important;font-weight:950!important}
+@media(max-width:480px){.auth-bottom,.auth-bottom .auth-link{font-size:16px!important}}
+
+.auth-recent-users{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}.auth-user-chip{border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:10px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}.auth-user-chip:hover{border-color:#8b7cff}
+
+/* Registration success receipt: password is shown only in the local, one-time success card. */
+.auth-receipt-password strong{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;white-space:normal;color:var(--text)}
+.auth-receipt-safe{line-height:1.55}
