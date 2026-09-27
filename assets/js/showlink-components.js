@@ -23,6 +23,15 @@
     dashboard: "/dashboard.html",
     createPasteLink: "/create-pastelink.html",
     createPaymentLink: "/create-payment-link.html",
+    shortlink: "/shortlink.html",
+    paymentLink: "/payment-link.html",
+    sub4unlock: "/sub4unlock.html",
+    manageLinks: "/kelola-tautan.html",
+    notifications: "/notifikasi.html",
+    payment: "/payment.html",
+    profile: "/profil.html",
+    settings: "/pengaturan.html",
+    about: "/about.html",
     terms: "/terms.html",
     privacy: "/privacy.html",
     contact: "/contact.html",
@@ -72,17 +81,24 @@
 
     const authLinks = `
       <a class="sl-nav-link" href="${CONFIG.dashboard}">
-        ${icon("sl-icon-blue","fa-house")} <span data-i18n="dashboard">${T("dashboard")}</span>
+        ${icon("sl-icon-blue","fa-gauge-high")} <span data-i18n="dashboard">${T("dashboard")}</span>
       </a>
-      <a class="sl-nav-link" href="${CONFIG.createPasteLink}">
-        ${icon("sl-icon-purple","fa-file-circle-plus")} <span data-i18n="pasteLink">${T("pasteLink")}</span>
-      </a>
-      <a class="sl-nav-link" href="${CONFIG.createPaymentLink}">
-        ${icon("sl-icon-pink","fa-credit-card")} <span data-i18n="paymentLink">${T("paymentLink")}</span>
-      </a>
-      <a class="sl-nav-link" href="${CONFIG.dashboard}#analytics">
-        ${icon("sl-icon-green","fa-chart-line")} <span data-i18n="analytics">${T("analytics")}</span>
-      </a>`;
+      <div class="sl-nav-dropdown">
+        <button class="sl-nav-link sl-nav-dropdown-toggle" type="button" aria-expanded="false">
+          ${icon("sl-icon-purple","fa-link")} <span data-i18n="manageLinks">${T("manageLinks")}</span> ${icon("sl-dropdown-chevron","fa-chevron-down")}
+        </button>
+        <div class="sl-nav-dropdown-menu">
+          <a class="sl-nav-link" href="${CONFIG.shortlink}">${icon("sl-icon-green","fa-link")} <span data-i18n="shortlink">${T("shortlink")}</span><span class="sl-new-badge sl-new-green"><i class="fa-solid fa-fire"></i> New</span></a>
+          <a class="sl-nav-link" href="${CONFIG.paymentLink}">${icon("sl-icon-yellow","fa-credit-card")} <span data-i18n="paymentLink">${T("paymentLink")}</span><span class="sl-new-badge sl-new-yellow"><i class="fa-solid fa-fire"></i> New</span></a>
+          <a class="sl-nav-link" href="${CONFIG.sub4unlock}">${icon("sl-icon-orange","fa-unlock-keyhole")} <span data-i18n="sub4unlock">${T("sub4unlock")}</span></a>
+        </div>
+      </div>
+      <a class="sl-nav-link" href="${CONFIG.notifications}">${icon("sl-icon-pink","fa-bell")} <span data-i18n="notifications">${T("notifications")}</span></a>
+      <a class="sl-nav-link" href="${CONFIG.payment}">${icon("sl-icon-green","fa-wallet")} <span data-i18n="payment">${T("payment")}</span></a>
+      <a class="sl-nav-link" href="${CONFIG.profile}">${icon("sl-icon-blue","fa-user")} <span data-i18n="profile">${T("profile")}</span></a>
+      <a class="sl-nav-link" href="${CONFIG.settings}">${icon("sl-icon-yellow","fa-gear")} <span data-i18n="settings">${T("settings")}</span></a>
+      <a class="sl-nav-link" href="${CONFIG.about}">${icon("sl-icon-purple","fa-circle-info")} <span data-i18n="about">${T("about")}</span></a>
+      <a class="sl-nav-link sl-nav-logout" href="#logout" data-logout>${icon("sl-icon-red","fa-right-from-bracket")} <span data-i18n="signOut">${T("signOut")}</span></a>`;
 
     host.innerHTML = `
       <div class="sl-shared">
@@ -105,9 +121,7 @@
               <div data-showlink-tools class="showlink-tools" aria-label="${T("displayOptions")}"></div>
               ${
                 loggedIn
-                  ? `<a class="sl-btn sl-btn-primary sl-desktop-action" href="${CONFIG.dashboard}">
-                       ${icon("","fa-gauge-high")} <span data-i18n="dashboard">${T("dashboard")}</span>
-                     </a>`
+                  ? ""
                   : `
                     <a class="sl-btn sl-btn-ghost sl-desktop-action" href="${CONFIG.login}">
                       ${icon("sl-icon-green","fa-right-to-bracket")} <span data-i18n="login">${T("login")}</span>
@@ -124,10 +138,7 @@
             <div class="sl-container">
               ${
                 loggedIn
-                  ? `${authLinks}
-                     <a class="sl-mobile-link" href="${CONFIG.dashboard}#settings">
-                       ${icon("sl-icon-yellow","fa-gear")} <span data-i18n="settings">${T("settings")}</span>
-                     </a>`
+                  ? `${authLinks}`
                   : `${guestLinks}
                      <a class="sl-mobile-link" href="${CONFIG.login}">
                        ${icon("sl-icon-green","fa-right-to-bracket")} <span data-i18n="login">${T("login")}</span>
@@ -156,6 +167,15 @@
         panel.classList.remove("open");
         menu?.setAttribute("aria-expanded", "false");
         if (menu) menu.innerHTML = icon("", "fa-bars");
+      });
+    });
+
+    host.querySelectorAll(".sl-nav-dropdown-toggle").forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const dd = btn.closest(".sl-nav-dropdown");
+        const open = dd?.classList.toggle("is-open");
+        btn.setAttribute("aria-expanded", String(!!open));
       });
     });
   }
@@ -197,6 +217,24 @@
   function render() {
     renderNavbar();
     renderFooter();
+  }
+
+  if (!window.__showLinkLogoutReady) {
+    window.__showLinkLogoutReady = true;
+    document.addEventListener("click", async (event) => {
+      const btn = event.target instanceof Element ? event.target.closest("[data-logout]") : null;
+      if (!btn) return;
+      event.preventDefault();
+      try {
+        if (window.ShowLinkSupabase?.load) {
+          const sb = await window.ShowLinkSupabase.load();
+          await sb.auth.signOut();
+        }
+      } catch (_) {}
+      localStorage.removeItem("showlink_user");
+      window.dispatchEvent(new CustomEvent("showlink:auth-change", { detail: { user: null } }));
+      location.replace("/login.html");
+    });
   }
 
   window.ShowLinkUI = {
@@ -243,7 +281,7 @@
     id: {
       platformInfo:"Informasi Platform", howItWorks:"Cara Kerja", help:"Bantuan",
       login:"Login", register:"Register", dashboard:"Dashboard", pasteLink:"PasteLink",
-      paymentLink:"Payment Link", analytics:"Analytics", settings:"Pengaturan",
+      paymentLink:"Payment Link", analytics:"Analytics", settings:"Pengaturan", manageLinks:"Kelola tautan", shortlink:"Shortlink", sub4unlock:"Sub4unlock", notifications:"Notifikasi", payment:"Payment", profile:"Profil", about:"About", comingSoon:"Segera hadir", sectionPlaceholder:"Halaman sudah disiapkan dengan fondasi yang sama. Fitur detail akan kita kerjakan satu per satu.", manageLinksIntro:"Kelola semua jenis tautan ShowLink dari satu tempat.", shortlinkIntro:"Buat dan kelola Shortlink ShowLink. Fitur akan kita isi bertahap.", paymentLinkIntro:"Buat dan kelola tautan pembayaran. Fitur akan kita isi bertahap.", sub4unlockIntro:"Kelola akses konten berbasis aksi pengguna.", notificationsIntro:"Lihat notifikasi akun, transaksi, dan aktivitas ShowLink.", paymentIntro:"Kelola pembayaran, saldo, dan aktivitas transaksi akun.", profileIntro:"Kelola informasi profil akun ShowLink.", settingsIntro:"Kelola preferensi akun, bahasa, tema, dan pengaturan ShowLink.", aboutIntro:"Informasi tentang ShowLink dan layanan yang tersedia.",
       openMenu:"Buka menu", mainNavigation:"Navigasi utama", displayOptions:"Opsi tampilan",
       theme:"Tema", light:"Terang", dark:"Gelap", language:"Bahasa",
       indonesia:"Indonesia", english:"Inggris", terms:"Terms of Service",
@@ -272,7 +310,7 @@
     en: {
       platformInfo:"Platform Information", howItWorks:"How It Works", help:"Help",
       login:"Login", register:"Register", dashboard:"Dashboard", pasteLink:"PasteLink",
-      paymentLink:"Payment Link", analytics:"Analytics", settings:"Settings",
+      paymentLink:"Payment Link", analytics:"Analytics", settings:"Settings", manageLinks:"Manage links", shortlink:"Shortlink", sub4unlock:"Sub4unlock", notifications:"Notifications", payment:"Payment", profile:"Profile", about:"About", comingSoon:"Coming soon", sectionPlaceholder:"This page is prepared with the same foundation. We will build the detailed features one by one.", manageLinksIntro:"Manage all ShowLink link types from one place.", shortlinkIntro:"Create and manage ShowLink Shortlinks. We will build the features step by step.", paymentLinkIntro:"Create and manage payment links. We will build the features step by step.", sub4unlockIntro:"Manage content access based on user actions.", notificationsIntro:"View account, transaction, and ShowLink activity notifications.", paymentIntro:"Manage payments, balance, and account transaction activity.", profileIntro:"Manage your ShowLink profile information.", settingsIntro:"Manage account preferences, language, theme, and ShowLink settings.", aboutIntro:"Information about ShowLink and the available service.",
       openMenu:"Open menu", mainNavigation:"Main navigation", displayOptions:"Display options",
       theme:"Theme", light:"Light", dark:"Dark", language:"Language",
       indonesia:"Indonesian", english:"English", terms:"Terms of Service",
