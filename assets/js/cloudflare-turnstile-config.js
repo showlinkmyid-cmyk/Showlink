@@ -4,5 +4,5 @@
  * NEVER put the Turnstile Secret Key here.
  */
 window.SHOWLINK_TURNSTILE = Object.freeze({
-  siteKey: "YOUR_CLOUDFLARE_TURNSTILE_SITE_KEY"
+  siteKey: "0x4AAAAAAFE3GjEuNb8_MO1X"
 });
