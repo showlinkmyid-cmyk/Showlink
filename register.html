@@ -49,6 +49,14 @@
 
       <form class="auth-form" data-auth-form="register" novalidate>
         <div class="auth-field">
+          <label for="register-username" data-i18n="username">Username</label>
+          <div class="auth-input-wrap">
+            <i class="fa-regular fa-user"></i>
+            <input class="auth-input" id="register-username" name="username" type="text" autocomplete="username" placeholder="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" required>
+          </div>
+          <span class="auth-hint" data-i18n="usernameHint">3–30 karakter, hanya huruf, angka, dan underscore.</span>
+        </div>
+        <div class="auth-field">
           <label for="register-email" data-i18n="email">Email</label>
           <div class="auth-input-wrap">
             <i class="fa-regular fa-envelope"></i>
@@ -77,8 +85,6 @@
         <div class="showlink-turnstile" data-turnstile-widget aria-label="Cloudflare Turnstile"></div>
 
         <button class="auth-submit" type="submit"><i class="fa-solid fa-user-plus"></i> <span data-i18n="createAccount">Buat akun</span></button>
-        <div class="auth-divider"><span data-i18n="orContinue">atau lanjutkan dengan</span></div>
-        <button class="auth-google" type="button" data-google-login><i class="fa-brands fa-google"></i><span data-i18n="google">Google</span></button>
       </form>
       <div class="auth-bottom">
         <span data-i18n="haveAccount">Sudah punya akun?</span>
