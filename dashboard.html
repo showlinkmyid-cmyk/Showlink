@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/assets/css/showlink-components.css">
 <link rel="stylesheet" href="/css/dashboard.css">
 <script src="/assets/js/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,7 +20,7 @@
 </script>
 </head>
 <body class="dashboard-page">
-<div id="showlink-app"></div>
+<div data-showlink-navbar></div>
 
 <main class="sl-main dash-main">
 <div class="sl-container">
@@ -55,6 +56,24 @@
       <div class="balance-value" data-metric="available_balance">Rp 0</div>
       <div class="balance-footer"><span><i class="fa-solid fa-wallet"></i><span data-i18n="readyToWithdraw">Siap digunakan/ditarik</span></span><i class="fa-solid fa-arrow-trend-up trend-green"></i></div>
     </article>
+  </section>
+
+  <section class="dash-card wrapped-card" data-wrapped-card>
+    <button class="wrapped-toggle" type="button" data-wrapped-toggle aria-expanded="true">
+      <span class="wrapped-title">
+        <i class="fa-solid fa-box-open icon-purple"></i>
+        <span>
+          <b data-i18n="wrapped">Terbungkus</b>
+          <small data-i18n="wrappedSub">Ringkasan pendapatan yang masih menunggu settlement.</small>
+        </span>
+      </span>
+      <i class="fa-solid fa-chevron-up wrapped-chevron"></i>
+    </button>
+    <div class="wrapped-body" data-wrapped-body>
+      <div class="wrapped-item"><i class="fa-solid fa-link icon-green"></i><span data-i18n="wrappedShort">Shortlink pending</span><strong data-metric="short_pending">Rp 0</strong></div>
+      <div class="wrapped-item"><i class="fa-solid fa-credit-card icon-yellow"></i><span data-i18n="wrappedPay">Payment Link pending</span><strong data-metric="pay_pending">Rp 0</strong></div>
+      <div class="wrapped-item"><i class="fa-solid fa-clock icon-orange"></i><span data-i18n="wrappedSettlement">Settlement berikutnya</span><strong data-metric="next_settlement">—</strong></div>
+    </div>
   </section>
 
   <section class="income-section">
@@ -170,6 +189,8 @@
 </div>
 </main>
 
+<div data-showlink-footer></div>
+<script src="/assets/js/showlink-components.js" defer></script>
 <script src="/js/dashboard.js" defer></script>
 </body>
 </html>
