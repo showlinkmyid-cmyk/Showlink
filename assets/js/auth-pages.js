@@ -117,8 +117,19 @@
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.success) {
+        const codes = Array.isArray(data.errors) ? data.errors : [];
+        let text = message("turnstileFailed","Verifikasi keamanan gagal. Silakan coba lagi.");
+        if (data.code === "server-not-configured") {
+          text = message("turnstileConfig","Cloudflare Turnstile belum dikonfigurasi di server.");
+        } else if (codes.includes("invalid-input-secret")) {
+          text = message("turnstileSecret","Secret Key Cloudflare Turnstile di Cloudflare Pages tidak cocok dengan widget ini.");
+        } else if (codes.includes("invalid-input-response")) {
+          text = message("turnstileToken","Token verifikasi tidak valid atau sudah kedaluwarsa. Silakan centang lagi.");
+        } else if (codes.includes("timeout-or-duplicate")) {
+          text = message("turnstileExpired","Verifikasi sudah kedaluwarsa atau sudah digunakan. Silakan centang lagi.");
+        }
         window.turnstile.reset(turnstileWidgetId);
-        showAlert(message("turnstileFailed","Verifikasi keamanan gagal. Silakan coba lagi."));
+        showAlert(text);
         return false;
       }
       return true;
