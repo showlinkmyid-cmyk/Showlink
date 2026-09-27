@@ -195,10 +195,13 @@
   }
 
   async function register(form) {
+    const username=$('[name="username"]',form)?.value.trim()||"";
     const email=$('[name="email"]',form)?.value.trim();
     const password=$('[name="password"]',form)?.value||"";
     const confirm=$('[name="confirmPassword"]',form)?.value||"";
     const terms=$('[name="terms"]',form);
+    if(!username) return showAlert(message("requiredField","Username wajib diisi."));
+    if(!/^[A-Za-z0-9_]{3,30}$/.test(username)) return showAlert(message("usernameInvalid","Username 3–30 karakter, hanya huruf, angka, dan underscore."));
     if(!email) return showAlert(message("requiredField","Email wajib diisi."));
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert(message("invalidEmail","Format email tidak valid."));
     if(password.length<8) return showAlert(message("passwordHint","Password minimal 8 karakter."));
@@ -208,7 +211,14 @@
     const sb=await getClient(); if(!sb)return;
     const btn=$(".auth-submit",form); if(btn)btn.disabled=true;
     try {
-      const {data,error}=await sb.auth.signUp({email,password,options:{data:{display_name:email.split("@")[0]}}});
+      const {data,error}=await sb.auth.signUp({
+        email,
+        password,
+        options:{data:{
+          username,
+          display_name:username
+        }}
+      });
       if(error)throw error;
       if(data.session) {
         persistUser(data.user);
@@ -219,35 +229,6 @@
       }
     } catch(e) { showAlert(e.message || message("registerFailed","Pendaftaran gagal.")); }
     finally { if(btn)btn.disabled=false; resetTurnstile(); }
-  }
-
-  async function google() {
-    const btn = document.querySelector("[data-google-login]");
-    hideAlert();
-    if (btn) {
-      btn.disabled = true;
-      btn.setAttribute("aria-busy", "true");
-    }
-    try {
-      if (!(await verifyTurnstile())) return;
-      const sb=await getClient(); if(!sb)return;
-      const {error}=await sb.auth.signInWithOAuth({
-        provider:"google",
-        options:{
-          redirectTo:`${location.origin}/auth-callback.html`,
-          queryParams:{access_type:"offline",prompt:"select_account"}
-        }
-      });
-      if(error) throw error;
-    } catch(e) {
-      showAlert(e?.message || message("googleFailed","Login Google gagal."));
-      resetTurnstile();
-    } finally {
-      if (btn) {
-        btn.disabled = false;
-        btn.removeAttribute("aria-busy");
-      }
-    }
   }
 
   async function forgot() {
@@ -269,7 +250,6 @@
         form.dataset.authForm==="register"?register(form):login(form);
       });
     });
-    document.querySelectorAll("[data-google-login]").forEach(b=>b.addEventListener("click",google));
     document.querySelectorAll('[data-i18n="forgotPassword"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();forgot();}));
   }
 
