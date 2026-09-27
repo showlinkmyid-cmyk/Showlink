@@ -70,9 +70,9 @@
           <a class="auth-link" href="#" data-i18n="forgotPassword">Lupa password?</a>
         </div>
 
-        <div class="showlink-turnstile" data-turnstile-widget aria-label="Cloudflare Turnstile"></div>
-
         <button class="auth-submit" type="submit"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="signIn">Masuk</span></button>
+        <div class="auth-divider"><span>atau</span></div>
+        <button class="auth-google" type="button" data-google-auth><i class="fa-brands fa-google"></i><span> Lanjutkan dengan Google</span></button>
       </form>
 
       <div class="auth-bottom">
@@ -85,8 +85,6 @@
   </div>
 </main>
 <div data-showlink-footer></div>
-<script src="/assets/js/cloudflare-turnstile-config.js"></script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script src="/assets/js/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
