@@ -1,6 +1,6 @@
 -- SHOWLINK AUTH + PROFILE DATABASE
--- Run in Supabase SQL Editor.
--- Safe/idempotent for a fresh or existing project.
+-- Email + username registration + Google OAuth profile support.
+-- Run in Supabase SQL Editor. Passwords are managed only by Supabase Auth; never store plaintext passwords in public.profiles.
 
 create extension if not exists pgcrypto;
 
@@ -28,14 +28,21 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles(id,email,display_name)
+  insert into public.profiles(id,email,username,display_name)
   values (
     new.id,
     new.email,
-    coalesce(new.raw_user_meta_data->>'display_name', split_part(coalesce(new.email,''),'@',1))
+    nullif(trim(new.raw_user_meta_data->>'username'),''),
+    coalesce(
+      nullif(trim(new.raw_user_meta_data->>'display_name'),''),
+      nullif(trim(new.raw_user_meta_data->>'username'),''),
+      split_part(coalesce(new.email,''),'@',1)
+    )
   )
   on conflict (id) do update set
     email=excluded.email,
+    username=coalesce(excluded.username, public.profiles.username),
+    display_name=coalesce(excluded.display_name, public.profiles.display_name),
     updated_at=now();
   return new;
 end;
@@ -48,7 +55,11 @@ for each row execute function public.handle_new_user();
 
 create or replace function public.touch_profiles_updated_at()
 returns trigger language plpgsql set search_path=public as $$
-begin new.updated_at=now(); return new; end; $$;
+begin
+  new.updated_at=now();
+  return new;
+end;
+$$;
 
 drop trigger if exists profiles_touch_updated_at on public.profiles;
 create trigger profiles_touch_updated_at
@@ -76,7 +87,3 @@ with check (id = auth.uid());
 grant usage on schema public to anon, authenticated;
 grant select, insert, update on public.profiles to authenticated;
 revoke all on public.profiles from anon;
-
--- Optional: protect plan from being changed by the browser.
--- If you later need subscription/admin updates, do them with a trusted
--- server/RPC rather than exposing plan writes through the client.

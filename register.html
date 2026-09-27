@@ -55,6 +55,7 @@
             <input class="auth-input" id="register-username" name="username" type="text" autocomplete="username" placeholder="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" required>
           </div>
           <span class="auth-hint" data-i18n="usernameHint">3–30 karakter, hanya huruf, angka, dan underscore.</span>
+          <div class="auth-recent-users" data-recent-usernames hidden></div>
         </div>
         <div class="auth-field">
           <label for="register-email" data-i18n="email">Email</label>
@@ -100,6 +101,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
 <script src="/assets/js/showlink-components.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="/assets/js/auth-pages.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const host=document.querySelector("[data-recent-usernames]"),input=document.getElementById("register-username");
+ let names=[];try{names=JSON.parse(localStorage.getItem("showlink_usernames")||"[]")}catch{}
+ if(host&&input&&names.length){host.hidden=false;host.innerHTML='<span class="auth-hint">Akun yang pernah digunakan di perangkat ini:</span>'+names.map(n=>`<button type="button" class="auth-user-chip" data-name="${String(n).replace(/"/g,"&quot;")}"><i class="fa-regular fa-user"></i> ${String(n).replace(/</g,"&lt;")}</button>`).join("");host.querySelectorAll("[data-name]").forEach(b=>b.onclick=()=>{input.value=b.dataset.name;input.focus()})}
+});
+</script>
 </body>
 </html>
