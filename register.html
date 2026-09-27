@@ -74,6 +74,8 @@
           </div>
         </div>
         <label class="auth-check"><input type="checkbox" name="terms" required> <span data-i18n="authTerms">Dengan melanjutkan, kamu menyetujui Ketentuan Layanan dan Kebijakan Privasi ShowLink.</span></label>
+        <div class="cf-turnstile showlink-turnstile" data-turnstile-widget aria-label="Cloudflare Turnstile"></div>
+
         <button class="auth-submit" type="submit"><i class="fa-solid fa-user-plus"></i> <span data-i18n="createAccount">Buat akun</span></button>
         <div class="auth-divider"><span data-i18n="orContinue">atau lanjutkan dengan</span></div>
         <button class="auth-google" type="button" data-google-login><i class="fa-brands fa-google"></i><span data-i18n="google">Google</span></button>
@@ -88,6 +90,8 @@
   </div>
 </main>
 <div data-showlink-footer></div>
+<script src="/assets/js/cloudflare-turnstile-config.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script src="/assets/js/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/supabase-client.js"></script>
