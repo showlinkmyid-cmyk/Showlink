@@ -262,7 +262,12 @@
       totalLinks:"Total link", totalViews:"Total views", totalSales:"Total penjualan",
       recentActivity:"Aktivitas terbaru", noActivity:"Belum ada aktivitas.",
       dashboardIntro:"Kelola akun dan aktivitas ShowLink kamu dari satu tempat.",
-      freePlan:"Free", registerDescription:"Buat akun ShowLink untuk membuat dan mengelola link."
+      freePlan:"Free", registerDescription:"Buat akun ShowLink untuk membuat dan mengelola link.",
+      accountSaved:"Data akun berhasil disimpan.", passwordHidden:"Password tidak ditampilkan demi keamanan.", passwordReceiptNote:"Password ditampilkan hanya di perangkat ini agar bisa kamu simpan sebagai catatan. Password tidak disimpan ke database oleh ShowLink.",
+      saveScreenshot:"Simpan screenshot", continueDashboard:"Lanjut ke Dashboard", registerSuccessTitle:"Pendaftaran berhasil!",
+      googleFailed:"Login Google gagal. Silakan coba lagi.", changePassword:"Ubah password",
+      changePasswordSub:"Masukkan password baru dan konfirmasi password.", newPassword:"Password baru",
+      changePasswordButton:"Ubah password", processingLogin:"Memproses login...", pleaseWait:"Mohon tunggu sebentar."
     },
     en: {
       platformInfo:"Platform Information", howItWorks:"How It Works", help:"Help",
@@ -286,6 +291,11 @@
       totalLinks:"Total links", totalViews:"Total views", totalSales:"Total sales",
       recentActivity:"Recent activity", noActivity:"No activity yet.",
       dashboardIntro:"Manage your ShowLink account and activity from one place.",
+      accountSaved:"Account details have been saved.", passwordHidden:"Your password is hidden for security.", passwordReceiptNote:"Your password is shown only on this device so you can save it as a record. ShowLink does not store your password in the database.",
+      saveScreenshot:"Save screenshot", continueDashboard:"Continue to Dashboard", registerSuccessTitle:"Registration successful!",
+      googleFailed:"Google login failed. Please try again.", changePassword:"Change password",
+      changePasswordSub:"Enter your new password and confirm it.", newPassword:"New password",
+      changePasswordButton:"Change password", processingLogin:"Signing you in...", pleaseWait:"Please wait.",
       freePlan:"Free", registerDescription:"Create a ShowLink account to create and manage links."
     }
   };
