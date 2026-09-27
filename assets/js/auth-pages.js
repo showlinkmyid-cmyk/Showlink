@@ -144,9 +144,10 @@
         return false;
       }
       return true;
-    } catch {
+    } catch (err) {
       window.turnstile.reset(turnstileWidgetId);
-      showAlert(message("turnstileFailed","Verifikasi keamanan gagal. Silakan coba lagi."));
+      const detail = err?.message ? ` (${err.message})` : "";
+      showAlert(message("turnstileFailed","Verifikasi keamanan gagal. Silakan coba lagi.") + detail);
       return false;
     }
   }
