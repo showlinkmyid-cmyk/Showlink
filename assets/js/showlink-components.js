@@ -267,7 +267,7 @@
       saveScreenshot:"Simpan screenshot", continueDashboard:"Lanjut ke Dashboard", registerSuccessTitle:"Pendaftaran berhasil!",
       googleFailed:"Login Google gagal. Silakan coba lagi.", changePassword:"Ubah password",
       changePasswordSub:"Masukkan password baru dan konfirmasi password.", newPassword:"Password baru",
-      changePasswordButton:"Ubah password", processingLogin:"Memproses login...", pleaseWait:"Mohon tunggu sebentar."
+      changePasswordButton:"Ubah password", resetPasswordTitle:"Reset password", resetPasswordSub:"Masukkan Gmail, lalu buat password baru dan konfirmasi password.", resetPasswordHint:"Demi keamanan, ShowLink akan mengirim link verifikasi ke Gmail. Setelah link dibuka, password baru dapat diterapkan.", rememberPassword:"Ingat password?", processingLogin:"Memproses login...", pleaseWait:"Mohon tunggu sebentar."
     },
     en: {
       platformInfo:"Platform Information", howItWorks:"How It Works", help:"Help",
@@ -295,7 +295,7 @@
       saveScreenshot:"Save screenshot", continueDashboard:"Continue to Dashboard", registerSuccessTitle:"Registration successful!",
       googleFailed:"Google login failed. Please try again.", changePassword:"Change password",
       changePasswordSub:"Enter your new password and confirm it.", newPassword:"New password",
-      changePasswordButton:"Change password", processingLogin:"Signing you in...", pleaseWait:"Please wait.",
+      changePasswordButton:"Change password", resetPasswordTitle:"Reset password", resetPasswordSub:"Enter your Gmail, then create and confirm your new password.", resetPasswordHint:"For security, ShowLink will send a verification link to your Gmail. After opening the link, your new password can be applied.", rememberPassword:"Remember your password?", processingLogin:"Signing you in...", pleaseWait:"Please wait.",
       freePlan:"Free", registerDescription:"Create a ShowLink account to create and manage links."
     }
   };

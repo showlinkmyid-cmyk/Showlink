@@ -77,7 +77,7 @@
   function setup(){
     setupPasswordToggles();setupStrength();
     document.querySelectorAll("[data-auth-form]").forEach(form=>form.addEventListener("submit",e=>{e.preventDefault();hideAlert();form.dataset.authForm==="register"?register(form):login(form)}));
-    document.querySelectorAll('[data-i18n="forgotPassword"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();forgot()}));
+    document.querySelectorAll('[data-i18n="forgotPassword"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();location.href="/reset-password.html"}));
     document.querySelectorAll("[data-google-auth]").forEach(b=>b.addEventListener("click",googleAuth));
   }
   document.addEventListener("DOMContentLoaded",setup);
