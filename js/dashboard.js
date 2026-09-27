@@ -1,40 +1,108 @@
-
 (() => {
-  "use strict";
-  const page = 'Dashboard';
-  const I18N = {'id': {'dashboard': 'Dashboard', 'accountOverview': 'Ringkasan akun', 'accountEmail': 'Email akun', 'accountPlan': 'Paket', 'accountCreated': 'Bergabung sejak', 'editProfile': 'Edit profil', 'platformInfo': 'Informasi Platform', 'totalLinks': 'Total link', 'totalViews': 'Total views', 'totalSales': 'Total penjualan', 'quickActions': 'Aksi cepat', 'createPasteLink': 'Buat PasteLink', 'createPaymentLink': 'Buat Payment Link', 'language': 'Bahasa', 'theme': 'Tema', 'signOut': 'Keluar', 'manageLinks': 'Kelola tautan', 'shortlink': 'Shortlink', 'paymentLink': 'Payment Link', 'sub4unlock': 'Sub4unlock', 'notifications': 'Notifikasi', 'payment': 'Payment', 'profile': 'Profil', 'settings': 'Pengaturan', 'about': 'About', 'logout': 'Log out', 'openMenu': 'Buka menu', 'closeMenu': 'Tutup menu', 'light': 'Terang', 'dark': 'Gelap', 'indonesia': 'Indonesia', 'english': 'English', 'new': 'New', 'dashboardWelcome': 'Selamat datang', 'dashboardIntro': 'Kelola akun dan aktivitas ShowLink kamu dari satu tempat.', 'manageLinksIntro': 'Kelola semua jenis tautan ShowLink dari satu tempat.', 'shortlinkIntro': 'Buat dan kelola Shortlink ShowLink.', 'paymentLinkIntro': 'Buat dan kelola tautan pembayaran.', 'sub4unlockIntro': 'Kelola akses konten berbasis aksi pengguna.', 'notificationsIntro': 'Lihat notifikasi akun, transaksi, dan aktivitas ShowLink.', 'paymentIntro': 'Kelola pembayaran, saldo, dan aktivitas transaksi akun.', 'profileIntro': 'Kelola informasi profil akun ShowLink.', 'settingsIntro': 'Kelola preferensi akun, bahasa, tema, dan pengaturan ShowLink.', 'aboutIntro': 'Informasi tentang ShowLink dan layanan yang tersedia.'}, 'en': {'dashboard': 'Dashboard', 'accountOverview': 'Ringkasan akun', 'accountEmail': 'Email akun', 'accountPlan': 'Paket', 'accountCreated': 'Bergabung sejak', 'editProfile': 'Edit profil', 'platformInfo': 'Informasi Platform', 'totalLinks': 'Total link', 'totalViews': 'Total views', 'totalSales': 'Total penjualan', 'quickActions': 'Aksi cepat', 'createPasteLink': 'Buat PasteLink', 'createPaymentLink': 'Buat Payment Link', 'language': 'Language', 'theme': 'Theme', 'signOut': 'Keluar', 'manageLinks': 'Manage links', 'shortlink': 'Shortlink', 'paymentLink': 'Payment Link', 'sub4unlock': 'Sub4unlock', 'notifications': 'Notifications', 'payment': 'Payment', 'profile': 'Profile', 'settings': 'Settings', 'about': 'About', 'logout': 'Log out', 'openMenu': 'Open menu', 'closeMenu': 'Close menu', 'light': 'Light', 'dark': 'Dark', 'indonesia': 'Indonesian', 'english': 'English', 'new': 'New', 'dashboardWelcome': 'Welcome', 'dashboardIntro': 'Manage your ShowLink account and activity in one place.', 'manageLinksIntro': 'Manage all ShowLink link types from one place.', 'shortlinkIntro': 'Create and manage ShowLink Shortlinks.', 'paymentLinkIntro': 'Create and manage payment links.', 'sub4unlockIntro': 'Manage content access based on user actions.', 'notificationsIntro': 'View account, transaction, and ShowLink activity notifications.', 'paymentIntro': 'Manage payments, balance, and account transaction activity.', 'profileIntro': 'Manage your ShowLink profile information.', 'settingsIntro': 'Manage account preferences, language, theme, and ShowLink settings.', 'aboutIntro': 'Information about ShowLink and available services.'}};
-  const items = [['dashboard.html', 'dashboard', 'fa-gauge-high', 'blue', ''], ['kelola-tautan.html', 'manageLinks', 'fa-layer-group', 'purple', ''], ['shortlink.html', 'shortlink', 'fa-link', 'green', 'new-green'], ['payment-link.html', 'paymentLink', 'fa-credit-card', 'yellow', 'new-yellow'], ['sub4unlock.html', 'sub4unlock', 'fa-unlock-keyhole', 'orange', ''], ['notifikasi.html', 'notifications', 'fa-bell', 'pink', ''], ['payment.html', 'payment', 'fa-wallet', 'green', ''], ['profil.html', 'profile', 'fa-user', 'blue', ''], ['pengaturan.html', 'settings', 'fa-gear', 'yellow', ''], ['about.html', 'about', 'fa-circle-info', 'purple', '']];
-  const keyTheme='showlink-theme', keyLang='showlink-language';
-  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-  const lang=()=>localStorage.getItem(keyLang)==='en'?'en':'id';
-  const theme=()=>{const t=localStorage.getItem(keyTheme);return t==='dark'||t==='light'?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')};
-  const t=k=>I18N[lang()][k]||k;
-  function applyTheme(v){v=v==='dark'?'dark':'light';document.documentElement.dataset.theme=v;document.documentElement.style.colorScheme=v;localStorage.setItem(keyTheme,v);sync();}
-  function applyLang(v){localStorage.setItem(keyLang,v==='en'?'en':'id');translate();}
-  function sync(){const v=theme();$$('[data-theme-label]').forEach(x=>x.textContent=v==='dark'?t('dark'):t('light'));$$('[data-theme-icon]').forEach(x=>x.innerHTML=v==='dark'?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>');$$('[data-theme-option]').forEach(x=>{x.classList.toggle('active',x.dataset.themeOption===v);x.querySelector('.sl-check').textContent=x.dataset.themeOption===v?'✓':''});$$('[data-lang-option]').forEach(x=>{x.classList.toggle('active',x.dataset.langOption===lang());x.querySelector('.sl-check').textContent=x.dataset.langOption===lang()?'✓':''});$$('[data-lang-label]').forEach(x=>x.textContent=lang()==='en'?'EN':'ID');}
-  function translate(){document.documentElement.lang=lang();$$('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(I18N[lang()][k]!==undefined)el.textContent=t(k)});document.title=t('title')||document.title;sync();}
-  function nav(){const host=$('#showlink-app');host.innerHTML=`
-    <header class="sl-topbar"><div class="sl-top-inner">
-      <button class="sl-menu-btn" data-menu aria-label="${t('openMenu')}"><i class="fa-solid fa-bars"></i></button>
-      <a class="sl-brand" href="/dashboard.html"><span class="sl-brand-mark"><i class="fa-solid fa-link"></i></span><span>Show<span>Link</span></span></a>
-      <div class="sl-top-spacer"></div><div class="sl-tools">
-        <div class="sl-tool" data-tool><button class="sl-tool-btn" data-theme-toggle><span data-theme-icon></span><span class="sl-tool-text" data-theme-label></span></button><div class="sl-tool-menu">
-          <button class="sl-tool-option" data-theme-option="light"><span class="sl-icon-sun"><i class="fa-solid fa-sun"></i></span><span>${t('light')}</span><span class="sl-check"></span></button>
-          <button class="sl-tool-option" data-theme-option="dark"><span class="sl-icon-moon"><i class="fa-solid fa-moon"></i></span><span>${t('dark')}</span><span class="sl-check"></span></button>
-        </div></div>
-        <div class="sl-tool" data-tool><button class="sl-tool-btn" data-lang-toggle><i class="fa-solid fa-language"></i><span class="sl-tool-text" data-lang-label></span></button><div class="sl-tool-menu">
-          <button class="sl-tool-option" data-lang-option="id"><i class="fa-solid fa-flag"></i><span>${t('indonesia')}</span><span class="sl-check"></span></button>
-          <button class="sl-tool-option" data-lang-option="en"><i class="fa-solid fa-earth-americas"></i><span>${t('english')}</span><span class="sl-check"></span></button>
-        </div></div>
-      </div>
-    </div></header>
-    <div class="sl-overlay" data-overlay></div>
-    <aside class="sl-drawer" data-drawer aria-hidden="true"><div class="sl-drawer-head"><span class="sl-drawer-title">ShowLink Menu</span><button class="sl-close" data-close aria-label="${t('closeMenu')}"><i class="fa-solid fa-xmark"></i></button></div><nav class="sl-nav-list">
-      ${items.map(([href,key,ic,color,badge])=>`<a class="sl-nav-item ${page===key?'active':''}" href="/${href}"><i class="fa-solid ${ic} sl-${color}"></i><span class="sl-nav-label" data-i18n="${key}">${t(key)}</span>${badge?`<span class="sl-new ${badge==='new-green'?'green':'yellow'}"><i class="fa-solid fa-fire"></i> ${t('new')}</span>`:''}</a>`).join('')}
-      <a class="sl-nav-item" href="#logout" data-logout><i class="fa-solid fa-right-from-bracket" style="color:#ef4444"></i><span class="sl-nav-label" data-i18n="logout">${t('logout')}</span></a>
-    </nav></aside>`;sync();}
-  async function guard(){try{const sb=await window.ShowLinkSupabase.load();const {data,error}=await sb.auth.getSession();if(error||!data.session){localStorage.removeItem('showlink_user');location.replace('/login.html');return false}localStorage.setItem('showlink_user',JSON.stringify({id:data.session.user.id,email:data.session.user.email,user_metadata:data.session.user.user_metadata||{}}));return true}catch(e){location.replace('/login.html');return false}}
-  function events(){document.addEventListener('click',async e=>{const el=e.target.closest('[data-menu]');if(el){const d=$('[data-drawer]');d.classList.add('open');$('[data-overlay]').classList.add('open');d.setAttribute('aria-hidden','false');return}if(e.target.closest('[data-close]')||e.target.closest('[data-overlay]')){close();return}const tt=e.target.closest('[data-theme-toggle]');if(tt){e.stopPropagation();const tool=tt.closest('[data-tool]');$$('[data-tool]').forEach(x=>x!==tool&&x.classList.remove('is-open'));tool.classList.toggle('is-open');return}const lo=e.target.closest('[data-lang-toggle]');if(lo){e.stopPropagation();const tool=lo.closest('[data-tool]');$$('[data-tool]').forEach(x=>x!==tool&&x.classList.remove('is-open'));tool.classList.toggle('is-open');return}const to=e.target.closest('[data-theme-option]');if(to){applyTheme(to.dataset.themeOption);return}const lgo=e.target.closest('[data-lang-option]');if(lgo){applyLang(lgo.dataset.langOption);return}if(e.target.closest('[data-logout]')){e.preventDefault();try{const sb=await window.ShowLinkSupabase.load();await sb.auth.signOut()}catch(_){}localStorage.removeItem('showlink_user');location.replace('/login.html');return}if(!e.target.closest('[data-tool]'))$$('[data-tool]').forEach(x=>x.classList.remove('is-open'));});}
-  function close(){$('[data-drawer]')?.classList.remove('open');$('[data-overlay]')?.classList.remove('open');$('[data-drawer]')?.setAttribute('aria-hidden','true')}
-  document.addEventListener('DOMContentLoaded',async()=>{document.documentElement.dataset.theme=theme();nav();translate();events();await guard();});
+"use strict";
+
+/*
+ * Dashboard data contract.
+ * The current uploaded HTML/CSS did not contain the actual Supabase table/column
+ * schema for Shortlink, Payment Link, or Sub4unlock. Therefore this file keeps
+ * the database adapter isolated instead of inventing a schema.
+ * Set these table names/field mappings when the canonical SQL schema is supplied.
+ */
+const I18N = {
+ id:{
+  dashboard:"Dashboard",welcome:"Selamat datang",dashboardIntro:"Pantau saldo, pendapatan, klik, dan performa semua layanan ShowLink dari satu tempat.",
+  accountGreeting:"Salam sambutan",welcomeNote:"Semua ringkasan penghasilanmu ada di sini.",availableBalance:"Saldo tersedia saat ini",readyToWithdraw:"Siap digunakan/ditarik",
+  shortlinkIncome:"Pendapatan Shortlink",shortlinkIncomeSub:"Penghasilan dari iklan & CPM",paymentIncome:"Pendapatan Payment Link",paymentIncomeSub:"Pendapatan bersih dari penjualan link",
+  subIncome:"Pendapatan Member Sub4unlock",subIncomeSub:"Hanya dari user yang menyelesaikan task Sub4Sub",pendingSettlement:"Saldo Pending Settlement H1",todayIncome:"Pendapatan hari ini",monthIncome:"Pendapatan bulan ini",
+  totalShortlinks:"Total Shortlink",totalPaymentLinks:"Total Payment Link",clicksToday:"Pendapatan klik hari ini",totalSubLinks:"Total Link Sub4unlock",
+  viewDetails:"Lihat detail",cpmTrend:"Naik Turun CPM Shortlink",weeklyCpm:"CPM mingguan",weekendHigher:"Weekend lebih tinggi",
+  cpmNote:"CPM acuan: Senin–Jumat Rp100–150, Sabtu–Minggu Rp150–250. Pendapatan aktual mengikuti CPM yang berlaku dan klik valid setelah task selesai.",
+  incomeDistribution:"Distribusi pendapatan",totalIncome:"Total pendapatan",shortlinkStats:"Statistik Shortlink",performanceTrend:"Performa & tren",
+  chartData:"Data akan mengikuti statistik Shortlink dari database.",validViews:"View valid",estimatedIncome:"Estimasi pendapatan",paymentStats:"Statistik Payment Link",salesTrend:"Penjualan & tren",paymentClicks:"Klik/checkout",netIncome:"Pendapatan bersih",
+  subStats:"Statistik Sub4unlock",subUnlockStats:"Klik & total link",validTasks:"Task selesai",monthlyClicks:"Klik bulan ini",activeLinks:"Link aktif",details:"Detail",subDetails:"Sub4unlock",
+  lockedContent:"Konten terkunci",unlockedContent:"Konten terbuka",usersCompleted:"User selesai task",successfulSales:"Penjualan berhasil",incomeRule:"Aturan pendapatan",incomeRuleTitle:"Saldo tampil sebagai pendapatan bersih",incomeRuleText:"Payment Link menampilkan bagian bersih yang menjadi milikmu. Fee platform tidak ditampilkan di Dashboard."
+ },
+ en:{
+  dashboard:"Dashboard",welcome:"Welcome",dashboardIntro:"Monitor your balance, earnings, clicks, and ShowLink performance in one place.",
+  accountGreeting:"Account greeting",welcomeNote:"Your earnings overview is all here.",availableBalance:"Available balance",readyToWithdraw:"Ready to use/withdraw",
+  shortlinkIncome:"Shortlink earnings",shortlinkIncomeSub:"Advertising & CPM earnings",paymentIncome:"Payment Link earnings",paymentIncomeSub:"Net earnings from link sales",
+  subIncome:"Sub4unlock member earnings",subIncomeSub:"Only from users completing Sub4Sub tasks",pendingSettlement:"Pending Settlement H1",todayIncome:"Today's earnings",monthIncome:"This month's earnings",
+  totalShortlinks:"Total Shortlinks",totalPaymentLinks:"Total Payment Links",clicksToday:"Clicks today",totalSubLinks:"Total Sub4unlock Links",
+  viewDetails:"View details",cpmTrend:"Shortlink CPM trend",weeklyCpm:"Weekly CPM",weekendHigher:"Higher on weekends",
+  cpmNote:"Reference CPM: Monday–Friday Rp100–150, Saturday–Sunday Rp150–250. Actual earnings follow the active CPM and valid clicks after the task is completed.",
+  incomeDistribution:"Income distribution",totalIncome:"Total earnings",shortlinkStats:"Shortlink statistics",performanceTrend:"Performance & trend",
+  chartData:"Data will follow Shortlink statistics from the database.",validViews:"Valid views",estimatedIncome:"Estimated earnings",paymentStats:"Payment Link statistics",salesTrend:"Sales & trend",paymentClicks:"Clicks/checkout",netIncome:"Net earnings",
+  subStats:"Sub4unlock statistics",subUnlockStats:"Clicks & total links",validTasks:"Completed tasks",monthlyClicks:"Clicks this month",activeLinks:"Active links",details:"Details",subDetails:"Sub4unlock",
+  lockedContent:"Locked content",unlockedContent:"Unlocked content",usersCompleted:"Users completing task",successfulSales:"Successful sales",incomeRule:"Earnings rule",incomeRuleTitle:"Balance is shown as net earnings",incomeRuleText:"Payment Link shows the net amount that belongs to you. Platform fees are not shown on the Dashboard."
+ }
+};
+
+const lang=()=>localStorage.getItem("showlink-language")==="en"?"en":"id";
+const theme=()=>{const t=localStorage.getItem("showlink-theme");return t==="dark"||t==="light"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")};
+const t=k=>I18N[lang()][k]||k;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function translate(){
+ document.documentElement.lang=lang();
+ $$("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N[lang()][k]!==undefined)el.textContent=t(k)});
+}
+function money(n){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0)}
+function num(n){return new Intl.NumberFormat("id-ID").format(Number(n)||0)}
+function setMetric(k,v){$$(`[data-metric="${k}"]`).forEach(el=>el.textContent=typeof v==="number"&&/balance|income|pending|today|month|earnings/.test(k)?money(v):num(v))}
+function setTrend(k,v){const nodes=$$(`[data-trend="${k}"]`);nodes.forEach(el=>{const n=Number(v)||0;el.classList.toggle("up",n>0);el.classList.toggle("down",n<0);el.innerHTML=`<i class="fa-solid fa-arrow-${n>=0?"trend-up":"trend-down"}"></i> ${Math.abs(n).toFixed(1)}%`})}
+
+async function loadProfile(sb,user){
+ try{
+  const {data}=await sb.from("profiles").select("username,display_name,email,plan,avatar_url").eq("id",user.id).maybeSingle();
+  const p=data||{};
+  const name=p.username||p.display_name||user.user_metadata?.username||user.email?.split("@")[0]||"User";
+  $$("[data-user-name]").forEach(x=>x.textContent=name);
+  $$("[data-user-email]").forEach(x=>x.textContent=p.email||user.email||"—");
+  $$("[data-account-status]").forEach(x=>x.textContent=(p.plan||"free").toUpperCase());
+  const av=$("[data-avatar]"); if(av && p.avatar_url) av.innerHTML=`<img src="${p.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
+ }catch(e){console.warn("Profile load:",e)}
+}
+
+/*
+ * Adapter point for the canonical database.
+ * No guessed table is queried here. Once the project's canonical SQL is supplied,
+ * this function can map exact rows/RPCs into the metrics below.
+ */
+async function loadDashboardData(){
+ const data={
+  available_balance:0,short_pending:0,short_today:0,short_month:0,short_total:0,short_views:0,short_earnings:0,
+  pay_pending:0,pay_today:0,pay_month:0,pay_total:0,pay_clicks:0,pay_earnings:0,pay_sales:0,
+  sub_today:0,sub_month:0,sub_total:0,sub_clicks:0,sub_clicks_month:0,sub_links_active:0,sub_locked:0,sub_unlocked:0,sub_users:0,
+  income_total:0,income_short_pct:0,income_pay_pct:0
+ };
+ Object.entries(data).forEach(([k,v])=>setMetric(k,v));
+ ["short_today","short_month","short_total","pay_today","pay_month","pay_total","sub_today","sub_month","sub_total"].forEach(k=>setTrend(k,0));
+ updateDonuts(0,0,0);
+}
+
+function updateDonuts(short,pay,sub){
+ const total=Number(short)+Number(pay);
+ const sp=total?Math.round(short/total*100):0, pp=total?100-sp:0;
+ setMetric("income_total",total);setMetric("income_short_pct",sp);setMetric("income_pay_pct",pp);
+ const d=$("#income-donut"); if(d)d.style.background=`conic-gradient(var(--green) 0 ${sp}%,var(--yellow) ${sp}% 100%)`;
+ const sd=$("#sub-donut"); if(sd)sd.style.background=`conic-gradient(var(--orange) 0 65%,var(--blue) 65% 100%)`;
+}
+
+async function guard(){
+ try{
+  const sb=await window.ShowLinkSupabase.load();
+  const {data,error}=await sb.auth.getSession();
+  if(error||!data.session){location.replace("/login.html");return}
+  await loadProfile(sb,data.session.user);
+  await loadDashboardData();
+ }catch(e){console.error(e);location.replace("/login.html")}
+}
+
+function applyTheme(v){v=v==="dark"?"dark":"light";document.documentElement.dataset.theme=v;document.documentElement.style.colorScheme=v;localStorage.setItem("showlink-theme",v);if(window.showlinkRefreshComponents)window.showlinkRefreshComponents()}
+function setupThemeSync(){
+ window.addEventListener("showlink:theme",e=>applyTheme(e.detail?.theme||theme()));
+ window.addEventListener("showlink:language",e=>{localStorage.setItem("showlink-language",e.detail?.language||lang());translate()});
+}
+
+document.addEventListener("DOMContentLoaded",()=>{translate();setupThemeSync();guard()});
 })();
