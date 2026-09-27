@@ -255,7 +255,7 @@
       confirmEmail:"Akun berhasil dibuat. Silakan cek email untuk konfirmasi akun sebelum login.",
       googleFailed:"Login Google gagal.", enterEmailFirst:"Masukkan email terlebih dahulu.",
       resetSent:"Link reset password telah dikirim ke email.", resetFailed:"Gagal mengirim reset password.",
-      authConfigError:"Supabase belum dikonfigurasi.", dashboardWelcome:"Selamat datang",
+      authConfigError:"Supabase belum dikonfigurasi.", turnstileConfig:"Cloudflare Turnstile belum dikonfigurasi.", turnstileLoading:"Verifikasi keamanan belum siap. Tunggu sebentar lalu coba lagi.", turnstileRequired:"Selesaikan verifikasi keamanan terlebih dahulu.", turnstileFailed:"Verifikasi keamanan gagal. Silakan coba lagi.", dashboardWelcome:"Selamat datang",
       accountOverview:"Ringkasan akun", accountEmail:"Email akun", accountPlan:"Paket",
       accountCreated:"Bergabung sejak", signOut:"Keluar", editProfile:"Edit profil",
       quickActions:"Aksi cepat", createPasteLink:"Buat PasteLink", createPaymentLink:"Buat Payment Link",
@@ -279,7 +279,7 @@
       confirmEmail:"Account created. Check your email to confirm your account before signing in.",
       googleFailed:"Google sign-in failed.", enterEmailFirst:"Enter your email first.",
       resetSent:"Password reset link sent to your email.", resetFailed:"Could not send the password reset link.",
-      authConfigError:"Supabase is not configured.", dashboardWelcome:"Welcome",
+      authConfigError:"Supabase is not configured.", turnstileConfig:"Cloudflare Turnstile is not configured.", turnstileLoading:"Security verification is not ready. Please wait a moment and try again.", turnstileRequired:"Complete the security verification first.", turnstileFailed:"Security verification failed. Please try again.", dashboardWelcome:"Welcome",
       accountOverview:"Account overview", accountEmail:"Account email", accountPlan:"Plan",
       accountCreated:"Joined", signOut:"Sign out", editProfile:"Edit profile",
       quickActions:"Quick actions", createPasteLink:"Create PasteLink", createPaymentLink:"Create Payment Link",
@@ -414,6 +414,7 @@
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.style.colorScheme = theme;
     if (persist) localStorage.setItem(THEME_KEY, theme);
+    window.dispatchEvent(new CustomEvent("showlink:theme-change", { detail: { theme } }));
 
     document.querySelectorAll("[data-theme-label]").forEach(el => {
       el.textContent = theme === "dark" ? t("dark") : t("light");
