@@ -324,3 +324,63 @@ html.sl-drawer-open body{
 html[data-theme="dark"] .sl-nav-overlay{background:rgba(0,0,0,.62)}
 html[data-theme="dark"] .sl-new-green{color:#6ee7b7;background:rgba(16,185,129,.14)}
 html[data-theme="dark"] .sl-new-yellow{color:#fcd34d;background:rgba(245,158,11,.14)}
+
+
+/* ============================================================
+   FIX: Theme + Language belong ONLY to the fixed top navbar.
+   They must never appear inside the slide-out drawer.
+   ============================================================ */
+.sl-navbar .sl-nav-actions{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  min-width:0;
+}
+.sl-navbar .showlink-tools{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+}
+.sl-navbar .showlink-tool{
+  position:relative;
+  flex:0 0 auto;
+}
+.sl-navbar .showlink-tool-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:40px;
+  padding:0 12px;
+  border:1px solid var(--sl-border);
+  border-radius:12px;
+  background:var(--sl-card);
+  color:var(--sl-text);
+  cursor:pointer;
+  white-space:nowrap;
+}
+.sl-navbar .showlink-tool-menu{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  z-index:10020;
+}
+.sl-nav-drawer .showlink-tools,
+.sl-nav-drawer [data-showlink-tools],
+.sl-drawer-tools,
+[data-showlink-drawer-tools]{
+  display:none !important;
+}
+@media (max-width:700px){
+  .sl-navbar .sl-tool-text,
+  .sl-navbar .showlink-tool-text{
+    display:none;
+  }
+  .sl-navbar .showlink-tool-btn{
+    width:40px;
+    padding:0;
+  }
+}
