@@ -55,25 +55,43 @@
       host.innerHTML = `<div class="turnstile-config-warning">${message("turnstileConfig","Cloudflare Turnstile belum dikonfigurasi.")}</div>`;
       return;
     }
+
     const render = () => {
       if (!window.turnstile || !host.isConnected || turnstileWidgetId !== null) return;
       try {
         turnstileWidgetId = window.turnstile.render(host, {
           sitekey: window.SHOWLINK_TURNSTILE.siteKey,
           theme: document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light",
-          callback: () => {},
-          "expired-callback": () => {},
-          "error-callback": () => {}
+          callback: () => {
+            host.classList.add("is-verified");
+          },
+          "expired-callback": () => {
+            host.classList.remove("is-verified");
+          },
+          "error-callback": () => {
+            host.classList.remove("is-verified");
+          }
         });
-      } catch {}
+      } catch (err) {
+        turnstileWidgetId = null;
+      }
     };
-    if (window.turnstile) render();
-    else {
-      const timer = setInterval(() => {
-        if (window.turnstile) { clearInterval(timer); render(); }
-      }, 100);
-      setTimeout(() => clearInterval(timer), 10000);
+
+    if (window.turnstile?.render) {
+      render();
+      return;
     }
+
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries++;
+      if (window.turnstile?.render) {
+        clearInterval(timer);
+        render();
+      } else if (tries >= 100) {
+        clearInterval(timer);
+      }
+    }, 100);
   }
 
   async function verifyTurnstile() {
@@ -180,15 +198,32 @@
   }
 
   async function google() {
-    if (!(await verifyTurnstile())) return;
-    const sb=await getClient(); if(!sb)return;
+    const btn = document.querySelector("[data-google-login]");
+    hideAlert();
+    if (btn) {
+      btn.disabled = true;
+      btn.setAttribute("aria-busy", "true");
+    }
     try {
+      if (!(await verifyTurnstile())) return;
+      const sb=await getClient(); if(!sb)return;
       const {error}=await sb.auth.signInWithOAuth({
         provider:"google",
-        options:{redirectTo:`${location.origin}/dashboard.html`}
+        options:{
+          redirectTo:`${location.origin}/auth-callback.html`,
+          queryParams:{access_type:"offline",prompt:"select_account"}
+        }
       });
-      if(error)throw error;
-    } catch(e){showAlert(e.message||message("googleFailed","Login Google gagal.")); resetTurnstile();}
+      if(error) throw error;
+    } catch(e) {
+      showAlert(e?.message || message("googleFailed","Login Google gagal."));
+      resetTurnstile();
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.removeAttribute("aria-busy");
+      }
+    }
   }
 
   async function forgot() {
