@@ -391,11 +391,35 @@
     }, true);
   }
 
+  window.addEventListener("showlink:navbar-rendered", () => {
+    buildControls();
+    translatePage();
+    applyTheme(getTheme(), false);
+    syncControlState();
+  });
+
+  let controlsObserver = null;
+
+  function watchSharedNavbar() {
+    if (controlsObserver) return;
+    controlsObserver = new MutationObserver(() => {
+      const containers = document.querySelectorAll("[data-showlink-tools]");
+      if (!containers.length) return;
+      buildControls();
+      translatePage();
+      syncControlState();
+    });
+    controlsObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
   function boot() {
     initControlEvents();
+    watchSharedNavbar();
     applyTheme(getTheme(), false);
-    // Navbar/footer are rendered first, then controls are attached.
-    window.ShowLinkNavbar?.refresh(); window.ShowLinkFooter?.refresh();
+    // Render the shared navbar/footer on every page, then attach the
+    // theme/language controls to the top navbar.
+    window.ShowLinkNavbar?.refresh();
+    window.ShowLinkFooter?.refresh();
     buildControls();
     translatePage();
     applyTheme(getTheme(), false);

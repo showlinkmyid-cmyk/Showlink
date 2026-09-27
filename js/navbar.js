@@ -107,8 +107,28 @@
 
           <nav class="sl-nav-links" aria-hidden="true"></nav>
 
-          <div class="sl-nav-actions">
-            <div data-showlink-tools class="showlink-tools" aria-label="${t("displayOptions")}"></div>
+          <div class="sl-nav-actions" data-top-navbar-tools>
+            <div data-showlink-tools class="showlink-tools" aria-label="${t("displayOptions")}" data-sl-tools-ready="false">
+              <div class="showlink-tool" data-theme-tool>
+                <button class="showlink-tool-btn" type="button" aria-label="${t("theme")}" aria-expanded="false" data-theme-toggle>
+                  <span class="sl-tool-icon" data-theme-icon><i class="fa-solid fa-moon" aria-hidden="true"></i></span>
+                  <span class="showlink-tool-text" data-theme-label>${t("light")}</span>
+                </button>
+                <div class="showlink-tool-menu" role="menu">
+                  <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="light"><span class="sl-option-icon sl-option-sun"><i class="fa-solid fa-sun" aria-hidden="true"></i></span><span data-i18n="light">${t("light")}</span><span class="sl-check"></span></button>
+                  <button class="showlink-tool-option" type="button" role="menuitem" data-theme-option="dark"><span class="sl-option-icon sl-option-moon"><i class="fa-solid fa-moon" aria-hidden="true"></i></span><span data-i18n="dark">${t("dark")}</span><span class="sl-check"></span></button>
+                </div>
+              </div>
+              <div class="showlink-tool" data-language-tool>
+                <button class="showlink-tool-btn" type="button" aria-label="${t("language")}" aria-expanded="false" data-language-toggle>
+                  <span class="sl-tool-icon"><i class="fa-solid fa-language" aria-hidden="true"></i></span><span class="showlink-lang-label" data-lang-label>ID</span>
+                </button>
+                <div class="showlink-tool-menu" role="menu">
+                  <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="id"><span class="sl-option-icon"><i class="fa-solid fa-flag" aria-hidden="true"></i></span><span data-i18n="indonesia">${t("indonesia")}</span><span class="sl-check"></span></button>
+                  <button class="showlink-tool-option" type="button" role="menuitem" data-lang-option="en"><span class="sl-option-icon"><i class="fa-solid fa-earth-americas" aria-hidden="true"></i></span><span data-i18n="english">${t("english")}</span><span class="sl-check"></span></button>
+                </div>
+              </div>
+            </div>
             ${is ? "" : `
               <a class="sl-btn sl-btn-ghost sl-desktop-action" href="${C.login}">
                 ${icon("sl-icon-green","fa-right-to-bracket")}<span data-i18n="login">${t("login")}</span>
@@ -154,6 +174,7 @@
       </aside>`;
 
     document.body.classList.add("showlink-navbar-page");
+    window.dispatchEvent(new CustomEvent("showlink:navbar-rendered"));
 
     const menu=host.querySelector("[data-showlink-menu]");
     menu?.addEventListener("click",()=>{
