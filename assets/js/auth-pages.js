@@ -41,124 +41,6 @@
   }
 
 
-  let turnstileWidgetId = null;
-  let turnstileToken = "";
-
-  function turnstileConfigured() {
-    const key = window.SHOWLINK_TURNSTILE?.siteKey || "";
-    return !!key && !key.includes("YOUR_CLOUDFLARE_TURNSTILE");
-  }
-
-  function renderTurnstile() {
-    const host = document.querySelector("[data-turnstile-widget]");
-    if (!host) return;
-    if (!turnstileConfigured()) {
-      host.innerHTML = `<div class="turnstile-config-warning">${message("turnstileConfig","Cloudflare Turnstile belum dikonfigurasi.")}</div>`;
-      return;
-    }
-
-    const render = () => {
-      if (!window.turnstile || !host.isConnected || turnstileWidgetId !== null) return;
-      try {
-        turnstileWidgetId = window.turnstile.render(host, {
-          sitekey: window.SHOWLINK_TURNSTILE.siteKey,
-          action: window.SHOWLINK_TURNSTILE.action || "auth",
-          theme: document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light",
-          callback: (token) => {
-            turnstileToken = typeof token === "string" ? token : "";
-            host.classList.toggle("is-verified", !!turnstileToken);
-          },
-          "expired-callback": () => {
-            turnstileToken = "";
-            host.classList.remove("is-verified");
-          },
-          "error-callback": () => {
-            turnstileToken = "";
-            host.classList.remove("is-verified");
-          }
-        });
-      } catch (err) {
-        turnstileWidgetId = null;
-      }
-    };
-
-    if (window.turnstile?.render) {
-      render();
-      return;
-    }
-
-    let tries = 0;
-    const timer = setInterval(() => {
-      tries++;
-      if (window.turnstile?.render) {
-        clearInterval(timer);
-        render();
-      } else if (tries >= 100) {
-        clearInterval(timer);
-      }
-    }, 100);
-  }
-
-  async function verifyTurnstile() {
-    if (!turnstileConfigured()) {
-      showAlert(message("turnstileConfig","Cloudflare Turnstile belum dikonfigurasi."));
-      return false;
-    }
-    if (!window.turnstile || turnstileWidgetId === null) {
-      showAlert(message("turnstileLoading","Verifikasi keamanan belum siap. Tunggu sebentar lalu coba lagi."));
-      return false;
-    }
-    const token = turnstileToken || window.turnstile.getResponse(turnstileWidgetId) || "";
-    if (!token) {
-      showAlert(message("turnstileRequired","Selesaikan verifikasi keamanan terlebih dahulu."));
-      return false;
-    }
-    try {
-      const res = await fetch("/api/turnstile", {
-        method: "POST",
-        headers: {"content-type":"application/json"},
-        credentials: "same-origin",
-        body: JSON.stringify({token})
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.success) {
-        const codes = Array.isArray(data.errors) ? data.errors : [];
-        let text = message("turnstileFailed","Verifikasi keamanan gagal. Silakan coba lagi.");
-        if (data.code === "server-not-configured") {
-          text = message("turnstileConfig","Cloudflare Turnstile belum dikonfigurasi di server.");
-        } else if (codes.includes("invalid-input-secret")) {
-          text = message("turnstileSecret","Secret Key Cloudflare Turnstile di Cloudflare Pages tidak cocok dengan widget ini.");
-        } else if (data.code === "hostname-mismatch") {
-          text = `Turnstile aktif untuk ${data.hostname || "hostname lain"}, bukan domain ShowLink ini.`;
-        } else if (data.code === "action-mismatch") {
-          text = "Konfigurasi aksi Turnstile tidak cocok. Silakan deploy konfigurasi terbaru.";
-        } else if (data.code === "cloudflare-http-error") {
-          text = message("turnstileFailed","Cloudflare Turnstile tidak dapat diverifikasi. Coba lagi.");
-        } else if (codes.includes("invalid-input-response")) {
-          text = message("turnstileToken","Token verifikasi tidak valid atau sudah kedaluwarsa. Silakan centang lagi.");
-        } else if (codes.includes("timeout-or-duplicate")) {
-          text = message("turnstileExpired","Verifikasi sudah kedaluwarsa atau sudah digunakan. Silakan centang lagi.");
-        }
-        window.turnstile.reset(turnstileWidgetId);
-        showAlert(text);
-        return false;
-      }
-      return true;
-    } catch (err) {
-      window.turnstile.reset(turnstileWidgetId);
-      const detail = err?.message ? ` (${err.message})` : "";
-      showAlert(message("turnstileFailed","Verifikasi keamanan gagal. Silakan coba lagi.") + detail);
-      return false;
-    }
-  }
-
-  function resetTurnstile() {
-    if (window.turnstile && turnstileWidgetId !== null) {
-      try { window.turnstile.reset(turnstileWidgetId); } catch {}
-      turnstileToken = "";
-    }
-  }
-
   async function getClient() {
     try { return await window.ShowLinkSupabase.load(); }
     catch(e){ showAlert(e.message || message("authConfigError","Supabase belum dikonfigurasi.")); return null; }
@@ -180,7 +62,6 @@
     if(!email) return showAlert(message("requiredField","Email wajib diisi."));
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert(message("invalidEmail","Format email tidak valid."));
     if(!password) return showAlert(message("requiredField","Password wajib diisi."));
-    if (!(await verifyTurnstile())) return;
     const sb=await getClient(); if(!sb)return;
     const btn=$(".auth-submit",form); if(btn) btn.disabled=true;
     try {
@@ -191,7 +72,7 @@
       setTimeout(()=>location.href="/dashboard.html",450);
     } catch(e) {
       showAlert(e.message || message("loginFailed","Email atau password salah."));
-    } finally { if(btn)btn.disabled=false; resetTurnstile(); }
+    } finally { if(btn)btn.disabled=false; }
   }
 
   async function register(form) {
@@ -207,7 +88,6 @@
     if(password.length<8) return showAlert(message("passwordHint","Password minimal 8 karakter."));
     if(password!==confirm) return showAlert(message("passwordMismatch","Konfirmasi password tidak sama."));
     if(terms&&!terms.checked) return showAlert(message("authTerms","Setujui ketentuan terlebih dahulu."));
-    if (!(await verifyTurnstile())) return;
     const sb=await getClient(); if(!sb)return;
     const btn=$(".auth-submit",form); if(btn)btn.disabled=true;
     try {
@@ -228,7 +108,21 @@
         showAlert(message("confirmEmail","Akun dibuat. Silakan cek email untuk konfirmasi akun sebelum login."),true);
       }
     } catch(e) { showAlert(e.message || message("registerFailed","Pendaftaran gagal.")); }
-    finally { if(btn)btn.disabled=false; resetTurnstile(); }
+    finally { if(btn)btn.disabled=false; }
+  }
+
+  async function googleAuth() {
+    hideAlert();
+    const sb=await getClient(); if(!sb)return;
+    try {
+      const {error}=await sb.auth.signInWithOAuth({
+        provider:"google",
+        options:{redirectTo:`${location.origin}/auth-callback.html`}
+      });
+      if(error) throw error;
+    } catch(e) {
+      showAlert(e.message || "Login Google gagal. Silakan coba lagi.");
+    }
   }
 
   async function forgot() {
@@ -243,7 +137,7 @@
   }
 
   function setup() {
-    setupPasswordToggles(); setupStrength(); renderTurnstile();
+    setupPasswordToggles(); setupStrength();
     document.querySelectorAll("[data-auth-form]").forEach(form=>{
       form.addEventListener("submit",e=>{
         e.preventDefault();hideAlert();
@@ -251,6 +145,7 @@
       });
     });
     document.querySelectorAll('[data-i18n="forgotPassword"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();forgot();}));
+    document.querySelectorAll("[data-google-auth]").forEach(btn=>btn.addEventListener("click",googleAuth));
   }
 
   document.addEventListener("DOMContentLoaded",setup);
