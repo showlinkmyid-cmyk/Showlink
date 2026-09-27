@@ -62,6 +62,7 @@
       try {
         turnstileWidgetId = window.turnstile.render(host, {
           sitekey: window.SHOWLINK_TURNSTILE.siteKey,
+          action: window.SHOWLINK_TURNSTILE.action || "auth",
           theme: document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light",
           callback: (token) => {
             turnstileToken = typeof token === "string" ? token : "";
@@ -127,6 +128,12 @@
           text = message("turnstileConfig","Cloudflare Turnstile belum dikonfigurasi di server.");
         } else if (codes.includes("invalid-input-secret")) {
           text = message("turnstileSecret","Secret Key Cloudflare Turnstile di Cloudflare Pages tidak cocok dengan widget ini.");
+        } else if (data.code === "hostname-mismatch") {
+          text = `Turnstile aktif untuk ${data.hostname || "hostname lain"}, bukan domain ShowLink ini.`;
+        } else if (data.code === "action-mismatch") {
+          text = "Konfigurasi aksi Turnstile tidak cocok. Silakan deploy konfigurasi terbaru.";
+        } else if (data.code === "cloudflare-http-error") {
+          text = message("turnstileFailed","Cloudflare Turnstile tidak dapat diverifikasi. Coba lagi.");
         } else if (codes.includes("invalid-input-response")) {
           text = message("turnstileToken","Token verifikasi tidak valid atau sudah kedaluwarsa. Silakan centang lagi.");
         } else if (codes.includes("timeout-or-duplicate")) {
