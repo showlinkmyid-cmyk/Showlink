@@ -19,11 +19,16 @@
     return t;
   };
 
-  const apiHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${window.SHOWLINK_SUPABASE.anonKey}`,
-    'apikey': window.SHOWLINK_SUPABASE.anonKey
-  });
+  async function apiHeaders(sb) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'apikey': window.SHOWLINK_SUPABASE.anonKey
+    };
+    const { data } = await sb.auth.getSession();
+    const token = data?.session?.access_token;
+    if (token) headers.Authorization = `Bearer ${token}`;
+    return headers;
+  }
 
   async function sessionUser(sb) {
     const { data } = await sb.auth.getUser();
@@ -84,12 +89,12 @@
     document.getElementById('buy').addEventListener('click', () => buy(data, sb));
   }
 
-  async function createCashiPayment(orderId) {
+  async function createCashiPayment(orderId, sb, guestAccessToken = null) {
     const fn = `${window.SHOWLINK_SUPABASE.url}/functions/v1/cashi-create-payment`;
     const resp = await fetch(fn, {
       method: 'POST',
-      headers: apiHeaders(),
-      body: JSON.stringify({ order_id: orderId })
+      headers: await apiHeaders(sb),
+      body: JSON.stringify({ order_id: orderId, guest_access_token: guestAccessToken || undefined })
     });
     const result = await resp.json().catch(() => ({}));
     if (!resp.ok) throw new Error(result.error || 'Gateway Cashi belum terhubung.');
@@ -114,7 +119,7 @@
       if (!oid) throw new Error('Order tidak berhasil dibuat.');
 
       status.textContent = 'Menghubungkan ke Cashi…';
-      const result = await createCashiPayment(oid);
+      const result = await createCashiPayment(oid, sb, user ? null : guestToken());
 
       if (result.already_paid) {
         location.href = contentUrl(oid);
@@ -141,7 +146,7 @@
               : ''}
             <div class="pf-status" id="status">Menunggu konfirmasi pembayaran…</div>
           </div>`;
-        pollPaid(oid);
+        pollPaid(oid, sb);
         return;
       }
 
@@ -162,7 +167,7 @@
     }
   }
 
-  async function pollPaid(orderId) {
+  async function pollPaid(orderId, sb) {
     const fn = `${window.SHOWLINK_SUPABASE.url}/functions/v1/cashi-check-status`;
     const status = document.getElementById('status');
 
@@ -172,8 +177,11 @@
       try {
         const resp = await fetch(fn, {
           method: 'POST',
-          headers: apiHeaders(),
-          body: JSON.stringify({ order_id: orderId })
+          headers: await apiHeaders(sb),
+          body: JSON.stringify({
+            order_id: orderId,
+            guest_access_token: (await sessionUser(sb)) ? undefined : guestToken()
+          })
         });
         const result = await resp.json().catch(() => ({}));
 
