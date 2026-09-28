@@ -40,7 +40,15 @@
       const { data, error } = await sb.rpc('get_payment_link_by_slug', { p_slug: slug });
       if (error) throw error;
       if (!data) throw new Error('Payment Link tidak ditemukan atau sudah tidak aktif.');
-      render(data, sb);
+
+      // Price shown to the buyer is calculated server-side from the current
+      // session plan. The database remains authoritative at checkout.
+      const { data: pricing, error: pricingError } = await sb.rpc('get_payment_link_buyer_price', {
+        p_original_amount: data.price,
+        p_buyer_id: null
+      });
+      if (pricingError) throw pricingError;
+      render({ ...data, buyer_pricing: Array.isArray(pricing) ? pricing[0] : pricing }, sb);
     } catch (e) {
       app.innerHTML = `<div class="pf-body"><div class="pf-loader">
         <i class="fa-solid fa-circle-exclamation"></i>
@@ -60,7 +68,16 @@
         <span class="pf-kicker"><i class="fa-solid fa-lock"></i> PAYMENT LINK</span>
         <h1 class="pf-title">${esc(data.title)}</h1>
         <p class="pf-desc">${esc(data.description || 'Konten berbayar ShowLink.')}</p>
-        <div class="pf-price">${money(data.price, data.currency || 'IDR')}</div>
+        ${(() => {
+          const p = data.buyer_pricing || {};
+          const original = Number(p.original_amount ?? data.price ?? 0);
+          const actual = Number(p.buyer_amount ?? original);
+          const discounted = actual < original;
+          const plan = String(p.buyer_plan || 'guest').toUpperCase();
+          return discounted
+            ? `<div class="pf-price"><span style="font-size:.55em;opacity:.6;text-decoration:line-through;display:block">${money(original, data.currency || 'IDR')}</span>${money(actual, data.currency || 'IDR')}</div><div class="pf-status">Harga ${esc(plan)} diterapkan. Nominal checkout dihitung ulang oleh server.</div>`
+            : `<div class="pf-price">${money(actual, data.currency || 'IDR')}</div>`;
+        })()}
         <button class="pf-btn" id="buy">Beli &amp; Bayar <i class="fa-solid fa-arrow-right"></i></button>
         <div class="pf-status" id="status">Pembayaran akan diproses otomatis sesuai nominal link.</div>
       </div>`;
