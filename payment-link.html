@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#6d5dfc">
-<meta name="description" content="Payment Link — ShowLink">
-<title>Payment Link — ShowLink</title>
+<meta name="description" content="Buat Payment Link — ShowLink">
+<title>Buat Payment Link — ShowLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<link rel="stylesheet" href="/css/payment-link.css">
 <link rel="stylesheet" href="/css/showlink-components.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
+<link rel="stylesheet" href="/css/payment-link.css">
 <script src="/js/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/js/supabase-client.js"></script>
@@ -21,130 +21,83 @@
 <script src="/js/navbar.js" defer></script>
 <script src="/js/footer.js" defer></script>
 <script>
-(function(){
-  try {
-    var t=localStorage.getItem('showlink-theme');
-    if(t==='dark'||t==='light'){
-      document.documentElement.dataset.theme=t;
-      document.documentElement.style.colorScheme=t;
-    }
-  } catch(e){}
-})();
+(function(){try{var t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}}catch(e){}})();
 </script>
 </head>
-<body class="dashboard-page" data-page-title-id="Payment Link — ShowLink" data-page-title-en="Payment Link — ShowLink">
+<body class="dashboard-page" data-page-title-id="Buat Payment Link — ShowLink" data-page-title-en="Create Payment Link — ShowLink">
 <div data-showlink-navbar></div>
 
 <main class="sl-main payment-create-main">
-  <div class="sl-container">
-    <section class="sl-main-hero payment-hero">
+  <div class="sl-container payment-create-container">
+    <section class="payment-page-head">
+      <div class="payment-title-icon"><i class="fa-solid fa-credit-card"></i></div>
       <div>
-        <span class="sl-main-kicker"><i class="fa-solid fa-credit-card"></i> SHOWLINK PAYMENT LINK</span>
+        <span class="payment-eyebrow">SHOWLINK · PAYMENT LINK</span>
         <h1>Buat Payment Link</h1>
-        <p class="sl-main-intro">Buat link <code>/p/xxx</code> yang langsung membuka halaman pembayaran, lalu membuka konten asli setelah pembayaran terverifikasi.</p>
+        <p>Buat satu link <code>/p/xxx</code> untuk menjual akses ke konten kamu.</p>
       </div>
     </section>
 
-    <section class="payment-info-grid" aria-label="Informasi Payment Link">
-      <div class="payment-info-card">
-        <span class="payment-info-icon"><i class="fa-solid fa-link"></i></span>
+    <section class="payment-create-card" aria-labelledby="payment-form-title">
+      <div class="payment-form-head">
         <div>
-          <strong>URL publik</strong>
-          <p>Hasil akhir akan menggunakan format <code>https://showlink.my.id/p/xxx</code>.</p>
-        </div>
-      </div>
-      <div class="payment-info-card">
-        <span class="payment-info-icon yellow"><i class="fa-solid fa-wallet"></i></span>
-        <div>
-          <strong>Pembayaran</strong>
-          <p>Buyer masuk ke halaman pembayaran terlebih dahulu. Konten asli baru dibuka setelah pembayaran terverifikasi.</p>
-        </div>
-      </div>
-    </section>
-
-    <div class="sl-main-card payment-form-card">
-      <div class="form-heading">
-        <div>
-          <span class="form-eyebrow"><i class="fa-solid fa-pen-to-square"></i> DETAIL LINK</span>
-          <h2>Isi informasi konten</h2>
-          <p>Gunakan informasi yang jelas agar buyer memahami apa yang akan mereka dapatkan.</p>
+          <span class="form-step">DETAIL KONTEN</span>
+          <h2 id="payment-form-title">Isi detail Payment Link</h2>
+          <p>Lengkapi empat bagian di bawah. Data ini akan tampil di halaman pembayaran.</p>
         </div>
       </div>
 
-      <form id="create-link-form" data-type="payment" class="create-form" novalidate>
-        <div class="form-section">
-          <div class="form-section-title"><i class="fa-solid fa-heading"></i><span>Informasi dasar</span></div>
-
-          <label class="create-field">
-            <span>Judul <b>*</b></span>
-            <input name="title" maxlength="120" placeholder="Contoh: Premium Content" autocomplete="off" required>
-            <small class="field-detail">Judul ini akan tampil di halaman pembayaran dan membantu buyer mengenali konten.</small>
-          </label>
-
-          <label class="create-field">
-            <span>Deskripsi</span>
-            <textarea name="description" rows="4" maxlength="1000" placeholder="Jelaskan secara singkat isi konten, manfaat, atau informasi penting untuk buyer."></textarea>
-            <small class="field-detail">Buat deskripsi singkat dan jelas. Jangan memasukkan data rahasia.</small>
-          </label>
-
-          <label class="create-field">
-            <span>Harga (IDR) <b>*</b></span>
-            <div class="price-wrap">
-              <span class="currency-prefix">Rp</span>
-              <input id="payment-price" name="price" type="number" min="2000" max="200000" step="100" inputmode="numeric" placeholder="15000" required>
-            </div>
-            <small class="field-detail yellow"><i class="fa-solid fa-circle-info"></i> Harga minimum <strong>Rp2.000</strong> dan maksimum <strong>Rp200.000</strong>.</small>
-            <small class="field-warning" data-price-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Harga harus berada di antara Rp2.000 dan Rp200.000.</small>
-          </label>
-
-          <label class="create-field">
-            <span>Thumbnail URL</span>
-            <input name="thumbnail_url" type="url" inputmode="url" placeholder="https://contoh.com/gambar.jpg" autocomplete="url">
-            <small class="field-detail">Gunakan URL gambar yang diawali <strong>https://</strong>. URL akan disimpan sebagai thumbnail publik.</small>
-            <small class="field-warning" data-thumbnail-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> URL thumbnail harus berupa alamat HTTPS yang valid.</small>
-          </label>
+      <form id="create-link-form" class="payment-form" novalidate>
+        <div class="payment-field">
+          <label for="payment-title">Judul <span>*</span></label>
+          <input id="payment-title" name="title" type="text" maxlength="120" autocomplete="off" placeholder="Contoh: Premium Content" required>
+          <small class="field-detail"><i class="fa-solid fa-circle-info"></i> Gunakan judul yang singkat dan mudah dipahami buyer.</small>
+          <small class="field-error" data-title-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Judul wajib diisi.</small>
         </div>
 
-        <div class="form-section">
-          <div class="form-section-title"><i class="fa-solid fa-lock"></i><span>Konten asli yang dikunci</span></div>
+        <div class="payment-field">
+          <label for="payment-description">Deskripsi</label>
+          <textarea id="payment-description" name="description" maxlength="1000" rows="4" placeholder="Jelaskan secara singkat apa yang akan didapatkan buyer."></textarea>
+          <small class="field-detail"><i class="fa-solid fa-circle-info"></i> Jelaskan isi atau manfaat konten tanpa memasukkan data rahasia.</small>
+        </div>
 
-          <label class="create-field">
-            <span>Konten asli — HTML opsional</span>
-            <textarea id="content-html" name="content_html" rows="8" placeholder="<p>Konten yang akan dibuka setelah pembayaran</p>"></textarea>
-            <small class="field-detail">HTML boleh digunakan. URL <strong>https://...</strong> atau <strong>www....</strong> pada teks akan otomatis dibuat menjadi link yang bisa diklik.</small>
-          </label>
+        <div class="payment-field">
+          <label for="payment-content">Konten <span>*</span></label>
+          <textarea id="payment-content" name="content" maxlength="50000" rows="12" placeholder="Tulis konten yang akan dibuka setelah pembayaran...&#10;&#10;Contoh:&#10;https://contoh.com&#10;www.contoh.com" required></textarea>
+          <small class="field-detail"><i class="fa-solid fa-link"></i> URL yang diawali <strong>https://</strong> atau <strong>www.</strong> akan otomatis menjadi link yang bisa diklik.</small>
+          <small class="field-error" data-content-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Konten wajib diisi.</small>
+        </div>
 
-          <label class="create-field">
-            <span>Konten asli — Text fallback</span>
-            <textarea id="content-text" name="content_text" rows="7" placeholder="Tulis konten asli di sini. Contoh: https://contoh.com atau www.contoh.com"></textarea>
-            <small class="field-detail">Jika HTML dikosongkan, teks ini dipakai sebagai konten. Link https:// dan www. akan otomatis dibuat clickable.</small>
-          </label>
+        <div class="payment-field">
+          <label for="payment-price">Harga <span>*</span></label>
+          <div class="price-input-wrap">
+            <span>Rp</span>
+            <input id="payment-price" name="price" type="number" min="2000" max="200000" step="100" inputmode="numeric" placeholder="15000" required>
+          </div>
+          <small class="field-detail price-detail"><i class="fa-solid fa-circle-info"></i> Minimum <strong>Rp2.000</strong> · Maksimum <strong>Rp200.000</strong>.</small>
+          <small class="field-error" data-price-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Harga harus antara Rp2.000 dan Rp200.000.</small>
+        </div>
 
-          <div class="form-warning-box">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <div>
-              <strong>Peringatan</strong>
-              <p>Pastikan harga, deskripsi, dan konten sudah benar sebelum publish. Setelah link dibagikan, buyer akan melihat halaman pembayaran menggunakan data yang kamu simpan.</p>
-            </div>
+        <div class="payment-warning">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>
+            <strong>Peringatan</strong>
+            <p>Periksa judul, konten, dan harga sebelum membuat link. Setelah link dibagikan, buyer akan melihat data yang kamu publish.</p>
           </div>
         </div>
 
-        <div class="form-actions">
-          <button class="sl-primary-btn" type="submit">
-            <i class="fa-solid fa-rocket"></i>
-            <span>Buat Payment Link</span>
-          </button>
-          <small class="field-detail">Dengan membuat link, kamu menyetujui bahwa data pembayaran dan konten mengikuti konfigurasi ShowLink.</small>
-        </div>
+        <button class="payment-submit" type="submit">
+          <i class="fa-solid fa-link"></i>
+          <span>Buat Payment Link</span>
+        </button>
       </form>
 
-      <div id="create-result" class="pf-status" role="status" aria-live="polite">Isi data lalu publish.</div>
-    </div>
+      <div id="create-result" class="payment-result" role="status" aria-live="polite" hidden></div>
+    </section>
   </div>
 </main>
 
-<script src="/js/payment-link.js" defer></script>
-<script src="/js/create-links.js" defer></script>
 <div data-showlink-footer></div>
+<script src="/js/payment-link.js" defer></script>
 </body>
 </html>
