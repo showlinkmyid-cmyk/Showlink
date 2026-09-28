@@ -2,10 +2,11 @@
   'use strict';
 
   const app = document.getElementById('app');
+  const injectedSlug = String(window.__SHOWLINK_PAYMENT_SLUG || '').trim();
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   const pathSlug = pathParts[0] === 'p' && pathParts[1] ? decodeURIComponent(pathParts[1]) : '';
   const querySlug = new URLSearchParams(window.location.search).get('slug') || '';
-  const slug = pathSlug || querySlug;
+  const slug = injectedSlug || pathSlug || querySlug;
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
   }[c]));
@@ -44,6 +45,7 @@
 
   async function load() {
     try {
+      if (!slug) throw new Error('Kode Payment Link tidak ditemukan di URL.');
       const sb = await window.ShowLinkSupabase.load();
       const { data, error } = await sb.rpc('get_payment_link_by_slug', { p_slug: slug });
       if (error) throw error;
