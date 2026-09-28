@@ -42,3 +42,38 @@
 .payment-result.success{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);color:#047857}
 .payment-result.error{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.24);color:#b91c1c}
 @media(max-width:650px){.payment-create-main{padding:25px 0 60px}.payment-create-container{width:calc(100% - 20px)}.payment-page-head{align-items:flex-start}.payment-title-icon{width:42px;height:42px;flex-basis:42px;border-radius:13px}.payment-form-head{padding:19px 17px 16px}.payment-form{padding:20px 17px 22px;gap:18px}.payment-result{margin:0 17px 18px}.payment-field textarea#payment-content{min-height:200px}}
+
+
+/* Bilingual Payment Link form — explicit high contrast */
+.payment-create-card .payment-field label {
+  color:#172033 !important;
+  font-weight:800;
+  opacity:1 !important;
+}
+.payment-create-card .payment-field input,
+.payment-create-card .payment-field textarea {
+  color:#111827 !important;
+  background:#fff !important;
+  border:2px solid #aeb8c8 !important;
+  -webkit-text-fill-color:#111827 !important;
+  opacity:1 !important;
+}
+.payment-create-card .payment-field input::placeholder,
+.payment-create-card .payment-field textarea::placeholder {
+  color:#667085 !important;
+  opacity:1 !important;
+}
+.payment-create-card .field-detail { color:#946200 !important; opacity:1 !important; }
+.payment-create-card .field-error { color:#c52222 !important; opacity:1 !important; }
+html[data-theme="dark"] .payment-create-card .payment-field label { color:#f8fafc !important; }
+html[data-theme="dark"] .payment-create-card .payment-field input,
+html[data-theme="dark"] .payment-create-card .payment-field textarea {
+  color:#f8fafc !important;
+  background:#182131 !important;
+  border-color:#66758c !important;
+  -webkit-text-fill-color:#f8fafc !important;
+}
+html[data-theme="dark"] .payment-create-card .payment-field input::placeholder,
+html[data-theme="dark"] .payment-create-card .payment-field textarea::placeholder { color:#aeb8c8 !important; }
+html[data-theme="dark"] .payment-create-card .field-detail { color:#f2b84b !important; }
+html[data-theme="dark"] .payment-create-card .field-error { color:#ff8b8b !important; }
