@@ -1239,7 +1239,7 @@ CREATE OR REPLACE FUNCTION public.get_payment_link_by_slug(p_slug text)
 RETURNS jsonb
 LANGUAGE sql
 STABLE
-SECURITY INVOKER
+SECURITY DEFINER
 SET search_path = public
 AS $$
   SELECT jsonb_build_object(
