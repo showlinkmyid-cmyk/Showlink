@@ -2,11 +2,17 @@
   'use strict';
 
   const app = document.getElementById('app');
-  const injectedSlug = String(window.__SHOWLINK_PAYMENT_SLUG || '').trim();
-  const pathParts = window.location.pathname.split('/').filter(Boolean);
-  const pathSlug = pathParts[0] === 'p' && pathParts[1] ? decodeURIComponent(pathParts[1]) : '';
-  const querySlug = new URLSearchParams(window.location.search).get('slug') || '';
-  const slug = injectedSlug || pathSlug || querySlug;
+  // Checkout is intentionally a separate page. It receives the Payment Link
+  // slug only through ?slug=... after the buyer clicks Beli & Bayar.
+  const slug = new URLSearchParams(window.location.search).get('slug') || '';
+  const dbg = window.ShowLinkDebug || {
+    log:()=>{}, warn:()=>{}, error:()=>{}
+  };
+  dbg.log('Checkout script started', {
+    pathname: window.location.pathname,
+    slug,
+    search: window.location.search
+  });
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
   }[c]));
@@ -45,9 +51,11 @@
 
   async function load() {
     try {
-      if (!slug) throw new Error('Kode Payment Link tidak ditemukan di URL.');
+      dbg.log('CHECKOUT: loading Supabase client');
       const sb = await window.ShowLinkSupabase.load();
+      dbg.log('CHECKOUT: RPC get_payment_link_by_slug START', { p_slug: slug });
       const { data, error } = await sb.rpc('get_payment_link_by_slug', { p_slug: slug });
+      dbg.log('CHECKOUT: RPC get_payment_link_by_slug RESULT', { data, error });
       if (error) throw error;
       if (!data) throw new Error('Payment Link tidak ditemukan atau sudah tidak aktif.');
 
@@ -80,6 +88,7 @@
 
       render({ ...data, buyer_pricing: buyerPricing }, sb);
     } catch (e) {
+      dbg.error('CHECKOUT LOAD FAILED', e);
       app.innerHTML = `<div class="pf-body"><div class="pf-loader">
         <i class="fa-solid fa-circle-exclamation"></i>
         <h2>Payment Link tidak tersedia</h2>
@@ -111,7 +120,10 @@
         <button class="pf-btn" id="buy">Beli &amp; Bayar <i class="fa-solid fa-arrow-right"></i></button>
         <div class="pf-status" id="status">Pembayaran akan diproses otomatis sesuai nominal link.</div>
       </div>`;
-    document.getElementById('buy').addEventListener('click', () => buy(data, sb));
+    document.getElementById('buy').addEventListener('click', () => {
+      dbg.log('CHECKOUT BUY CLICK', { slug, payment_link_id: data.id });
+      buy(data, sb);
+    });
   }
 
   async function createCashiPayment(orderId, sb, guestAccessToken = null) {
