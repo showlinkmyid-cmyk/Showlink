@@ -3,7 +3,9 @@
 
   const app = document.getElementById('app');
   const pathParts = window.location.pathname.split('/').filter(Boolean);
-  const slug = pathParts[0] === 'p' && pathParts[1] ? decodeURIComponent(pathParts[1]) : '';
+  const pathSlug = pathParts[0] === 'p' && pathParts[1] ? decodeURIComponent(pathParts[1]) : '';
+  const querySlug = new URLSearchParams(window.location.search).get('slug') || '';
+  const slug = pathSlug || querySlug;
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
   }[c]));
@@ -47,14 +49,34 @@
       if (error) throw error;
       if (!data) throw new Error('Payment Link tidak ditemukan atau sudah tidak aktif.');
 
-      // Price shown to the buyer is calculated server-side from the current
-      // session plan. The database remains authoritative at checkout.
-      const { data: pricing, error: pricingError } = await sb.rpc('get_payment_link_buyer_price', {
-        p_original_amount: data.price,
-        p_buyer_id: null
-      });
-      if (pricingError) throw pricingError;
-      render({ ...data, buyer_pricing: Array.isArray(pricing) ? pricing[0] : pricing }, sb);
+      // The public link itself is already valid at this point.
+      // Buyer pricing is an optional enhancement; checkout recalculates the
+      // authoritative amount server-side. Never hide a valid Payment Link
+      // just because the pricing helper/config is unavailable.
+      let buyerPricing = {
+        original_amount: Number(data.price || 0),
+        buyer_plan: 'guest',
+        buyer_price_percent: 100,
+        buyer_amount: Number(data.price || 0),
+        platform_fee_percent: 20,
+        platform_fee_amount: Number(data.price || 0) * 0.20,
+        seller_amount: Number(data.price || 0) * 0.80
+      };
+
+      try {
+        const { data: pricing } = await sb.rpc('get_payment_link_buyer_price', {
+          p_original_amount: data.price,
+          p_buyer_id: null
+        });
+        if (pricing) {
+          buyerPricing = Array.isArray(pricing) ? (pricing[0] || buyerPricing) : pricing;
+        }
+      } catch (_) {
+        // Keep the public Payment Link visible. The checkout RPC remains
+        // authoritative and recalculates the final buyer amount.
+      }
+
+      render({ ...data, buyer_pricing: buyerPricing }, sb);
     } catch (e) {
       app.innerHTML = `<div class="pf-body"><div class="pf-loader">
         <i class="fa-solid fa-circle-exclamation"></i>
