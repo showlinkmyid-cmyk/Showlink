@@ -1,0 +1,90 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const CASHI_STATUS_URL = "https://cashi.id/api/check-status";
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS, "content-type": "application/json; charset=utf-8" },
+  });
+
+function env(name: string): string {
+  const value = Deno.env.get(name);
+  if (!value) throw new Error(`${name} is not configured`);
+  return value;
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
+
+  try {
+    const body = await req.json().catch(() => ({}));
+    const orderId = String(body.order_id || "").trim();
+    if (!orderId) return json({ error: "order_id is required" }, 400);
+
+    const supabase = createClient(
+      env("SUPABASE_URL"),
+      env("SUPABASE_SERVICE_ROLE_KEY"),
+      { auth: { persistSession: false, autoRefreshToken: false } },
+    );
+
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .select("id,status,provider_order_id")
+      .eq("id", orderId)
+      .single();
+
+    if (orderError || !order) return json({ error: "Order not found" }, 404);
+
+    if (["paid", "completed"].includes(String(order.status))) {
+      return json({ success: true, status: "SETTLED", paid: true });
+    }
+
+    if (!order.provider_order_id) {
+      return json({ success: false, status: order.status, paid: false });
+    }
+
+    const response = await fetch(
+      `${CASHI_STATUS_URL}/${encodeURIComponent(order.provider_order_id)}`,
+      { headers: { "x-api-key": env("CASHI_API_KEY") } },
+    );
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result?.success !== true) {
+      return json({
+        error: result?.message || result?.error || "Cashi status check failed",
+      }, 502);
+    }
+
+    const cashiStatus = String(result.status || "").toUpperCase();
+    if (cashiStatus === "SETTLED") {
+      const { data: settled, error: settleError } = await supabase.rpc(
+        "settle_paid_order",
+        {
+          p_order_id: order.id,
+          p_provider: "CASHI",
+          p_provider_payment_id: order.provider_order_id,
+          p_provider_payload: result,
+        },
+      );
+      if (settleError) {
+        console.error(settleError);
+        return json({ error: "Settlement failed" }, 500);
+      }
+      return json({ success: true, status: "SETTLED", paid: true, settlement: settled });
+    }
+
+    return json({
+      success: true,
+      status: cashiStatus || "PENDING",
+      paid: false,
+    });
+  } catch (error) {
+    console.error(error);
+    return json({ error: error instanceof Error ? error.message : "Internal server error" }, 500);
+  }
+});
