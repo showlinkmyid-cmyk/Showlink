@@ -479,7 +479,9 @@ CREATE TABLE IF NOT EXISTS public.platform_earnings (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS platform_earnings_order_uidx
+-- Non-unique lookup index. Settlement uses a transaction advisory lock
+-- so existing historical duplicate rows cannot make this migration fail.
+CREATE INDEX IF NOT EXISTS platform_earnings_order_idx
   ON public.platform_earnings(order_id)
   WHERE order_id IS NOT NULL;
 
@@ -2436,6 +2438,13 @@ DECLARE
   v_seller_percent numeric(5,2) := 80.00;
   v_platform_fee numeric(18,2);
 BEGIN
+  -- Serialize settlement attempts for the same order. This makes webhook
+  -- retries/concurrent status checks idempotent without relying on a unique
+  -- index that could fail on historical duplicate financial rows.
+  PERFORM pg_advisory_xact_lock(
+    hashtextextended('showlink-payment-link-settlement:' || p_order_id::text, 0)
+  );
+
   SELECT *
   INTO v_order
   FROM public.orders
@@ -2511,13 +2520,11 @@ BEGIN
     source,
     description
   )
-  VALUES (
-    v_order.id,
-    v_platform,
-    'payment_link',
-    'Payment Link platform fee 20%'
-  )
-  ON CONFLICT (order_id) DO NOTHING;
+  SELECT v_order.id, v_platform, 'payment_link', 'Payment Link platform fee 20%'
+  WHERE NOT EXISTS (
+    SELECT 1 FROM public.platform_earnings
+    WHERE order_id = v_order.id
+  );
 
   IF v_order.seller_id IS NOT NULL THEN
     INSERT INTO public.wallets (user_id)
