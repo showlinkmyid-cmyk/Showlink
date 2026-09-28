@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
     const signature = req.headers.get("x-gateway-signature") || "";
     if (!signature) return json({ error: "Missing signature" }, 401);
 
-    const expected = await hmacSha256Hex(raw, env("CASHI_WEBHOOK_SECRET"));
+    const expected = await hmacSha256Hex(raw, env("CASHI_SECRET_KEY"));
     if (!timingSafeEqual(expected.toLowerCase(), signature.trim().toLowerCase())) {
       return json({ error: "Invalid signature" }, 401);
     }
