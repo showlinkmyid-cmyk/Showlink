@@ -1432,8 +1432,8 @@ CREATE OR REPLACE FUNCTION public.get_paid_content(
 )
 RETURNS jsonb
 LANGUAGE plpgsql
-SECURITY INVOKER
-SET search_path = public
+SECURITY DEFINER
+SET search_path = public, extensions
 AS $$
 DECLARE
   v_link public.payment_links%ROWTYPE;
@@ -1508,6 +1508,9 @@ BEGIN
   );
 END;
 $$;
+
+REVOKE ALL ON FUNCTION public.get_paid_content(text, text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_paid_content(text, text) TO anon, authenticated;
 
 -- ============================================================
 -- INTERNAL PAYMENT SETTLEMENT
