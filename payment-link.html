@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-showlink-page-language="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,6 +23,74 @@
 <script>
 (function(){try{var t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}}catch(e){}})();
 </script>
+
+<script>
+window.SHOWLINK_PAYMENT_I18N = {
+  id: {
+    "payment.eyebrow":"SHOWLINK · PAYMENT LINK",
+    "payment.title":"Buat Payment Link",
+    "payment.subtitle":"Buat satu link <code>/p/xxx</code> untuk menjual akses ke konten kamu.",
+    "payment.step":"DETAIL KONTEN",
+    "payment.form_title":"Isi detail Payment Link",
+    "payment.form_subtitle":"Lengkapi empat bagian di bawah. Data ini akan tampil di halaman pembayaran.",
+    "payment.title_label":"Judul <span>*</span>",
+    "payment.title_placeholder":"Contoh: Premium Content",
+    "payment.title_detail":"Gunakan judul yang singkat dan mudah dipahami buyer.",
+    "payment.title_error":"Judul wajib diisi.",
+    "payment.description_label":"Deskripsi",
+    "payment.description_placeholder":"Jelaskan secara singkat apa yang akan didapatkan buyer.",
+    "payment.description_detail":"Jelaskan isi atau manfaat konten tanpa memasukkan data rahasia.",
+    "payment.content_label":"Konten <span>*</span>",
+    "payment.content_placeholder":"Tulis konten yang akan dibuka setelah pembayaran...\\n\\nContoh:\\nhttps://contoh.com\\nwww.contoh.com",
+    "payment.content_detail":"URL yang diawali <strong>https://</strong> atau <strong>www.</strong> akan otomatis menjadi link yang bisa diklik.",
+    "payment.content_error":"Konten wajib diisi.",
+    "payment.price_label":"Harga <span>*</span>",
+    "payment.price_placeholder":"15000",
+    "payment.price_detail":"Minimum <strong>Rp2.000</strong> · Maksimum <strong>Rp200.000</strong>.",
+    "payment.price_error":"Harga harus antara Rp2.000 dan Rp200.000.",
+    "payment.warning_title":"Peringatan",
+    "payment.warning_text":"Periksa judul, konten, dan harga sebelum membuat link. Setelah link dibagikan, buyer akan melihat data yang kamu publish.",
+    "payment.submit":"Buat Payment Link",
+    "payment.loading":"Sedang membuat Payment Link...",
+    "payment.success":"Payment Link berhasil dibuat",
+    "payment.session_error":"Sesi login tidak ditemukan. Silakan login kembali.",
+    "payment.url_error":"Payment Link berhasil dibuat tetapi URL tidak diterima.",
+    "payment.generic_error":"Gagal membuat Payment Link. Silakan coba lagi."
+  },
+  en: {
+    "payment.eyebrow":"SHOWLINK · PAYMENT LINK",
+    "payment.title":"Create Payment Link",
+    "payment.subtitle":"Create one <code>/p/xxx</code> link to sell access to your content.",
+    "payment.step":"CONTENT DETAILS",
+    "payment.form_title":"Enter Payment Link details",
+    "payment.form_subtitle":"Complete the four sections below. This information will appear on the payment page.",
+    "payment.title_label":"Title <span>*</span>",
+    "payment.title_placeholder":"Example: Premium Content",
+    "payment.title_detail":"Use a short title that is easy for buyers to understand.",
+    "payment.title_error":"Title is required.",
+    "payment.description_label":"Description",
+    "payment.description_placeholder":"Briefly explain what the buyer will receive.",
+    "payment.description_detail":"Explain the content or its benefits without including confidential information.",
+    "payment.content_label":"Content <span>*</span>",
+    "payment.content_placeholder":"Write the content that will be unlocked after payment...\\n\\nExample:\\nhttps://example.com\\nwww.example.com",
+    "payment.content_detail":"URLs starting with <strong>https://</strong> or <strong>www.</strong> will automatically become clickable links.",
+    "payment.content_error":"Content is required.",
+    "payment.price_label":"Price <span>*</span>",
+    "payment.price_placeholder":"15000",
+    "payment.price_detail":"Minimum <strong>Rp2,000</strong> · Maximum <strong>Rp200,000</strong>.",
+    "payment.price_error":"Price must be between Rp2,000 and Rp200,000.",
+    "payment.warning_title":"Warning",
+    "payment.warning_text":"Check the title, content, and price before creating the link. Once the link is shared, buyers will see the information you publish.",
+    "payment.submit":"Create Payment Link",
+    "payment.loading":"Creating Payment Link...",
+    "payment.success":"Payment Link created successfully",
+    "payment.session_error":"Login session not found. Please log in again.",
+    "payment.url_error":"Payment Link was created, but no URL was returned.",
+    "payment.generic_error":"Failed to create Payment Link. Please try again."
+  }
+};
+</script>
+
 </head>
 <body class="dashboard-page" data-page-title-id="Buat Payment Link — ShowLink" data-page-title-en="Create Payment Link — ShowLink">
 <div data-showlink-navbar></div>
@@ -32,63 +100,63 @@
     <section class="payment-page-head">
       <div class="payment-title-icon"><i class="fa-solid fa-credit-card"></i></div>
       <div>
-        <span class="payment-eyebrow">SHOWLINK · PAYMENT LINK</span>
-        <h1>Buat Payment Link</h1>
-        <p>Buat satu link <code>/p/xxx</code> untuk menjual akses ke konten kamu.</p>
+        <span class="payment-eyebrow" data-i18n="payment.eyebrow">SHOWLINK · PAYMENT LINK</span>
+        <h1 data-i18n="payment.title">Buat Payment Link</h1>
+        <p data-i18n-html="payment.subtitle">Buat satu link <code>/p/xxx</code> untuk menjual akses ke konten kamu.</p>
       </div>
     </section>
 
     <section class="payment-create-card" aria-labelledby="payment-form-title">
       <div class="payment-form-head">
         <div>
-          <span class="form-step">DETAIL KONTEN</span>
-          <h2 id="payment-form-title">Isi detail Payment Link</h2>
-          <p>Lengkapi empat bagian di bawah. Data ini akan tampil di halaman pembayaran.</p>
+          <span class="form-step" data-i18n="payment.step">DETAIL KONTEN</span>
+          <h2 id="payment-form-title" data-i18n="payment.form_title">Isi detail Payment Link</h2>
+          <p data-i18n="payment.form_subtitle">Lengkapi empat bagian di bawah. Data ini akan tampil di halaman pembayaran.</p>
         </div>
       </div>
 
       <form id="create-link-form" class="payment-form" novalidate>
         <div class="payment-field">
-          <label for="payment-title">Judul <span>*</span></label>
-          <input id="payment-title" name="title" type="text" maxlength="120" autocomplete="off" placeholder="Contoh: Premium Content" required>
-          <small class="field-detail"><i class="fa-solid fa-circle-info"></i> Gunakan judul yang singkat dan mudah dipahami buyer.</small>
-          <small class="field-error" data-title-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Judul wajib diisi.</small>
+          <label for="payment-title" data-i18n="payment.title_label">Judul <span>*</span></label>
+          <input id="payment-title" name="title" type="text" maxlength="120" autocomplete="off" placeholder="Contoh: Premium Content" data-i18n-placeholder="payment.title_placeholder" required>
+          <small class="field-detail" data-i18n="payment.title_detail"><i class="fa-solid fa-circle-info"></i> Gunakan judul yang singkat dan mudah dipahami buyer.</small>
+          <small class="field-error" data-title-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="payment.title_error">Judul wajib diisi.</span></small>
         </div>
 
         <div class="payment-field">
-          <label for="payment-description">Deskripsi</label>
-          <textarea id="payment-description" name="description" maxlength="1000" rows="4" placeholder="Jelaskan secara singkat apa yang akan didapatkan buyer."></textarea>
-          <small class="field-detail"><i class="fa-solid fa-circle-info"></i> Jelaskan isi atau manfaat konten tanpa memasukkan data rahasia.</small>
+          <label for="payment-description" data-i18n="payment.description_label">Deskripsi</label>
+          <textarea id="payment-description" name="description" maxlength="1000" rows="4" placeholder="Jelaskan secara singkat apa yang akan didapatkan buyer." data-i18n-placeholder="payment.description_placeholder"></textarea>
+          <small class="field-detail" data-i18n="payment.description_detail"><i class="fa-solid fa-circle-info"></i> Jelaskan isi atau manfaat konten tanpa memasukkan data rahasia.</small>
         </div>
 
         <div class="payment-field">
-          <label for="payment-content">Konten <span>*</span></label>
-          <textarea id="payment-content" name="content" maxlength="50000" rows="12" placeholder="Tulis konten yang akan dibuka setelah pembayaran...&#10;&#10;Contoh:&#10;https://contoh.com&#10;www.contoh.com" required></textarea>
-          <small class="field-detail"><i class="fa-solid fa-link"></i> URL yang diawali <strong>https://</strong> atau <strong>www.</strong> akan otomatis menjadi link yang bisa diklik.</small>
-          <small class="field-error" data-content-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Konten wajib diisi.</small>
+          <label for="payment-content" data-i18n="payment.content_label">Konten <span>*</span></label>
+          <textarea id="payment-content" name="content" maxlength="50000" rows="12" placeholder="Tulis konten yang akan dibuka setelah pembayaran...&#10;&#10;Contoh:&#10;https://contoh.com&#10;www.contoh.com" data-i18n-placeholder="payment.content_placeholder" required></textarea>
+          <small class="field-detail" data-i18n="payment.content_detail"><i class="fa-solid fa-link"></i> URL yang diawali <strong>https://</strong> atau <strong>www.</strong> akan otomatis menjadi link yang bisa diklik.</small>
+          <small class="field-error" data-content-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="payment.content_error">Konten wajib diisi.</span></small>
         </div>
 
         <div class="payment-field">
-          <label for="payment-price">Harga <span>*</span></label>
+          <label for="payment-price" data-i18n="payment.price_label">Harga</label>
           <div class="price-input-wrap">
             <span>Rp</span>
-            <input id="payment-price" name="price" type="number" min="2000" max="200000" step="100" inputmode="numeric" placeholder="15000" required>
+            <input id="payment-price" name="price" type="number" min="2000" max="200000" step="100" inputmode="numeric" placeholder="15000" data-i18n-placeholder="payment.price_placeholder" required>
           </div>
-          <small class="field-detail price-detail"><i class="fa-solid fa-circle-info"></i> Minimum <strong>Rp2.000</strong> · Maksimum <strong>Rp200.000</strong>.</small>
-          <small class="field-error" data-price-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> Harga harus antara Rp2.000 dan Rp200.000.</small>
+          <small class="field-detail price-detail"><i class="fa-solid fa-circle-info"></i> <span data-i18n="payment.price_detail">Minimum <strong>Rp2.000</strong> · Maksimum <strong>Rp200.000</strong>.</span></small>
+          <small class="field-error" data-price-warning hidden><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="payment.price_error">Harga harus antara Rp2.000 dan Rp200.000.</span></small>
         </div>
 
         <div class="payment-warning">
           <i class="fa-solid fa-triangle-exclamation"></i>
           <div>
-            <strong>Peringatan</strong>
-            <p>Periksa judul, konten, dan harga sebelum membuat link. Setelah link dibagikan, buyer akan melihat data yang kamu publish.</p>
+            <strong data-i18n="payment.warning_title">Peringatan</strong>
+            <p data-i18n="payment.warning_text">Periksa judul, konten, dan harga sebelum membuat link. Setelah link dibagikan, buyer akan melihat data yang kamu publish.</p>
           </div>
         </div>
 
         <button class="payment-submit" type="submit">
           <i class="fa-solid fa-link"></i>
-          <span>Buat Payment Link</span>
+          <span data-i18n="payment.submit">Buat Payment Link</span>
         </button>
       </form>
 
