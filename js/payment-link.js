@@ -126,7 +126,7 @@
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
       const key = el.dataset.i18nPlaceholder;
-      if (dict[key] != null) el.setAttribute("placeholder", dict[key]);
+      if (dict[key] != null) el.setAttribute("placeholder", String(dict[key]).replace(/\\n/g, "\n"));
     });
   }
 
