@@ -66,6 +66,11 @@
     return !badTitle && !badContent && !badPrice;
   }
 
+  function normalizePaymentUrl(url) {
+    const value = String(url || "");
+    return value.replace("/d/", "/p/");
+  }
+
   async function createPaymentLink(form) {
     const sb = await window.ShowLinkSupabase.load();
     const { data: sessionData, error: sessionError } = await sb.auth.getSession();
@@ -94,6 +99,7 @@
 
     const row = Array.isArray(data) ? data[0] : data;
     if (!row?.url) throw new Error(t("payment.url_error"));
+    if (row?.url) row.url = normalizePaymentUrl(row.url);
     return row;
   }
 
