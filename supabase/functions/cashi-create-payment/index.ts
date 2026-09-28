@@ -25,22 +25,55 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json().catch(() => ({}));
     const orderId = String(body.order_id || "").trim();
+    const guestToken = String(body.guest_access_token || "").trim();
     if (!orderId) return json({ error: "order_id is required" }, 400);
 
+    const authHeader = req.headers.get("Authorization") || "";
+    const supabaseUrl = env("SUPABASE_URL");
+    const serviceKey = env("SUPABASE_SERVICE_ROLE_KEY");
+
+    // Service-role client is used only for trusted DB reads/writes.
     const supabase = createClient(
-      env("SUPABASE_URL"),
-      env("SUPABASE_SERVICE_ROLE_KEY"),
+      supabaseUrl,
+      serviceKey,
       { auth: { persistSession: false, autoRefreshToken: false } },
     );
 
+    // Authenticate the caller separately. The previous implementation only
+    // used the service-role client, so anyone who knew an order UUID could
+    // attempt to create a Cashi invoice for another buyer's order.
+    let callerUserId: string | null = null;
+    if (authHeader.startsWith("Bearer ")) {
+      const authClient = createClient(
+        supabaseUrl,
+        env("SUPABASE_ANON_KEY"),
+        {
+          auth: { persistSession: false, autoRefreshToken: false },
+          global: { headers: { Authorization: authHeader } },
+        },
+      );
+      const { data: userData } = await authClient.auth.getUser();
+      callerUserId = userData.user?.id || null;
+    }
+
+    if (!callerUserId && !guestToken) {
+      return json({ error: "AUTH_OR_GUEST_TOKEN_REQUIRED" }, 401);
+    }
+
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .select("id,order_number,amount,currency,status,payment_reference,provider_order_id")
+      .select("id,order_number,amount,currency,status,payment_reference,provider_order_id,buyer_id,guest_access_token")
       .eq("id", orderId)
       .single();
 
     if (orderError || !order) {
       return json({ error: "Order not found" }, 404);
+    }
+
+    const ownsAsUser = !!callerUserId && order.buyer_id === callerUserId;
+    const ownsAsGuest = !callerUserId && !!guestToken && order.guest_access_token === guestToken;
+    if (!ownsAsUser && !ownsAsGuest) {
+      return json({ error: "ORDER_ACCESS_DENIED" }, 403);
     }
 
     if (["paid", "completed"].includes(String(order.status))) {
