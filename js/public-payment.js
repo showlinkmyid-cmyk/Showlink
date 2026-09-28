@@ -46,7 +46,9 @@
   }
 
   function contentUrl(orderId) {
-    return `/content/payment/${encodeURIComponent(slug)}?order=${encodeURIComponent(orderId)}`;
+    // Keep the buyer on the original /p/{slug} page. That page re-checks
+    // server-side access and renders the paid content only after settlement.
+    return `/p/${encodeURIComponent(slug)}`;
   }
 
   async function load() {
