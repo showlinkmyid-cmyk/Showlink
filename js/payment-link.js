@@ -70,7 +70,7 @@
     const sb = await window.ShowLinkSupabase.load();
     const { data: sessionData, error: sessionError } = await sb.auth.getSession();
     if (sessionError || !sessionData?.session) {
-      throw new Error("Sesi login tidak ditemukan. Silakan login kembali.");
+      throw new Error(t("payment.session_error"));
     }
 
     const title = form.elements.title.value.trim();
@@ -93,8 +93,41 @@
     if (error) throw error;
 
     const row = Array.isArray(data) ? data[0] : data;
-    if (!row?.url) throw new Error("Payment Link berhasil dibuat tetapi URL tidak diterima.");
+    if (!row?.url) throw new Error(t("payment.url_error"));
     return row;
+  }
+
+
+  function currentLanguage() {
+    const raw = localStorage.getItem("showlink-language") ||
+      localStorage.getItem("showlink-lang") ||
+      document.documentElement.lang || "id";
+    return /^en/i.test(raw) ? "en" : "id";
+  }
+
+  function t(key) {
+    const lang = currentLanguage();
+    return window.SHOWLINK_PAYMENT_I18N?.[lang]?.[key] ??
+      window.SHOWLINK_PAYMENT_I18N?.id?.[key] ?? key;
+  }
+
+  function applyPaymentLanguage() {
+    const lang = currentLanguage();
+    const dict = window.SHOWLINK_PAYMENT_I18N?.[lang] || window.SHOWLINK_PAYMENT_I18N.id;
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.dataset.i18n;
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+      const key = el.dataset.i18nHtml;
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      const key = el.dataset.i18nPlaceholder;
+      if (dict[key] != null) el.setAttribute("placeholder", dict[key]);
+    });
   }
 
   function init() {
@@ -118,16 +151,16 @@
       const original = button.innerHTML;
       button.disabled = true;
       button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Membuat link...</span>';
-      setResult("Sedang membuat Payment Link...", "loading");
+      setResult(t("payment.loading"), "loading");
 
       try {
         const result = await createPaymentLink(form);
         const priceText = rupiah(Number(form.elements.price.value));
-        setResult(`Payment Link berhasil dibuat · ${priceText}:`, "success", result.url);
+        setResult(`${t("payment.success")} · ${priceText}:`, "success", result.url);
         form.reset();
       } catch (error) {
         console.error(error);
-        setResult(error?.message || "Gagal membuat Payment Link. Silakan coba lagi.", "error");
+        setResult(error?.message || t("payment.generic_error"), "error");
       } finally {
         button.disabled = false;
         button.innerHTML = original;
@@ -135,5 +168,16 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", () => {
+    applyPaymentLanguage();
+    init();
+
+    window.addEventListener("showlink:language-change", applyPaymentLanguage);
+    window.addEventListener("languagechange", applyPaymentLanguage);
+    window.addEventListener("storage", (event) => {
+      if (event.key === "showlink-language" || event.key === "showlink-lang") {
+        applyPaymentLanguage();
+      }
+    });
+  });
 })();
