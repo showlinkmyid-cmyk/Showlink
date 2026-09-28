@@ -2,7 +2,8 @@
   'use strict';
 
   const app = document.getElementById('app');
-  const slug = location.pathname.split('/').filter(Boolean)[1] || '';
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const slug = pathParts[0] === 'p' && pathParts[1] ? decodeURIComponent(pathParts[1]) : '';
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
   }[c]));
