@@ -164,7 +164,11 @@
     };
     const { data } = await sb.auth.getSession();
     const accessToken = data?.session?.access_token;
-    if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+    // Supabase Edge Functions may still enforce the JWT gateway when an
+    // older deployment has not picked up config.toml yet.  Always provide a
+    // valid Supabase JWT in Authorization; for guests this is the public anon
+    // key, while logged-in users use their real access-token.
+    headers.Authorization = `Bearer ${accessToken || window.SHOWLINK_SUPABASE.anonKey}`;
     return headers;
   }
 
