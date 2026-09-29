@@ -2238,9 +2238,9 @@ BEGIN
       WHEN 'free' THEN free_percent
       ELSE guest_percent
     END,
-    platform_fee_percent
+    cfg.platform_fee_percent
   INTO v_percent, v_platform_percent
-  FROM public.payment_link_pricing_config
+  FROM public.payment_link_pricing_config AS cfg
   WHERE id = true;
 
   v_percent := coalesce(v_percent, 100.00);
