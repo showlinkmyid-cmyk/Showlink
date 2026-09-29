@@ -1196,22 +1196,16 @@ CREATE OR REPLACE FUNCTION public.get_pastelink_by_slug(p_slug text)
 RETURNS jsonb
 LANGUAGE sql
 STABLE
-SECURITY INVOKER
-SET search_path = public
+SECURITY DEFINER
+SET search_path = public, extensions
 AS $$
   SELECT jsonb_build_object(
     'id', p.id,
     'slug', p.slug,
     'title', p.title,
     'description', p.description,
-    'content_html', CASE
-      WHEN p.password_hash IS NOT NULL THEN ''
-      ELSE p.content_html
-    END,
-    'content_text', CASE
-      WHEN p.password_hash IS NOT NULL THEN ''
-      ELSE p.content_text
-    END,
+    'content_html', p.content_html,
+    'content_text', p.content_text,
     'thumbnail_url', p.thumbnail_url,
     'visibility', p.visibility,
     'has_password', p.password_hash IS NOT NULL,
@@ -1220,14 +1214,31 @@ AS $$
     'allow_download', p.allow_download,
     'tags', p.tags,
     'views', p.views,
-    'published_at', p.published_at
+    'published_at', p.published_at,
+    'is_paid', (pl.id IS NOT NULL),
+    'payment_link_id', pl.id,
+    'payment_link_slug', pl.slug,
+    'price', pl.price,
+    'currency', pl.currency
   )
   FROM public.pastelinks p
+  LEFT JOIN LATERAL (
+    SELECT x.*
+    FROM public.payment_links x
+    WHERE x.pastelink_id = p.id
+      AND x.status IN ('active','paused')
+      AND (x.expires_at IS NULL OR x.expires_at > now())
+    ORDER BY x.created_at DESC
+    LIMIT 1
+  ) pl ON true
   WHERE p.slug = p_slug
     AND p.status = 'published'
     AND p.visibility <> 'private'
     AND (p.expires_at IS NULL OR p.expires_at > now());
 $$;
+
+REVOKE ALL ON FUNCTION public.get_pastelink_by_slug(text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_pastelink_by_slug(text) TO anon, authenticated;
 
 -- ============================================================
 -- PUBLIC PAYMENT LINK LOOKUP
