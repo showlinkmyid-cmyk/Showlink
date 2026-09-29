@@ -152,7 +152,22 @@ Deno.serve(async (req) => {
     const checkoutUrl = result.checkout_url ? String(result.checkout_url) : null;
     const qrUrl = result.qrUrl ? String(result.qrUrl) : null;
 
-    const { error: paymentError } = await supabase.from("payments").upsert({
+    // The live database uses a PARTIAL unique index on
+    // (provider, provider_payment_id) WHERE provider_payment_id IS NOT NULL.
+    // PostgREST upsert/onConflict cannot reliably infer that partial index.
+    // Do an explicit lookup, then UPDATE or INSERT instead.
+    if (!Number.isFinite(amount) || amount < 0) {
+      return json({ error: "Invalid Cashi amount" }, 502);
+    }
+    if (!Number.isFinite(fee) || fee < 0) {
+      return json({ error: "Invalid Cashi fee" }, 502);
+    }
+    const netAmount = amount - fee;
+    if (netAmount < 0) {
+      return json({ error: "Invalid Cashi net amount" }, 502);
+    }
+
+    const paymentPayload = {
       order_id: order.id,
       provider: "CASHI",
       payment_method: "CASHI",
@@ -160,20 +175,78 @@ Deno.serve(async (req) => {
       invoice_id: providerId,
       amount,
       fee,
-      net_amount: amount - fee,
+      net_amount: netAmount,
       status: "pending",
       checkout_url: checkoutUrl,
       qr_string: qrUrl,
       provider_payload: result,
-    }, { onConflict: "provider,provider_payment_id" });
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data: existingByProviderId, error: lookupError } = await supabase
+      .from("payments")
+      .select("id")
+      .eq("provider", "CASHI")
+      .eq("provider_payment_id", providerId)
+      .maybeSingle();
+
+    if (lookupError) {
+      console.error("payments lookup failed", lookupError);
+      return json({
+        error: "Payment record could not be checked",
+        db_error: lookupError.message,
+        db_details: lookupError.details || null,
+        db_hint: lookupError.hint || null,
+      }, 500);
+    }
+
+    let paymentError = null;
+
+    if (existingByProviderId?.id) {
+      const { error } = await supabase
+        .from("payments")
+        .update(paymentPayload)
+        .eq("id", existingByProviderId.id);
+      paymentError = error;
+    } else {
+      const { error } = await supabase
+        .from("payments")
+        .insert(paymentPayload);
+      paymentError = error;
+
+      // Two fast clicks can race between the lookup and INSERT. If the
+      // partial unique index catches that race, fetch the row and update it
+      // instead of returning a false payment-save failure.
+      if (paymentError) {
+        const duplicate = /duplicate key|unique constraint/i.test(paymentError.message || "");
+        if (duplicate) {
+          const { data: racedPayment, error: racedLookupError } = await supabase
+            .from("payments")
+            .select("id")
+            .eq("provider", "CASHI")
+            .eq("provider_payment_id", providerId)
+            .maybeSingle();
+
+          if (!racedLookupError && racedPayment?.id) {
+            const { error: racedUpdateError } = await supabase
+              .from("payments")
+              .update(paymentPayload)
+              .eq("id", racedPayment.id);
+            paymentError = racedUpdateError;
+          }
+        }
+      }
+    }
 
     if (paymentError) {
-      console.error("payments upsert failed", paymentError);
+      console.error("payments save failed", paymentError);
       return json({
         error: "Payment record could not be saved",
         db_error: paymentError.message,
         db_details: paymentError.details || null,
         db_hint: paymentError.hint || null,
+        provider_payment_id: providerId,
+        order_id: order.id,
       }, 500);
     }
 
