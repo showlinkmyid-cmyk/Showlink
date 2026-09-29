@@ -165,11 +165,16 @@ Deno.serve(async (req) => {
       checkout_url: checkoutUrl,
       qr_string: qrUrl,
       provider_payload: result,
-    }, { onConflict: "provider_payment_id" });
+    }, { onConflict: "provider,provider_payment_id" });
 
     if (paymentError) {
       console.error("payments upsert failed", paymentError);
-      return json({ error: "Payment record could not be saved" }, 500);
+      return json({
+        error: "Payment record could not be saved",
+        db_error: paymentError.message,
+        db_details: paymentError.details || null,
+        db_hint: paymentError.hint || null,
+      }, 500);
     }
 
     const { error: orderUpdateError } = await supabase
