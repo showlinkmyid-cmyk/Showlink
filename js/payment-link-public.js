@@ -248,6 +248,23 @@
     }
   }
 
+  // The shared ShowLink language control changes localStorage and then
+  // broadcasts this event.  Payment Link must react immediately without
+  // reloading the page or fetching the link again.
+  window.addEventListener('showlink:language-change', () => {
+    syncDocumentLanguage();
+    rerenderCurrent();
+    const lang = document.getElementById('pl-lang');
+    if (lang) lang.textContent = currentLang() === 'en' ? 'ID' : 'EN';
+  });
+
+  // Also react to language changes made by another same-page component.
+  window.addEventListener('storage', (event) => {
+    if (event.key !== 'showlink-language') return;
+    syncDocumentLanguage();
+    rerenderCurrent();
+  });
+
   setupControls();
   load();
 })();
