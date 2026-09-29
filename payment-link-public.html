@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6d5dfc">
 <title>Payment Link — ShowLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <link rel="stylesheet" href="/css/public-flow.css">
+<link rel="stylesheet" href="/css/payment-link.css">
 <script src="/js/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/js/supabase-client.js"></script>
@@ -18,17 +20,30 @@
 <link rel="stylesheet" href="/css/showlink-components.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="/js/showlink-debug.js?v=20260929-debug2"></script>
+<script>
+(function(){
+ try{
+   const t=localStorage.getItem('showlink-theme');
+   if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}
+ }catch(e){}
+})();
+</script>
 </head>
 <body>
 <div data-showlink-navbar></div>
-<main class="pf-shell">
-  <a class="pf-brand" href="/"><span class="pf-brand-mark"><i class="fa-solid fa-link"></i></span>ShowLink</a>
-  <section class="pf-card" id="app">
-    <div class="pf-loader"><i class="fa-solid fa-spinner fa-spin"></i><div>Memuat Payment Link…</div></div>
+<main class="pl-page">
+  <div class="pl-top">
+    <a class="pl-brand" href="/"><span class="pl-brand-mark"><i class="fa-solid fa-link"></i></span>ShowLink</a>
+    <div class="pl-tools">
+      <button class="pl-tool" id="pl-theme" type="button" aria-label="Theme"><i class="fa-solid fa-moon"></i></button>
+      <button class="pl-tool" id="pl-lang" type="button" aria-label="Language">EN</button>
+    </div>
+  </div>
+  <section class="pl-card" id="app">
+    <div class="pl-loading"><i class="fa-solid fa-spinner fa-spin"></i><div data-i18n="loading">Memuat Payment Link…</div></div>
   </section>
 </main>
-<script src="/js/payment-link-public.js?v=20260929-payment-final2" defer></script>
 <div data-showlink-footer></div>
+<script src="/js/payment-link-public.js?v=20260929-ui3" defer></script>
 </body>
 </html>
