@@ -129,8 +129,19 @@ Deno.serve(async (req) => {
     const result = await response.json().catch(() => ({}));
 
     if (!response.ok || result?.success !== true) {
+      const providerMessage =
+        result?.message ||
+        result?.error ||
+        result?.errors ||
+        `HTTP ${response.status}`;
+      console.error("Cashi create-order rejected", {
+        status: response.status,
+        providerMessage,
+        result,
+      });
       return json({
-        error: result?.message || result?.error || "Cashi create-order failed",
+        error: `CASHI_CREATE_ORDER_FAILED: ${String(providerMessage)}`,
+        provider_status: response.status,
         provider_response: result,
       }, 502);
     }
