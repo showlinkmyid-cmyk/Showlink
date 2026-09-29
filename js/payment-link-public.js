@@ -183,8 +183,19 @@
         guest_access_token: isUser ? undefined : token
       })
     });
-    const result = await resp.json().catch(() => ({}));
-    if (!resp.ok) throw new Error(result.error || 'Gateway Cashi belum terhubung.');
+    const raw = await resp.text();
+    let result = {};
+    try { result = raw ? JSON.parse(raw) : {}; } catch (_) {
+      result = { message: raw };
+    }
+    if (!resp.ok) {
+      const detail = result.error || result.message || result.msg ||
+        result.code || `HTTP ${resp.status}`;
+      throw new Error(`Cashi create payment gagal (${resp.status}): ${detail}`);
+    }
+    if (result.success === false) {
+      throw new Error(result.error || result.message || 'Cashi menolak pembuatan pembayaran.');
+    }
     return result;
   }
 
@@ -269,8 +280,19 @@
           guest_access_token: isUser ? undefined : token
         })
       });
-      const result = await resp.json().catch(() => ({}));
-      if (!resp.ok) throw new Error(result.error || 'Gagal memeriksa pembayaran.');
+      const raw = await resp.text();
+      let result = {};
+      try { result = raw ? JSON.parse(raw) : {}; } catch (_) {
+        result = { message: raw };
+      }
+      if (!resp.ok) {
+        const detail = result.error || result.message || result.msg ||
+          result.code || `HTTP ${resp.status}`;
+        throw new Error(`Cek Cashi gagal (${resp.status}): ${detail}`);
+      }
+      if (result.success === false) {
+        throw new Error(result.error || result.message || 'Cashi belum mengonfirmasi pembayaran.');
+      }
 
       if (result.paid === true || String(result.status || '').toUpperCase() === 'SETTLED') {
         if (status) status.textContent = currentLang()==='en' ? 'Payment verified. Unlocking content…' : 'Pembayaran berhasil. Membuka konten…';
