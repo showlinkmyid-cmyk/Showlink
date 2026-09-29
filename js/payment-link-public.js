@@ -37,6 +37,10 @@
     if (!currentData) return;
     if (currentView === 'locked') renderLocked(currentData);
     else if (currentView === 'unlocked') renderUnlocked(currentData);
+    else if (currentView === 'payment') renderCashiPayment(
+      currentData.data, currentData.result, currentData.sb,
+      currentData.orderId, currentData.token, currentData.isUser
+    );
     else if (currentView === 'error') renderError(currentData);
   }
 
@@ -145,11 +149,198 @@
       </div>`;
 
     document.getElementById('buy').addEventListener('click', () => {
-      const token = guestToken();
-      const url = `/payment-public?slug=${encodeURIComponent(slug)}&guest_token=${encodeURIComponent(token)}`;
-      dbg.log('PAYMENT LINK BUY CLICK', { slug, url });
-      window.location.href = url;
+      startPayment(data).catch(error => {
+        dbg.error('PAYMENT LINK INLINE PAYMENT FAILED', error);
+        renderPaymentError(error?.message || 'Pembayaran gagal dibuat.');
+      });
     });
+  }
+
+
+  async function apiHeaders(sb) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'apikey': window.SHOWLINK_SUPABASE.anonKey
+    };
+    const { data } = await sb.auth.getSession();
+    const accessToken = data?.session?.access_token;
+    if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+    return headers;
+  }
+
+  async function sessionUser(sb) {
+    const { data } = await sb.auth.getUser();
+    return data?.user || null;
+  }
+
+  async function createCashiPayment(orderId, sb, token, isUser) {
+    const fn = `${window.SHOWLINK_SUPABASE.url}/functions/v1/cashi-create-payment`;
+    const resp = await fetch(fn, {
+      method: 'POST',
+      headers: await apiHeaders(sb),
+      body: JSON.stringify({
+        order_id: orderId,
+        guest_access_token: isUser ? undefined : token
+      })
+    });
+    const result = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(result.error || 'Gateway Cashi belum terhubung.');
+    return result;
+  }
+
+  function renderPaymentError(message) {
+    currentView = 'error';
+    currentData = message || '';
+    app.innerHTML = `<div class="pl-body">
+      <div class="pl-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <h2>${esc(t('notAvailable'))}</h2>
+        <p>${esc(message || 'Pembayaran gagal dibuat.')}</p>
+        <button class="pl-buy" id="retry-payment" type="button"><i class="fa-solid fa-rotate-right"></i> ${esc(currentLang()==='en'?'Try again':'Coba lagi')}</button>
+      </div>
+    </div>`;
+    document.getElementById('retry-payment')?.addEventListener('click', () => {
+      if (currentData && typeof currentData === 'object') startPayment(currentData);
+      else load();
+    });
+  }
+
+  function renderCashiPayment(data, result, sb, orderId, token, isUser) {
+    currentView = 'payment';
+    currentData = { data, result, sb, orderId, token, isUser };
+    const amount = Number(result.amount ?? data.price ?? 0);
+    const qr = result.qr_url || result.qrUrl || '';
+    const checkout = result.checkout_url || '';
+    app.innerHTML = `
+      ${data.thumbnail_url ? `<div class="pl-cover"><img src="${esc(data.thumbnail_url)}" alt=""></div>` : `<div class="pl-cover"><i class="fa-solid fa-qrcode"></i></div>`}
+      <div class="pl-body">
+        <span class="pl-kicker"><i class="fa-solid fa-qrcode"></i> CASHI</span>
+        <h1 class="pl-title">${esc(currentLang()==='en'?'Complete payment':'Selesaikan pembayaran')}</h1>
+        <p class="pl-desc">${esc(currentLang()==='en'
+          ? 'Scan the QR and complete the payment. Stay on this page until verification is successful.'
+          : 'Scan QR dan selesaikan pembayaran. Tetap di halaman ini sampai verifikasi berhasil.')}</p>
+        <div class="pl-meta">
+          <div class="pl-meta-box"><span class="pl-meta-label">${esc(t('titleLabel'))}</span><span class="pl-meta-value">${esc(data.title || 'Payment Link')}</span></div>
+          <div class="pl-meta-box"><span class="pl-meta-label">${esc(t('priceLabel'))}</span><span class="pl-meta-value">${money(amount, data.currency || 'IDR')}</span></div>
+        </div>
+        ${qr ? `<div style="text-align:center;margin:22px 0">
+          <img src="${esc(qr)}" alt="QR pembayaran Cashi" style="display:block;max-width:320px;width:100%;margin:auto;border-radius:18px;background:#fff;padding:10px;box-sizing:border-box">
+        </div>` : ''}
+        ${checkout ? `<a class="pl-buy" href="${esc(checkout)}" target="_blank" rel="noopener noreferrer" style="display:flex;text-decoration:none;justify-content:center;align-items:center;gap:8px">
+          ${esc(currentLang()==='en'?'Open Cashi':'Buka Cashi')} <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>` : ''}
+        <button class="pl-buy" id="check-payment" type="button" style="margin-top:10px">
+          <i class="fa-solid fa-circle-check"></i> ${esc(currentLang()==='en'?'Check Payment':'Cek Pembayaran')}
+        </button>
+        <div class="pl-status" id="payment-status">${esc(currentLang()==='en'?'Waiting for payment confirmation…':'Menunggu konfirmasi pembayaran…')}</div>
+        ${renderPaymentGuidance()}
+      </div>`;
+
+    document.getElementById('check-payment')?.addEventListener('click', () => {
+      checkCashiPayment(orderId, sb, token, isUser);
+    });
+
+    pollCashiPayment(orderId, sb, token, isUser);
+  }
+
+  async function unlockAfterPayment(sb, token) {
+    const { data: access, error } = await sb.rpc('get_paid_content', {
+      p_payment_link_slug: slug,
+      p_guest_access_token: token || null
+    });
+    if (error) throw error;
+    if (!access?.unlocked) throw new Error(currentLang()==='en'
+      ? 'Payment is verified, but content access is not ready yet. Please check payment again.'
+      : 'Pembayaran sudah terverifikasi, tetapi akses konten belum siap. Silakan cek pembayaran lagi.');
+    renderUnlocked({ ...(currentData?.data || currentData || {}), ...access });
+  }
+
+  async function checkCashiPayment(orderId, sb, token, isUser) {
+    const status = document.getElementById('payment-status');
+    if (status) status.textContent = currentLang()==='en' ? 'Checking payment…' : 'Memeriksa pembayaran…';
+
+    try {
+      const fn = `${window.SHOWLINK_SUPABASE.url}/functions/v1/cashi-check-status`;
+      const resp = await fetch(fn, {
+        method: 'POST',
+        headers: await apiHeaders(sb),
+        body: JSON.stringify({
+          order_id: orderId,
+          guest_access_token: isUser ? undefined : token
+        })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if (!resp.ok) throw new Error(result.error || 'Gagal memeriksa pembayaran.');
+
+      if (result.paid === true || String(result.status || '').toUpperCase() === 'SETTLED') {
+        if (status) status.textContent = currentLang()==='en' ? 'Payment verified. Unlocking content…' : 'Pembayaran berhasil. Membuka konten…';
+        await unlockAfterPayment(sb, token);
+        return true;
+      }
+
+      if (status) status.textContent = `${currentLang()==='en'?'Payment status':'Status pembayaran'}: ${result.status || 'PENDING'}. ${currentLang()==='en'?'Waiting for confirmation…':'Menunggu konfirmasi…'}`;
+      return false;
+    } catch (error) {
+      if (status) {
+        status.className = 'pl-status error';
+        status.textContent = error?.message || (currentLang()==='en' ? 'Payment check failed.' : 'Cek pembayaran gagal.');
+      }
+      return false;
+    }
+  }
+
+  async function pollCashiPayment(orderId, sb, token, isUser) {
+    // Poll gently while keeping the user on /p/{slug}. Manual "Cek Pembayaran"
+    // remains available and uses the same authoritative Edge Function.
+    for (let i = 0; i < 100; i++) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      if (currentView !== 'payment') return;
+      const done = await checkCashiPayment(orderId, sb, token, isUser);
+      if (done) return;
+    }
+  }
+
+  async function startPayment(data) {
+    const btn = document.getElementById('buy');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${esc(currentLang()==='en'?'Creating payment…':'Membuat pembayaran…')}`;
+    }
+
+    try {
+      const sb = await window.ShowLinkSupabase.load();
+      const user = await sessionUser(sb);
+      const token = user ? '' : guestToken();
+
+      const { data: order, error } = await sb.rpc('create_checkout_order', {
+        p_payment_link_id: data.id,
+        p_guest_access_token: user ? null : token
+      });
+      if (error) throw error;
+
+      if (order?.already_accessible === true) {
+        await unlockAfterPayment(sb, token);
+        return;
+      }
+
+      const orderId = order?.order_id || order?.id;
+      if (!orderId) throw new Error('Order tidak berhasil dibuat.');
+
+      const result = await createCashiPayment(orderId, sb, token, !!user);
+      if (result.already_paid) {
+        await unlockAfterPayment(sb, token);
+        return;
+      }
+
+      if (!result.qr_url && !result.qrUrl && !result.checkout_url) {
+        throw new Error('Cashi tidak mengembalikan QR atau halaman pembayaran.');
+      }
+
+      renderCashiPayment(data, result, sb, orderId, token, !!user);
+    } catch (error) {
+      dbg.error('INLINE CASHI PAYMENT FAILED', error);
+      renderPaymentError(error?.message || 'Pembayaran gagal dibuat.');
+    }
   }
 
   function renderUnlocked(data) {
