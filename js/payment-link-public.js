@@ -33,10 +33,10 @@
 
   function renderError(message) {
     app.innerHTML = `<div class="pf-body">
-      <div class="pf-loader">
+      <div class="pl-error">
         <i class="fa-solid fa-circle-exclamation"></i>
-        <h2>Payment Link tidak tersedia</h2>
-        <p>${esc(message || 'Payment Link tidak ditemukan atau sudah tidak aktif.')}</p>
+        <h2>${esc(t('notAvailable'))}</h2>
+        <p>${esc(message || t('notFound'))}</p>
       </div>
     </div>`;
   }
@@ -45,6 +45,12 @@
     id: {
       kicker:'PAYMENT LINK', locked:'Konten terkunci. Lakukan pembayaran untuk membuka konten.',
       buy:'Beli & Bayar', verified:'Pembayaran terverifikasi. Konten sudah terbuka.',
+      titleLabel:'Judul', priceLabel:'Harga', empty:'Konten kosong.',
+      notAvailable:'Payment Link tidak tersedia',
+      notFound:'Payment Link tidak ditemukan atau sudah tidak aktif.',
+      loadError:'Kode Payment Link tidak ditemukan di URL.',
+      loading:'Memuat Payment Link…',
+      verifiedKicker:'PEMBAYARAN TERVERIFIKASI', themeLabel:'Tema', languageLabel:'Bahasa',
       warningTitle:'Peringatan penting',
       warning:'Utamakan cek dahulu sebelum membayar. Jangan meninggalkan halaman setelah QR tampil. Hargai platform agar pembayaran gagal dapat diminimalkan.',
       how:'Cara pembayaran',
@@ -62,6 +68,12 @@
     en: {
       kicker:'PAYMENT LINK', locked:'Content is locked. Complete payment to unlock it.',
       buy:'Buy & Pay', verified:'Payment verified. Content is now unlocked.',
+      titleLabel:'Title', priceLabel:'Price', empty:'Content is empty.',
+      notAvailable:'Payment Link unavailable',
+      notFound:'Payment Link was not found or is no longer active.',
+      loadError:'Payment Link code was not found in the URL.',
+      loading:'Loading Payment Link…',
+      verifiedKicker:'PAYMENT VERIFIED', themeLabel:'Theme', languageLabel:'Language',
       warningTitle:'Important notice',
       warning:'Please check the link before paying. Do not leave the page after the QR appears. Respect the platform so failed payments can be minimized.',
       how:'How to pay',
@@ -111,8 +123,8 @@
         <h1 class="pl-title">${esc(data.title || 'Payment Link')}</h1>
         ${data.description ? `<p class="pl-desc">${esc(data.description)}</p>` : ''}
         <div class="pl-meta">
-          <div class="pl-meta-box"><span class="pl-meta-label">Judul / Title</span><span class="pl-meta-value">${esc(data.title || 'Payment Link')}</span></div>
-          <div class="pl-meta-box"><span class="pl-meta-label">Harga / Price</span><span class="pl-meta-value">${money(data.price, data.currency || 'IDR')}</span></div>
+          <div class="pl-meta-box"><span class="pl-meta-label">${esc(t('titleLabel'))}</span><span class="pl-meta-value">${esc(data.title || 'Payment Link')}</span></div>
+          <div class="pl-meta-box"><span class="pl-meta-label">${esc(t('priceLabel'))}</span><span class="pl-meta-value">${money(data.price, data.currency || 'IDR')}</span></div>
         </div>
         <div class="pl-price">${money(data.price, data.currency || 'IDR')}</div>
         <button class="pl-buy" id="buy"><i class="fa-solid fa-lock-open"></i> ${t('buy')}</button>
@@ -129,16 +141,28 @@
 
   function renderUnlocked(data) {
     const content = data.content_html ||
-      (data.content_text ? `<pre class="pl-content-text">${esc(data.content_text)}</pre>` : `<div class="pl-status">Konten kosong.</div>`);
+      (data.content_text ? `<pre class="pl-content-text">${esc(data.content_text)}</pre>` : `<div class="pl-status">${esc(t('empty'))}</div>`);
     app.innerHTML = `
       ${data.thumbnail_url ? `<div class="pl-cover"><img src="${esc(data.thumbnail_url)}" alt=""></div>` : `<div class="pl-cover"><i class="fa-solid fa-unlock"></i></div>`}
       <div class="pl-body">
-        <span class="pl-kicker"><i class="fa-solid fa-circle-check"></i> ${currentLang()==='en'?'PAYMENT VERIFIED':'PEMBAYARAN TERVERIFIKASI'}</span>
+        <span class="pl-kicker"><i class="fa-solid fa-circle-check"></i> ${t('verifiedKicker')}</span>
         <h1 class="pl-title">${esc(data.title || 'Payment Link')}</h1>
         ${data.description ? `<p class="pl-desc">${esc(data.description)}</p>` : ''}
         <div class="pl-status"><i class="fa-solid fa-unlock"></i> ${t('verified')}</div>
         <div class="pl-content">${content}</div>
       </div>`;
+  }
+
+  function syncDocumentLanguage(){
+    const lang = currentLang();
+    document.documentElement.lang = lang;
+    document.title = lang === 'en' ? 'Payment Link — ShowLink' : 'Payment Link — ShowLink';
+    const loading = document.querySelector('[data-i18n="loading"]');
+    if (loading) loading.textContent = t('loading');
+    const theme = document.getElementById('pl-theme');
+    const langButton = document.getElementById('pl-lang');
+    if (theme) theme.setAttribute('aria-label', t('themeLabel'));
+    if (langButton) langButton.setAttribute('aria-label', t('languageLabel'));
   }
 
   function setupControls(){
@@ -155,18 +179,22 @@
       document.documentElement.style.colorScheme=next;
       try{localStorage.setItem('showlink-theme',next);}catch(_){}
       sync();
+      syncDocumentLanguage();
       load();
     });
     lang?.addEventListener('click',()=>{
       try{localStorage.setItem('showlink-language',currentLang()==='en'?'id':'en');}catch(_){}
-      sync(); load();
+      sync();
+      syncDocumentLanguage();
+      load();
     });
     sync();
+    syncDocumentLanguage();
   }
 
   async function load() {
     try {
-      if (!slug) throw new Error('Kode Payment Link tidak ditemukan di URL.');
+      if (!slug) throw new Error(t('loadError'));
 
       dbg.log('PAYMENT LINK PUBLIC LOAD', {
         slug,
@@ -181,7 +209,7 @@
       dbg.log('PAYMENT LINK LOOKUP', { slug, data, error });
 
       if (error) throw error;
-      if (!data) throw new Error('Payment Link tidak ditemukan atau sudah tidak aktif.');
+      if (!data) throw new Error(t('notFound'));
 
       // The public page is the Payment Link landing page. Only after payment
       // access is granted do we expose content_html/content_text.
