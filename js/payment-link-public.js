@@ -3,8 +3,10 @@
 
   const app = document.getElementById('app');
   const parts = window.location.pathname.split('/').filter(Boolean);
-  const slug = parts[0] === 'p' && parts[1] ? decodeURIComponent(parts[1]) : '';
+  const routeSlug = parts[0] === 'p' && parts[1] ? decodeURIComponent(parts[1]) : '';
   const qs = new URLSearchParams(window.location.search);
+  const injectedSlug = String(window.__SHOWLINK_PAYMENT_SLUG || '').trim();
+  const slug = injectedSlug || routeSlug || String(qs.get('slug') || '').trim();
   const incomingGuestToken = qs.get('guest_token') || '';
   const dbg = window.ShowLinkDebug || { log:()=>{}, warn:()=>{}, error:()=>{} };
 
@@ -94,7 +96,13 @@
     try {
       if (!slug) throw new Error('Kode Payment Link tidak ditemukan di URL.');
 
-      dbg.log('PAYMENT LINK PUBLIC LOAD', { slug, pathname: window.location.pathname });
+      dbg.log('PAYMENT LINK PUBLIC LOAD', {
+        slug,
+        pathname: window.location.pathname,
+        routeSlug,
+        injectedSlug,
+        querySlug: qs.get('slug') || ''
+      });
       const sb = await window.ShowLinkSupabase.load();
 
       const { data, error } = await sb.rpc('get_payment_link_by_slug', { p_slug: slug });
