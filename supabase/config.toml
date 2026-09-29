@@ -1,2 +1,13 @@
+# Cashi webhook is called server-to-server by Cashi, so JWT verification is disabled.
 [functions.cashi-webhook]
+verify_jwt = false
+
+# These two functions perform their own authorization:
+# - logged-in users are verified with Supabase auth.getUser()
+# - guests are verified against the order guest_access_token
+# Therefore Supabase's automatic Edge Function JWT gate must not reject guest requests.
+[functions.cashi-create-payment]
+verify_jwt = false
+
+[functions.cashi-check-status]
 verify_jwt = false
