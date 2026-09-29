@@ -8,6 +8,8 @@
   const injectedSlug = String(window.__SHOWLINK_PAYMENT_SLUG || '').trim();
   const slug = injectedSlug || routeSlug || String(qs.get('slug') || '').trim();
   const incomingGuestToken = qs.get('guest_token') || '';
+  let currentView = '';
+  let currentData = null;
   const dbg = window.ShowLinkDebug || { log:()=>{}, warn:()=>{}, error:()=>{} };
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -31,7 +33,16 @@
     return incomingGuestToken || localStorage.getItem('showlink_guest_token') || '';
   }
 
+  function rerenderCurrent(){
+    if (!currentData) return;
+    if (currentView === 'locked') renderLocked(currentData);
+    else if (currentView === 'unlocked') renderUnlocked(currentData);
+    else if (currentView === 'error') renderError(currentData);
+  }
+
   function renderError(message) {
+    currentView = 'error';
+    currentData = message || '';
     app.innerHTML = `<div class="pf-body">
       <div class="pl-error">
         <i class="fa-solid fa-circle-exclamation"></i>
@@ -115,6 +126,8 @@
   }
 
   function renderLocked(data) {
+    currentView = 'locked';
+    currentData = data;
     const image = data.thumbnail_url;
     app.innerHTML = `
       ${image ? `<div class="pl-cover"><img src="${esc(image)}" alt=""></div>` : `<div class="pl-cover"><i class="fa-solid fa-credit-card"></i></div>`}
@@ -140,6 +153,8 @@
   }
 
   function renderUnlocked(data) {
+    currentView = 'unlocked';
+    currentData = data;
     const content = data.content_html ||
       (data.content_text ? `<pre class="pl-content-text">${esc(data.content_text)}</pre>` : `<div class="pl-status">${esc(t('empty'))}</div>`);
     app.innerHTML = `
@@ -180,13 +195,12 @@
       try{localStorage.setItem('showlink-theme',next);}catch(_){}
       sync();
       syncDocumentLanguage();
-      load();
     });
     lang?.addEventListener('click',()=>{
       try{localStorage.setItem('showlink-language',currentLang()==='en'?'id':'en');}catch(_){}
       sync();
       syncDocumentLanguage();
-      load();
+      rerenderCurrent();
     });
     sync();
     syncDocumentLanguage();
