@@ -4,7 +4,10 @@
   const app = document.getElementById('app');
   // Checkout is intentionally a separate page. It receives the Payment Link
   // slug only through ?slug=... after the buyer clicks Beli & Bayar.
-  const slug = new URLSearchParams(window.location.search).get('slug') || '';
+  const qs = new URLSearchParams(window.location.search);
+  const slug = qs.get('slug') || '';
+  const returnSlug = qs.get('return_slug') || '';
+  const incomingGuestToken = qs.get('guest_token') || '';
   const dbg = window.ShowLinkDebug || {
     log:()=>{}, warn:()=>{}, error:()=>{}
   };
@@ -48,7 +51,9 @@
   function contentUrl(orderId) {
     // Keep the buyer on the original /p/{slug} page. That page re-checks
     // server-side access and renders the paid content only after settlement.
-    return `/p/${encodeURIComponent(slug)}`;
+    const target = returnSlug || slug;
+    const token = incomingGuestToken || localStorage.getItem('showlink_guest_token') || '';
+    return `/p/${encodeURIComponent(target)}${token ? `?purchase_access=1&guest_token=${encodeURIComponent(token)}` : '?purchase_access=1'}`;
   }
 
   async function load() {
