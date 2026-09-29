@@ -84,8 +84,20 @@ Deno.serve(async (req) => {
     );
     const result = await response.json().catch(() => ({}));
     if (!response.ok || result?.success !== true) {
+      const providerMessage =
+        result?.message ||
+        result?.error ||
+        result?.errors ||
+        `HTTP ${response.status}`;
+      console.error("Cashi check-status rejected", {
+        status: response.status,
+        providerMessage,
+        result,
+      });
       return json({
-        error: result?.message || result?.error || "Cashi status check failed",
+        error: `CASHI_STATUS_CHECK_FAILED: ${String(providerMessage)}`,
+        provider_status: response.status,
+        provider_response: result,
       }, 502);
     }
 
