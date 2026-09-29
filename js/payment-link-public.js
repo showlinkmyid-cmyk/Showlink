@@ -3,7 +3,7 @@
 
   const app = document.getElementById('app');
   const parts = window.location.pathname.split('/').filter(Boolean);
-  const routeSlug = parts[0] === 'p' && parts[1] ? decodeURIComponent(parts[1]) : '';
+  const routeSlug = parts[0] === 'p' && parts[1] ? (() => { try { return decodeURIComponent(parts[1]); } catch (_) { return ''; } })() : '';
   const qs = new URLSearchParams(window.location.search);
   const injectedSlug = String(window.__SHOWLINK_PAYMENT_SLUG || '').trim();
   const slug = injectedSlug || routeSlug || String(qs.get('slug') || '').trim();
