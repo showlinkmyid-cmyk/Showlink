@@ -159,6 +159,12 @@
       });
       if (error) throw error;
 
+      if (order?.already_accessible === true) {
+        status.textContent = 'Akses sudah tersedia. Membuka konten…';
+        location.href = contentUrl('');
+        return;
+      }
+
       const oid = order?.order_id || order?.id;
       if (!oid) throw new Error('Order tidak berhasil dibuat.');
 

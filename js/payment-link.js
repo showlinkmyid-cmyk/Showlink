@@ -2,7 +2,7 @@
   "use strict";
 
   const MIN_PRICE = 2000;
-  const MAX_PRICE = 100000;
+  const MAX_PRICE = 10000000;
   const URL_RE = /((?:https?:\/\/|www\.)[^\s<]+)/gi;
 
   const $ = (selector, root = document) => root.querySelector(selector);
