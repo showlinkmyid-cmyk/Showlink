@@ -24,17 +24,12 @@
 <label class="create-field"><span data-i18n="sl.description">Deskripsi</span><textarea name="description" rows="4" maxlength="1000" placeholder="Jelaskan isi konten..." data-i18n-placeholder="sl.descriptionPh"></textarea></label>
 <label class="create-field"><span data-i18n="sl.content">Isi Konten</span><textarea name="content_text" rows="8" maxlength="50000" placeholder="Masukkan link atau konten yang akan dibuka..." data-i18n-placeholder="sl.contentPh" required></textarea><small class="field-detail" data-i18n="sl.contentDetail"><i class="fa-solid fa-link"></i> URL https:// atau www. akan otomatis menjadi link yang bisa diklik.</small></label>
 
-<div class="sl-section-title"><i class="fa-solid fa-list-check"></i><span data-i18n="sl.missionTitle">Misi FREE</span></div>
-<p class="sl-help" data-i18n="sl.missionHelp">Isi maksimal 3 task. Sistem otomatis memakai 3 task untuk FREE, 2 task untuk VIP, dan 1 task untuk PREMIUM.</p>
-<div class="task-editor">
-<div class="task-box"><b>Task 1</b><input name="task1_title" placeholder="Judul Task 1" required><input name="task1_description" placeholder="Deskripsi Task 1"><input name="task1_url" placeholder="https://..." type="url"></div>
-<div class="task-box"><b>Task 2</b><input name="task2_title" placeholder="Judul Task 2" required><input name="task2_description" placeholder="Deskripsi Task 2"><input name="task2_url" placeholder="https://..." type="url"></div>
-<div class="task-box"><b>Task 3</b><input name="task3_title" placeholder="Judul Task 3" required><input name="task3_description" placeholder="Deskripsi Task 3"><input name="task3_url" placeholder="https://..." type="url"></div>
+<div class="sl-info-panel">
+<div class="sl-info-icon"><i class="fa-solid fa-circle-info"></i></div>
+<div><strong data-i18n="sl.flowTitle">Alur akses Shortlink</strong><p data-i18n="sl.flowDetail">Sistem otomatis mengatur jumlah Task dan FINAL sesuai paket akun. User FREE melewati 3 Task, VIP 2 Task, dan PREMIUM 1 Task. Halaman Task sudah disiapkan oleh sistem.</p></div>
 </div>
 
-<label class="create-field"><span data-i18n="sl.payment">Payment Link untuk Langsung Akses</span><input name="payment_link_url" placeholder="https://showlink.my.id/p/xxxx" required><small class="field-detail" data-i18n="sl.paymentDetail"><i class="fa-solid fa-credit-card"></i> Jika diisi, pilihan “Langsung Akses” akan membuka Payment Link ini.</small></label>
-
-<div class="sl-warning"><i class="fa-solid fa-triangle-exclamation"></i><div><strong data-i18n="sl.warningTitle">Peringatan</strong><p data-i18n="sl.warning">Periksa judul, deskripsi, konten, task, dan Payment Link sebelum publish. Setelah Shortlink dibagikan, data tersebut dapat dilihat oleh user.</p></div></div>
+<div class="sl-warning"><i class="fa-solid fa-triangle-exclamation"></i><div><strong data-i18n="sl.warningTitle">Peringatan</strong><p data-i18n="sl.warning">Periksa judul, deskripsi, dan isi konten sebelum publish. Setelah Shortlink dibagikan, data tersebut dapat dilihat oleh user.</p></div></div>
 <button class="sl-primary-btn" type="submit"><i class="fa-solid fa-rocket"></i><span data-i18n="sl.createBtn">Buat Shortlink</span></button>
 </form>
 <div id="create-result" class="pf-status" style="margin-top:16px" data-i18n="sl.ready">Isi data lalu publish.</div>
