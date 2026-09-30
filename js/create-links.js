@@ -6,16 +6,6 @@
   const result=document.getElementById('create-result');
   const btn=form.querySelector('button[type="submit"]');
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-  const shortTasks=()=>{
-    const out=[];
-    for(let i=1;i<=3;i++){
-      const title=String(form.querySelector(`[name="task${i}_title"]`)?.value||'').trim();
-      const description=String(form.querySelector(`[name="task${i}_description"]`)?.value||'').trim();
-      const url=String(form.querySelector(`[name="task${i}_url"]`)?.value||'').trim();
-      if(title||description||url) out.push({title:title||`Task ${i}`,description,url});
-    }
-    return out;
-  };
   form.addEventListener('submit',async e=>{
     e.preventDefault();
     btn.disabled=true;
@@ -41,24 +31,12 @@
       }else if(type==='shortlink'){
         const content=String(fd.get('content_text')||'').trim();
         if(!content) throw new Error('Isi konten wajib diisi.');
-        for(let i=1;i<=3;i++){if(!String(fd.get(`task${i}_title`)||'').trim()) throw new Error(`Judul Task ${i} wajib diisi.`);}
-        if(!String(fd.get('payment_link_url')||'').trim()) throw new Error('Payment Link untuk akses langsung wajib diisi.');
         const slug=await makeSlug(sb,'showlink_shortlinks');
-        const paymentRaw=String(fd.get('payment_link_url')||'').trim();
-        let paymentLinkId=null;
-        if(paymentRaw){
-          const m=paymentRaw.match(/\/p\/([^/?#]+)/);
-          if(!m) throw new Error('Payment Link tidak valid. Gunakan URL /p/xxxx.');
-          const {data:pl,error:pe}=await sb.from('payment_links').select('id,slug,status').eq('slug',m[1]).maybeSingle();
-          if(pe) throw pe;
-          if(!pl || pl.status!=='active') throw new Error('Payment Link tidak ditemukan atau belum aktif.');
-          paymentLinkId=pl.id;
-        }
         const {data,error}=await sb.from('showlink_shortlinks').insert({
           owner_id:uid,title:String(fd.get('title')||'').trim(),
           description:String(fd.get('description')||'').trim(),
           content_text:content,destination_url:content,
-          tasks:shortTasks(),payment_link_id:paymentLinkId,status:'active'
+          tasks:[],payment_link_id:null,status:'active'
         }).select('slug').single();
         if(error) throw error;
         link={slug:data.slug};
