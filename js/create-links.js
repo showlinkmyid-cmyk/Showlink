@@ -33,7 +33,7 @@
         if(!content) throw new Error('Isi konten wajib diisi.');
         const slug=await makeSlug(sb,'showlink_shortlinks');
         const {data,error}=await sb.from('showlink_shortlinks').insert({
-          owner_id:uid,title:String(fd.get('title')||'').trim(),
+          owner_id:uid,slug,title:String(fd.get('title')||'').trim(),
           description:String(fd.get('description')||'').trim(),
           content_text:content,destination_url:content,
           tasks:[],payment_link_id:null,status:'active'
