@@ -32,3 +32,8 @@ body.dashboard-page{margin:0;color:var(--text);background:radial-gradient(circle
 .sponsor-link-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;margin:18px 0 26px;text-align:center}
 .sponsor-link{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:11px;text-decoration:none;font-size:12px;font-weight:800;color:var(--primary2);border:1px solid var(--border);background:transparent}
 .sponsor-link-wrap small{font-size:9px;color:var(--muted)}
+
+.download-bottom-gate{margin:28px 0 18px;text-align:center}
+.download-bottom-gate h3{margin:0 0 7px}
+.download-bottom-gate p{font-size:12px;color:var(--muted)}
+.locked-bottom{opacity:.55!important;cursor:not-allowed!important;pointer-events:none}
