@@ -9,7 +9,7 @@ try{state=JSON.parse(sessionStorage.getItem(key)||'{"completed":[]}')}catch(e){}
 if(!Array.isArray(state.completed))state.completed=[];
 
 const en=()=>document.documentElement.lang==='en'||localStorage.getItem('showlink-lang')==='en';
-const adUrl=()=>window.SHOWLINK_ADSTERRA_URL||localStorage.getItem('showlink-adsterra-url')||'';
+const adUrl=()=>window.SHOWLINK_ADSTERRA_URL||localStorage.getItem('showlink-adsterra-url')||'https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75';
 const $=id=>document.getElementById(id);
 
 const copy={
