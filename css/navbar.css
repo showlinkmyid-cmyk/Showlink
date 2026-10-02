@@ -52,3 +52,12 @@ html[data-theme="dark"]{
 .sl-drawer-divider{height:1px;margin:12px 6px;background:var(--sl-line)}
 .sl-new-badge{margin-left:auto;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:900;line-height:1;border:1px solid transparent}.sl-new-green{color:#059669;background:rgba(16,185,129,.10);border-color:rgba(16,185,129,.20)}.sl-new-yellow{color:#d97706;background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.20)}
 @media(max-width:620px){.sl-nav-shell{width:calc(100% - 18px)}.sl-brand-text{display:none}.sl-brand-mark{width:42px;height:42px}.sl-desktop-action{display:none!important}}
+
+.sl-feature-locked{opacity:.48!important;cursor:not-allowed!important;filter:saturate(.55)}
+.sl-feature-locked::after{content:"🔒";margin-left:auto;font-size:11px;opacity:.8}
+.sl-plan-toast{
+ position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+ z-index:99999;padding:10px 15px;border-radius:12px;
+ color:#fff;background:linear-gradient(135deg,#ec4899,#7c3aed,#06b6d4);
+ box-shadow:0 12px 30px rgba(80,40,130,.25);font-size:12px;font-weight:700;
+}
