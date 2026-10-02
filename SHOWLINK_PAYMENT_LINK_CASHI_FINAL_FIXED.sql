@@ -1146,9 +1146,19 @@ AS $$
 DECLARE
   v_id uuid;
   v_slug text;
+  v_plan text;
 BEGIN
   IF auth.uid() IS NULL THEN
     RAISE EXCEPTION 'AUTH_REQUIRED';
+  END IF;
+
+  SELECT lower(coalesce(plan, 'free'))
+    INTO v_plan
+  FROM public.profiles
+  WHERE id = auth.uid();
+
+  IF coalesce(v_plan, 'free') NOT IN ('vip', 'premium') THEN
+    RAISE EXCEPTION 'PLAN_REQUIRED: Payment Link hanya tersedia untuk akun VIP dan Premium';
   END IF;
 
   IF p_price IS NULL OR p_price < 2000 OR p_price > 100000 THEN
