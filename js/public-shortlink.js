@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const app=document.getElementById('app');
-  const slug=location.pathname.split('/').filter(Boolean)[1]||'';
+  const slug=String(window.__SHOWLINK_SHORTLINK_SLUG||location.pathname.split('/').filter(Boolean)[1]||'').trim();
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
   const urlize=s=>esc(s).replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi,m=>{
     const href=m.toLowerCase().startsWith('www.')?'https://'+m:m;
