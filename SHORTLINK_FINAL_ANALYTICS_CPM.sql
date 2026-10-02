@@ -151,4 +151,10 @@ SELECT
 FROM public.showlink_shortlinks s
 LEFT JOIN public.showlink_shortlink_final_stats a ON a.shortlink_id=s.id;
 
+-- Security hardening:
+-- The dashboard view must evaluate permissions/RLS as the querying user.
+-- This avoids inheriting the view owner's privileges.
+ALTER VIEW public.showlink_shortlink_final_dashboard
+SET (security_invoker = true);
+
 COMMIT;
