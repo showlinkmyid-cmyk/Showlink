@@ -86,6 +86,40 @@
     document.documentElement.classList.add("sl-drawer-open");
   }
 
+
+  async function applyPlanFeatureLocks(){
+    const host=document.querySelector("[data-showlink-navbar]");
+    if(!host || !logged()) return;
+    try{
+      const sb=await window.ShowLinkSupabase?.load?.();
+      if(!sb) return;
+      const {data:session}=await sb.auth.getSession();
+      const uid=session?.session?.user?.id;
+      if(!uid) return;
+      const {data:profile}=await sb.from("profiles").select("plan").eq("id",uid).maybeSingle();
+      const plan=String(profile?.plan||"free").toLowerCase();
+      const allowed=plan==="vip"||plan==="premium";
+      const links=host.querySelectorAll('a[href="/payment-link.html"]');
+      links.forEach(a=>{
+        a.classList.toggle("sl-feature-locked",!allowed);
+        a.setAttribute("aria-disabled",String(!allowed));
+        if(!allowed){
+          a.setAttribute("title","Payment Link hanya untuk VIP & Premium");
+          a.addEventListener("click",function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            const msg=document.createElement("div");
+            msg.className="sl-plan-toast";
+            msg.textContent="Payment Link hanya tersedia untuk VIP dan Premium.";
+            document.body.appendChild(msg);
+            setTimeout(()=>msg.remove(),2600);
+          },{once:false});
+        }
+      });
+    }catch(e){}
+  }
+
+
   function render(){
     const host=document.querySelector("[data-showlink-navbar]");
     if(!host)return;
@@ -175,6 +209,7 @@
 
     document.body.classList.add("showlink-navbar-page");
     window.dispatchEvent(new CustomEvent("showlink:navbar-rendered"));
+    applyPlanFeatureLocks();
 
     const menu=host.querySelector("[data-showlink-menu]");
     menu?.addEventListener("click",()=>{
