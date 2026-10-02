@@ -20,7 +20,7 @@
 <p class="sl-main-intro" data-i18n="sl.createIntro">Buat Shortlink untuk mengarahkan user ke konten asli melalui pilihan FREE atau akses langsung dengan Payment Link.</p></div></section>
 <div class="sl-main-card">
 <form id="create-link-form" data-type="shortlink" class="create-form" novalidate>
-<label class="create-field"><span data-i18n="sl.title">Judul</span><input name="title" maxlength="120" placeholder="Contoh: Video Premium" required></label>
+<label class="create-field"><span data-i18n="sl.title">Judul</span><input name="title" maxlength="120" placeholder="Contoh: Video Premium" autocomplete="off" required></label>
 <label class="create-field"><span data-i18n="sl.description">Deskripsi</span><textarea name="description" rows="4" maxlength="1000" placeholder="Jelaskan isi konten..." data-i18n-placeholder="sl.descriptionPh"></textarea></label>
 <label class="create-field"><span data-i18n="sl.content">Isi Konten</span><textarea name="content_text" rows="8" maxlength="50000" placeholder="Masukkan link atau konten yang akan dibuka..." data-i18n-placeholder="sl.contentPh" required></textarea><small class="field-detail" data-i18n="sl.contentDetail"><i class="fa-solid fa-link"></i> URL https:// atau www. akan otomatis menjadi link yang bisa diklik.</small></label>
 
@@ -33,28 +33,28 @@
   <div class="sl-direct-access-head">
     <div class="sl-direct-access-icon"><i class="fa-solid fa-bolt"></i></div>
     <div class="sl-direct-access-copy">
-      <div class="sl-direct-access-eyebrow">AKSES LANGSUNG</div>
-      <h2 id="direct-access-title">Payment Link <span>(opsional)</span></h2>
-      <p>Pilih Payment Link aktif jika kamu ingin menyediakan tombol <strong>Buka Langsung</strong> tanpa melewati iklan atau Task.</p>
+      <div class="sl-direct-access-eyebrow" data-i18n="sl.directEyebrow">AKSES LANGSUNG</div>
+      <h2 id="direct-access-title" data-i18n="sl.directTitle">Payment Link <span>(opsional)</span></h2>
+      <p data-i18n="sl.directIntro">Pilih Payment Link aktif jika kamu ingin menyediakan tombol <strong>Buka Langsung</strong> tanpa melewati iklan atau Task.</p>
     </div>
-    <span class="sl-optional-pill">OPSIONAL</span>
+    <span class="sl-optional-pill" data-i18n="sl.optional">OPSIONAL</span>
   </div>
 
-  <label class="sl-payment-select-label" for="payment_link_id">Payment Link aktif</label>
+  <label class="sl-payment-select-label" for="payment_link_id" data-i18n="sl.activePayment">Payment Link aktif</label>
   <div class="sl-payment-select-wrap">
     <i class="fa-solid fa-credit-card"></i>
     <select id="payment_link_id" name="payment_link_id" aria-describedby="payment-link-help">
-      <option value="">Tanpa akses langsung</option>
+      <option value="" data-i18n="sl.noDirect">Tanpa akses langsung</option>
     </select>
     <i class="fa-solid fa-chevron-down sl-select-chevron"></i>
   </div>
   <div id="payment-link-help" class="sl-payment-help">
     <i class="fa-solid fa-circle-check"></i>
-    <span>Payment Link yang dipilih akan dipakai sebagai tujuan tombol <strong>Buka Langsung (no iklan)</strong> pada Shortlink ini.</span>
+    <span data-i18n="sl.paymentHelp">Payment Link yang dipilih akan dipakai sebagai tujuan tombol <strong>Buka Langsung (no iklan)</strong> pada Shortlink ini.</span>
   </div>
   <div id="payment-link-empty" class="sl-payment-empty" hidden>
     <i class="fa-solid fa-circle-info"></i>
-    <span>Belum ada Payment Link aktif. Buat Payment Link terlebih dahulu jika ingin menggunakan akses langsung.</span>
+    <span data-i18n="sl.paymentEmpty">Belum ada Payment Link aktif. Buat Payment Link terlebih dahulu jika ingin menggunakan akses langsung.</span>
   </div>
 </section>
 
