@@ -140,3 +140,293 @@ button:not(.fa):not([class*="icon"]),input,select,textarea{accent-color:var(--sl
   .showlink-tool-btn{width:40px;min-width:40px;padding:0}
   .showlink-tool-text,.showlink-lang-label{display:none}
 }
+
+/* ============================================================
+   SHOWLINK CRYSTAL MATERIAL — CARDS + FORMS
+   Uses the existing shared stylesheet; no additional CSS file.
+   ============================================================ */
+:root{
+  --bg:var(--sl-bg);
+  --bg2:var(--sl-bg-2);
+  --surface:var(--sl-surface);
+  --surface2:var(--sl-surface-soft);
+  --surface-strong:var(--sl-surface-strong);
+  --text:var(--sl-text);
+  --muted:var(--sl-muted);
+  --line:var(--sl-border);
+  --border:var(--sl-border);
+  --primary:var(--sl-purple);
+  --primary2:var(--sl-blue);
+  --purple:var(--sl-purple);
+  --pink:var(--sl-pink);
+  --blue:var(--sl-blue);
+  --cyan:var(--sl-cyan);
+  --shadow:var(--sl-shadow);
+}
+
+html[data-theme="dark"]{
+  --bg:var(--sl-bg);
+  --bg2:var(--sl-bg-2);
+  --surface:var(--sl-surface);
+  --surface2:var(--sl-surface-soft);
+  --surface-strong:var(--sl-surface-strong);
+  --text:var(--sl-text);
+  --muted:var(--sl-muted);
+  --line:var(--sl-border);
+  --border:var(--sl-border);
+  --primary:var(--sl-purple);
+  --primary2:var(--sl-blue);
+  --purple:var(--sl-purple);
+  --pink:var(--sl-pink);
+  --blue:var(--sl-blue);
+  --cyan:var(--sl-cyan);
+  --shadow:var(--sl-shadow);
+}
+
+/* Page-specific cards: normalize them into the same translucent crystal material. */
+.sl-main-card,
+.sl-card,
+.auth-card,
+.auth-alert,
+.form-card,
+.form-section,
+.form-panel,
+.form-card-section,
+.create-card,
+.create-form,
+.editor-card,
+.settings-card,
+.profile-card,
+.payment-card,
+.payment-box,
+.payment-panel,
+.preview-card,
+.preview-window,
+.pf-card,
+.pf-content,
+.content-card,
+.content-panel,
+.content-box,
+.link-card,
+.link-item,
+.list-card,
+.list-item,
+.dash-card,
+.metric-card,
+.chart-card,
+.cpm-card,
+.donut-card,
+.info-card,
+.wrapped-card,
+.stat-card,
+.feature-card,
+.price-card,
+.plan-card,
+.table-card,
+.modal-card,
+.dropdown-panel{
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,255,255,.42)) !important;
+  border:1px solid rgba(255,255,255,.72) !important;
+  box-shadow:
+    0 18px 55px rgba(78,55,155,.12),
+    inset 0 1px 0 rgba(255,255,255,.90),
+    0 0 0 1px rgba(255,47,179,.035) !important;
+  backdrop-filter:blur(20px) saturate(135%);
+  -webkit-backdrop-filter:blur(20px) saturate(135%);
+  color:var(--sl-text);
+}
+
+html[data-theme="dark"] .sl-main-card,
+html[data-theme="dark"] .sl-card,
+html[data-theme="dark"] .auth-card,
+html[data-theme="dark"] .auth-alert,
+html[data-theme="dark"] .form-card,
+html[data-theme="dark"] .form-section,
+html[data-theme="dark"] .form-panel,
+html[data-theme="dark"] .form-card-section,
+html[data-theme="dark"] .create-card,
+html[data-theme="dark"] .create-form,
+html[data-theme="dark"] .editor-card,
+html[data-theme="dark"] .settings-card,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .payment-card,
+html[data-theme="dark"] .payment-box,
+html[data-theme="dark"] .payment-panel,
+html[data-theme="dark"] .preview-card,
+html[data-theme="dark"] .preview-window,
+html[data-theme="dark"] .pf-card,
+html[data-theme="dark"] .pf-content,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .content-panel,
+html[data-theme="dark"] .content-box,
+html[data-theme="dark"] .link-card,
+html[data-theme="dark"] .link-item,
+html[data-theme="dark"] .list-card,
+html[data-theme="dark"] .list-item,
+html[data-theme="dark"] .dash-card,
+html[data-theme="dark"] .metric-card,
+html[data-theme="dark"] .chart-card,
+html[data-theme="dark"] .cpm-card,
+html[data-theme="dark"] .donut-card,
+html[data-theme="dark"] .info-card,
+html[data-theme="dark"] .wrapped-card,
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .feature-card,
+html[data-theme="dark"] .price-card,
+html[data-theme="dark"] .plan-card,
+html[data-theme="dark"] .table-card,
+html[data-theme="dark"] .modal-card,
+html[data-theme="dark"] .dropdown-panel{
+  background:
+    linear-gradient(135deg,rgba(13,19,50,.78),rgba(17,13,50,.60) 45%,rgba(5,31,60,.66)) !important;
+  border-color:rgba(129,151,255,.28) !important;
+  box-shadow:
+    0 22px 75px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 0 35px rgba(80,150,255,.055) !important;
+}
+
+/* Holographic edge highlight for cards. */
+.sl-main-card::before,
+.auth-card::before,
+.form-card::before,
+.form-panel::before,
+.create-card::before,
+.editor-card::before,
+.settings-card::before,
+.profile-card::before,
+.payment-card::before,
+.payment-panel::before,
+.preview-card::before,
+.pf-card::before,
+.content-card::before,
+.link-card::before,
+.dash-card::before,
+.metric-card::before,
+.feature-card::before,
+.plan-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(120deg,rgba(255,47,179,.34),rgba(124,58,237,.12),rgba(37,99,235,.22),rgba(6,214,255,.34));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+}
+.sl-main-card,.auth-card,.form-card,.form-panel,.create-card,.editor-card,.settings-card,.profile-card,.payment-card,.payment-panel,.preview-card,.pf-card,.content-card,.link-card,.dash-card,.metric-card,.feature-card,.plan-card{position:relative;overflow:hidden}
+
+/* Inputs and textareas: translucent crystal fields, not flat white boxes. */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea,
+.auth-input,
+.form-input,
+.input,
+.field-input,
+.text-input,
+.search-input,
+textarea.form-control,
+input.form-control,
+select.form-control{
+  color:var(--sl-text) !important;
+  background:linear-gradient(135deg,rgba(255,255,255,.68),rgba(247,249,255,.48)) !important;
+  border:1px solid rgba(112,91,210,.20) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 6px 20px rgba(69,54,145,.055) !important;
+  backdrop-filter:blur(14px) saturate(125%);
+  -webkit-backdrop-filter:blur(14px) saturate(125%);
+}
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] .auth-input,
+html[data-theme="dark"] .form-input,
+html[data-theme="dark"] .input,
+html[data-theme="dark"] .field-input,
+html[data-theme="dark"] .text-input,
+html[data-theme="dark"] .search-input,
+html[data-theme="dark"] textarea.form-control,
+html[data-theme="dark"] input.form-control,
+html[data-theme="dark"] select.form-control{
+  color:var(--sl-text) !important;
+  background:linear-gradient(135deg,rgba(7,14,39,.78),rgba(22,13,53,.60),rgba(4,35,57,.62)) !important;
+  border-color:rgba(105,164,255,.30) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 25px rgba(0,0,0,.20) !important;
+}
+input::placeholder,textarea::placeholder{color:var(--sl-muted) !important;opacity:.82}
+input:focus,select:focus,textarea:focus,.auth-input:focus,.form-input:focus,.input:focus,.field-input:focus,.text-input:focus,.search-input:focus{
+  outline:none !important;
+  border-color:rgba(124,58,237,.58) !important;
+  box-shadow:0 0 0 3px rgba(124,58,237,.11),0 0 24px rgba(6,214,255,.08),inset 0 1px 0 rgba(255,255,255,.75) !important;
+}
+
+/* Form labels and field helpers follow the crystal palette. */
+label,.field-label,.form-label,.auth-field label{color:var(--sl-text);font-weight:750}
+.form-help,.field-help,.form-hint,.auth-help,.auth-subtitle,.form-description{color:var(--sl-muted)}
+
+/* Common inner rows / chips also receive the same glass treatment. */
+.plan-chip,.email-chip,.period-chip,.cpm-badge,.badge,.chip,.tag,.filter-chip,.status-pill,.section-chip,
+.chart-summary span,.sub-mini-stats div,.wrapped-item,.welcome-note,.preview-url,.payment-url,.mini-card{
+  background:var(--sl-gradient-soft) !important;
+  border-color:var(--sl-border) !important;
+  color:var(--sl-text);
+}
+
+/* Secondary buttons remain glass; primary actions retain the gem spectrum. */
+.btn-ghost,.btn-outline,.secondary-btn,.outline-btn,.btn-secondary,.action-secondary{
+  color:var(--sl-text) !important;
+  background:rgba(255,255,255,.42) !important;
+  border:1px solid var(--sl-border) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 7px 22px rgba(65,55,135,.06) !important;
+  backdrop-filter:blur(14px);
+}
+html[data-theme="dark"] .btn-ghost,html[data-theme="dark"] .btn-outline,html[data-theme="dark"] .secondary-btn,html[data-theme="dark"] .outline-btn,html[data-theme="dark"] .btn-secondary,html[data-theme="dark"] .action-secondary{
+  background:rgba(13,22,53,.52) !important;
+  border-color:rgba(105,164,255,.27) !important;
+}
+
+/* Preserve semantic colors but add holographic glow to service icons. */
+.stat-icon,.list-icon,.why-icon,.step-icon,.auth-icon,.info-icon,.section-icon,.icon-link{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 8px 24px rgba(74,59,170,.10);
+}
+
+/* Additional real project surfaces found in the existing page styles. */
+.sl-card,.sl-main-card,.task-card,.checkout-card,.final-card,.auth-art-card,.auth-receipt-card,
+.payment-create-card,.pf-choice-card,.sl-info-panel,.sl-mobile-panel,.faq-section,.why-section,
+.settings-row,.create-field,.payment-field,.auth-row,.auth-receipt-row,.price-row{
+  background:linear-gradient(135deg,rgba(255,255,255,.70),rgba(255,255,255,.40)) !important;
+  border-color:var(--sl-border) !important;
+  box-shadow:0 16px 48px rgba(73,55,145,.10),inset 0 1px 0 rgba(255,255,255,.86) !important;
+  color:var(--sl-text);
+  backdrop-filter:blur(18px) saturate(130%);
+  -webkit-backdrop-filter:blur(18px) saturate(130%);
+}
+html[data-theme="dark"] .sl-card,html[data-theme="dark"] .sl-main-card,html[data-theme="dark"] .task-card,html[data-theme="dark"] .checkout-card,html[data-theme="dark"] .final-card,html[data-theme="dark"] .auth-art-card,html[data-theme="dark"] .auth-receipt-card,html[data-theme="dark"] .payment-create-card,html[data-theme="dark"] .pf-choice-card,html[data-theme="dark"] .sl-info-panel,html[data-theme="dark"] .sl-mobile-panel,html[data-theme="dark"] .faq-section,html[data-theme="dark"] .why-section,html[data-theme="dark"] .settings-row,html[data-theme="dark"] .create-field,html[data-theme="dark"] .payment-field,html[data-theme="dark"] .auth-row,html[data-theme="dark"] .auth-receipt-row,html[data-theme="dark"] .price-row{
+  background:linear-gradient(135deg,rgba(11,18,48,.78),rgba(20,13,52,.58),rgba(5,34,59,.62)) !important;
+  border-color:rgba(112,160,255,.27) !important;
+  box-shadow:0 20px 70px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+/* Forms themselves are part of the crystal surface, not just their inputs. */
+.auth-form,.create-form,.payment-form,.form,.settings-form,.profile-form,.withdraw-form,.topup-form{
+  color:var(--sl-text);
+}
+.auth-field,.create-field,.payment-field,.form-field,.field-group{
+  color:var(--sl-text);
+}
+
+/* Ensure hard-coded white form controls from page CSS cannot flatten the theme. */
+.auth-input-wrap,.input-wrap,.field-wrap,.form-control-wrap,.payment-input-wrap{
+  background:rgba(255,255,255,.24) !important;
+  border-color:var(--sl-border) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+html[data-theme="dark"] .auth-input-wrap,html[data-theme="dark"] .input-wrap,html[data-theme="dark"] .field-wrap,html[data-theme="dark"] .form-control-wrap,html[data-theme="dark"] .payment-input-wrap{
+  background:rgba(5,13,37,.40) !important;
+  border-color:rgba(100,160,255,.24) !important;
+}
