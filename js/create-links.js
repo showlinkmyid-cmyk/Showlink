@@ -36,7 +36,7 @@
           owner_id:uid,slug,title:String(fd.get('title')||'').trim(),
           description:String(fd.get('description')||'').trim(),
           content_text:content,destination_url:content,
-          tasks:[],payment_link_id:null,status:'active'
+          tasks:[],payment_link_id: await resolvePaymentLinkId(sb, form),status:'active'
         }).select('slug').single();
         if(error) throw error;
         link={slug:data.slug};
@@ -61,6 +61,33 @@
       result.textContent=err.message||'Gagal membuat link.';
     }finally{btn.disabled=false;}
   });
+
+  // Resolve an optional Payment Link relation without changing the existing form flow.
+  async function resolvePaymentLinkId(sb, form) {
+    const el =
+      form?.querySelector('[name="payment_link_id"]') ||
+      form?.querySelector('#payment_link_id') ||
+      document.querySelector('[name="payment_link_id"]') ||
+      document.querySelector('#payment_link_id');
+
+    const raw = String(el?.value || '').trim();
+    if (!raw) return null;
+
+    // Accept UUID directly.
+    if (/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(raw)) return raw;
+
+    // Otherwise allow a Payment Link slug.
+    const { data, error } = await sb
+      .from('payment_links')
+      .select('id')
+      .eq('slug', raw)
+      .eq('status', 'active')
+      .maybeSingle();
+
+    if (error) throw error;
+    return data?.id || null;
+  }
+
   async function makeSlug(sb,table){
     for(let i=0;i<10;i++){
       const s=Math.random().toString(36).slice(2,6);
