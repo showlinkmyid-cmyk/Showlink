@@ -31,6 +31,14 @@
 
 <div class="sl-warning"><i class="fa-solid fa-triangle-exclamation"></i><div><strong data-i18n="sl.warningTitle">Peringatan</strong><p data-i18n="sl.warning">Periksa judul, deskripsi, dan isi konten sebelum publish. Setelah Shortlink dibagikan, data tersebut dapat dilihat oleh user.</p></div></div>
 <button class="sl-primary-btn" type="submit"><i class="fa-solid fa-rocket"></i><span data-i18n="sl.createBtn">Buat Shortlink</span></button>
+
+<div class="form-group shortlink-payment-link-field">
+  <label for="payment_link_id">Payment Link untuk Buka Langsung (opsional)</label>
+  <select id="payment_link_id" name="payment_link_id">
+    <option value="">Tidak menggunakan Payment Link</option>
+  </select>
+  <small>Pilih Payment Link aktif agar tombol “Buka Langsung (no iklan)” tersedia.</small>
+</div>
 </form>
 <div id="create-result" class="pf-status" style="margin-top:16px" data-i18n="sl.ready">Isi data lalu publish.</div>
 </div></div></main>
