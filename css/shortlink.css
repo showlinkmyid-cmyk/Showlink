@@ -235,3 +235,205 @@ html[data-theme="dark"] .sl-payment-select-wrap select{background:rgba(7,12,25,.
   .sl-direct-access-copy p{font-size:10.8px}
   .sl-payment-select-wrap select{height:48px;font-size:12px}
 }
+
+
+/* =========================================================
+   CREATE LINK POLISH — NAVBAR CLEARANCE / FORM / WARNING
+   ========================================================= */
+body.dashboard-page{
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.sl-main{
+  position:relative;
+  z-index:1;
+  padding-top:calc(var(--sl-nav-height, 72px) + 34px);
+}
+.sl-container{
+  width:min(1120px,100%);
+  max-width:1120px;
+}
+.sl-main-hero{
+  margin-bottom:22px;
+}
+.sl-main-card{
+  padding:32px;
+}
+.create-form{
+  gap:20px;
+}
+
+/* Title, description and content use the same crystal field material. */
+.create-field{
+  width:100%;
+}
+.create-field>span{
+  display:flex;
+  align-items:center;
+  min-height:20px;
+  margin:0 0 8px;
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:-.01em;
+}
+.create-field input,
+.create-field textarea{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid rgba(124,58,237,.16);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.78),rgba(248,250,255,.56));
+  color:var(--sl-text);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    0 4px 18px rgba(70,58,150,.035);
+}
+html[data-theme="dark"] .create-field input,
+html[data-theme="dark"] .create-field textarea{
+  background:linear-gradient(135deg,rgba(12,20,45,.82),rgba(16,25,54,.68));
+  border-color:rgba(130,150,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.create-field input{
+  height:52px;
+  padding:0 16px;
+}
+.create-field textarea{
+  min-height:0;
+  padding:14px 16px;
+  resize:vertical;
+  line-height:1.6;
+}
+.create-field textarea[name="description"]{
+  height:140px;
+  min-height:140px;
+}
+.create-field textarea[name="content_text"]{
+  width:100%;
+  min-height:360px;
+  height:360px;
+  padding:17px 18px;
+  font-size:14px;
+  line-height:1.7;
+}
+.create-field input:hover,
+.create-field textarea:hover{
+  border-color:rgba(124,58,237,.30);
+}
+.create-field input:focus,
+.create-field textarea:focus{
+  border-color:rgba(124,58,237,.62);
+  box-shadow:
+    0 0 0 4px rgba(124,58,237,.09),
+    0 10px 28px rgba(124,58,237,.07);
+}
+.field-detail{
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
+  margin-top:7px;
+  color:var(--sl-muted);
+  font-size:10.5px;
+  line-height:1.45;
+}
+.field-detail i{
+  margin-top:2px;
+  color:var(--sl-cyan);
+}
+
+/* Cleaner section separators. */
+.sl-info-panel,
+.sl-direct-access,
+.sl-warning{
+  position:relative;
+}
+.sl-info-panel{
+  margin-top:2px;
+  border-color:rgba(124,58,237,.14);
+  box-shadow:0 7px 24px rgba(70,58,150,.045);
+}
+.sl-direct-access{
+  margin-top:2px;
+}
+.sl-warning{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-top:1px;
+  padding:10px 12px !important;
+  border:1px solid rgba(239,68,68,.18) !important;
+  border-radius:11px !important;
+  background:rgba(239,68,68,.045) !important;
+  box-shadow:none !important;
+  color:#b4232d;
+}
+html[data-theme="dark"] .sl-warning{
+  color:#ff9da5;
+  border-color:rgba(248,113,113,.22) !important;
+  background:rgba(239,68,68,.075) !important;
+}
+.sl-warning>i{
+  flex:0 0 auto;
+  margin-top:2px;
+  color:#ef4444;
+  font-size:13px;
+}
+.sl-warning strong{
+  display:block;
+  margin:0 0 2px;
+  font-size:10.5px;
+  font-weight:900;
+  letter-spacing:.01em;
+}
+.sl-warning p{
+  margin:0;
+  font-size:10px;
+  line-height:1.45;
+  color:inherit;
+  opacity:.88;
+}
+
+/* Make the direct-access copy itself translate cleanly without breaking emphasis. */
+.sl-direct-access-copy p strong,
+.sl-payment-help strong{
+  color:var(--sl-text);
+}
+
+/* Cleaner submit/result separation. */
+.sl-primary-btn{
+  margin-top:2px;
+}
+#create-result{
+  margin-top:12px !important;
+}
+
+@media(max-width:760px){
+  .sl-main{
+    padding:calc(var(--sl-nav-height,72px) + 22px) 14px 58px;
+  }
+  .sl-main-card{
+    padding:22px 17px;
+    border-radius:20px;
+  }
+  .create-field textarea[name="description"]{
+    height:125px;
+    min-height:125px;
+  }
+  .create-field textarea[name="content_text"]{
+    height:300px;
+    min-height:300px;
+  }
+}
+@media(max-width:460px){
+  .sl-main{
+    padding-top:calc(var(--sl-nav-height,72px) + 18px);
+  }
+  .sl-main-card{padding:19px 14px}
+  .create-field input{height:50px}
+  .create-field textarea[name="content_text"]{
+    height:260px;
+    min-height:260px;
+  }
+}
