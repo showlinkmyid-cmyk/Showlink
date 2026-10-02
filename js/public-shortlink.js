@@ -121,9 +121,36 @@
 
     try {
       const sb = await window.ShowLinkSupabase.load();
-      const { data, error } = await sb.rpc('get_public_shortlink', { p_slug: slug });
+      const { data: rpcData, error } = await sb.rpc('get_public_shortlink', { p_slug: slug });
       if (error) throw error;
-      if (!data?.ok) throw new Error(data?.error || 'Shortlink tidak tersedia.');
+
+      // Supabase RPCs can return an object, a one-row array, or JSON text
+      // depending on the SQL function definition. Normalize all supported forms.
+      let data = rpcData;
+      if (typeof data === 'string') {
+        try { data = JSON.parse(data); } catch (_) {}
+      }
+      if (Array.isArray(data)) data = data[0] || null;
+
+      if (!data) throw new Error('Shortlink tidak tersedia.');
+      if (data.ok === false) throw new Error(data.error || 'Shortlink tidak tersedia.');
+
+      // Accept the canonical payment_url plus common RPC aliases without
+      // changing the database contract.
+      const paymentUrl = String(
+        data.payment_url ??
+        data.paymentUrl ??
+        data.direct_url ??
+        data.direct_url_no_ads ??
+        data.no_ads_url ??
+        ''
+      ).trim();
+
+      data = { ...data, payment_url: paymentUrl };
+
+      // A valid RPC row without an explicit `ok` flag is still usable.
+      if (!data.slug && !data.id) throw new Error('Data Shortlink tidak lengkap.');
+
       const plan = await getPlan(sb);
       renderChoice(data, plan);
     } catch (e) {
