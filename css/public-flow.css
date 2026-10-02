@@ -23,3 +23,87 @@ html[data-theme="dark"] .pf-btn.alt{background:#211d48;color:#c4bfff}
 .pf-choice-heading{margin:26px 0 14px;font-size:22px;font-weight:900;color:inherit}.pf-choice-card{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:18px;border:1px solid #dfe4f0;border-radius:20px;background:rgba(255,255,255,.72);margin-top:12px}.pf-choice-icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#a855f718;color:#a855f7;font-size:20px}.pf-choice-copy h3{margin:0 0 5px;font-size:17px}.pf-choice-copy p{margin:0 0 6px;color:#64708a}.pf-choice-copy span{font-size:12px;font-weight:800}.pf-choice-card.disabled{opacity:.62}.pf-choice-card .pf-btn{white-space:nowrap}.pf-warning{margin-top:18px;display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:18px;background:#fff8df;border:1px solid #e8c84b;color:#5c4a0a}.pf-warning i{margin-top:3px}.pf-warning strong{display:block}.pf-warning p{margin:5px 0 0}.pf-content-preview{display:none!important}@media(max-width:640px){.pf-choice-card{grid-template-columns:auto 1fr}.pf-choice-card .pf-btn{grid-column:1/-1;width:100%}.pf-choice-heading{font-size:20px}}
 :root[data-theme="dark"] .pf-choice-card{background:#121a2b;border-color:#293653}.dark .pf-choice-card{background:#121a2b}
 :root[data-theme="dark"] .pf-choice-copy p{color:#aeb9d1}:root[data-theme="dark"] .pf-warning{background:#352b0c;border-color:#80670e;color:#f4d875}
+
+
+/* ShowLink holographic treatment — integrated into public-flow.css */
+:root{
+  --sl-pink:#ff4fd8;
+  --sl-purple:#9b5cff;
+  --sl-blue:#4d7cff;
+  --sl-cyan:#28d9ff;
+  --sl-glass:rgba(255,255,255,.64);
+  --sl-border:rgba(130,105,255,.20);
+}
+body{
+  background:
+    radial-gradient(circle at 8% 0, rgba(255,79,216,.16), transparent 32%),
+    radial-gradient(circle at 92% 8%, rgba(40,217,255,.18), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(155,92,255,.10), transparent 42%),
+    #f7f9ff;
+}
+.pf-brand-mark{
+  position:relative;
+  overflow:hidden;
+  width:42px;height:42px;border-radius:14px;
+  background:linear-gradient(135deg,var(--sl-pink),var(--sl-purple) 42%,var(--sl-blue) 72%,var(--sl-cyan));
+  box-shadow:0 12px 32px rgba(102,84,255,.25), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.pf-brand-mark img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  mix-blend-mode:normal;
+}
+.pf-card,
+.pf-choice-card,
+.pf-task,
+.pf-content-preview,
+.pf-status{
+  border-color:rgba(126,105,255,.20);
+  background:linear-gradient(135deg,rgba(255,255,255,.78),rgba(246,250,255,.62));
+  box-shadow:0 18px 55px rgba(54,72,140,.10), inset 0 1px 0 rgba(255,255,255,.82);
+  backdrop-filter:blur(18px) saturate(135%);
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+}
+.pf-card{box-shadow:0 24px 70px rgba(54,72,140,.13), inset 0 1px 0 rgba(255,255,255,.9)}
+.pf-btn{
+  background:linear-gradient(105deg,var(--sl-pink),var(--sl-purple) 38%,var(--sl-blue) 70%,var(--sl-cyan));
+  box-shadow:0 12px 28px rgba(100,82,255,.22), inset 0 1px 0 rgba(255,255,255,.42);
+}
+.pf-btn.alt{
+  background:linear-gradient(105deg,rgba(255,79,216,.14),rgba(155,92,255,.14),rgba(40,217,255,.15));
+  color:#6650d8;
+  border:1px solid rgba(115,91,255,.24);
+  box-shadow:0 10px 24px rgba(87,83,190,.10), inset 0 1px 0 rgba(255,255,255,.72);
+}
+.pf-choice-icon,.pf-task-no{
+  background:linear-gradient(135deg,rgba(255,79,216,.14),rgba(155,92,255,.14),rgba(40,217,255,.16));
+  color:#7654dc;
+  border:1px solid rgba(126,105,255,.16);
+}
+.pf-progress span{background:linear-gradient(90deg,var(--sl-pink),var(--sl-purple),var(--sl-blue),var(--sl-cyan))}
+.pf-kicker{color:#7753db}
+.pf-short-info{
+  background:linear-gradient(100deg,rgba(255,79,216,.10),rgba(155,92,255,.12),rgba(40,217,255,.11));
+  color:#6d51cf;
+  border:1px solid rgba(126,105,255,.16);
+}
+html[data-theme="dark"] body{
+  background:
+    radial-gradient(circle at 8% 0,rgba(255,79,216,.13),transparent 32%),
+    radial-gradient(circle at 92% 8%,rgba(40,217,255,.12),transparent 34%),
+    #080d1d;
+}
+html[data-theme="dark"] .pf-card,
+html[data-theme="dark"] .pf-choice-card,
+html[data-theme="dark"] .pf-task,
+html[data-theme="dark"] .pf-content-preview,
+html[data-theme="dark"] .pf-status{
+  background:linear-gradient(135deg,rgba(18,26,45,.88),rgba(14,20,38,.76));
+  border-color:rgba(137,117,255,.24);
+  box-shadow:0 24px 70px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.05);
+}
+html[data-theme="dark"] .pf-btn.alt{
+  background:linear-gradient(105deg,rgba(255,79,216,.12),rgba(155,92,255,.14),rgba(40,217,255,.12));
+  color:#cfc7ff;
+  border-color:rgba(151,132,255,.28);
+}
+html[data-theme="dark"] .pf-short-info{color:#d0c8ff}
