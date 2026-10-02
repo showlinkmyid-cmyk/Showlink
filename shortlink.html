@@ -29,16 +29,37 @@
 <div><strong data-i18n="sl.flowTitle">Alur akses Shortlink</strong><p data-i18n="sl.flowDetail">Sistem otomatis mengatur jumlah Task dan FINAL sesuai paket akun. User FREE melewati 3 Task, VIP 2 Task, dan PREMIUM 1 Task. Halaman Task sudah disiapkan oleh sistem.</p></div>
 </div>
 
+<section class="sl-direct-access" aria-labelledby="direct-access-title">
+  <div class="sl-direct-access-head">
+    <div class="sl-direct-access-icon"><i class="fa-solid fa-bolt"></i></div>
+    <div class="sl-direct-access-copy">
+      <div class="sl-direct-access-eyebrow">AKSES LANGSUNG</div>
+      <h2 id="direct-access-title">Payment Link <span>(opsional)</span></h2>
+      <p>Pilih Payment Link aktif jika kamu ingin menyediakan tombol <strong>Buka Langsung</strong> tanpa melewati iklan atau Task.</p>
+    </div>
+    <span class="sl-optional-pill">OPSIONAL</span>
+  </div>
+
+  <label class="sl-payment-select-label" for="payment_link_id">Payment Link aktif</label>
+  <div class="sl-payment-select-wrap">
+    <i class="fa-solid fa-credit-card"></i>
+    <select id="payment_link_id" name="payment_link_id" aria-describedby="payment-link-help">
+      <option value="">Tanpa akses langsung</option>
+    </select>
+    <i class="fa-solid fa-chevron-down sl-select-chevron"></i>
+  </div>
+  <div id="payment-link-help" class="sl-payment-help">
+    <i class="fa-solid fa-circle-check"></i>
+    <span>Payment Link yang dipilih akan dipakai sebagai tujuan tombol <strong>Buka Langsung (no iklan)</strong> pada Shortlink ini.</span>
+  </div>
+  <div id="payment-link-empty" class="sl-payment-empty" hidden>
+    <i class="fa-solid fa-circle-info"></i>
+    <span>Belum ada Payment Link aktif. Buat Payment Link terlebih dahulu jika ingin menggunakan akses langsung.</span>
+  </div>
+</section>
+
 <div class="sl-warning"><i class="fa-solid fa-triangle-exclamation"></i><div><strong data-i18n="sl.warningTitle">Peringatan</strong><p data-i18n="sl.warning">Periksa judul, deskripsi, dan isi konten sebelum publish. Setelah Shortlink dibagikan, data tersebut dapat dilihat oleh user.</p></div></div>
 <button class="sl-primary-btn" type="submit"><i class="fa-solid fa-rocket"></i><span data-i18n="sl.createBtn">Buat Shortlink</span></button>
-
-<div class="form-group shortlink-payment-link-field">
-  <label for="payment_link_id">Payment Link untuk Buka Langsung (opsional)</label>
-  <select id="payment_link_id" name="payment_link_id">
-    <option value="">Tidak menggunakan Payment Link</option>
-  </select>
-  <small>Pilih Payment Link aktif agar tombol “Buka Langsung (no iklan)” tersedia.</small>
-</div>
 </form>
 <div id="create-result" class="pf-status" style="margin-top:16px" data-i18n="sl.ready">Isi data lalu publish.</div>
 </div></div></main>
