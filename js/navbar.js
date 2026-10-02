@@ -101,7 +101,7 @@
           </button>
 
           <a class="sl-brand" href="${C.home}" aria-label="ShowLink">
-            <span class="sl-brand-mark">${icon("","fa-link")}</span>
+            <span class="sl-brand-mark"><img src="/assets/showlink-logo.svg" alt="ShowLink"></span>
             <span class="sl-brand-text">Show<span>Link</span></span>
           </a>
 
@@ -146,7 +146,7 @@
       <aside class="sl-nav-drawer" data-showlink-drawer aria-hidden="true">
         <div class="sl-drawer-head">
           <div class="sl-drawer-brand">
-            <span class="sl-brand-mark">${icon("","fa-link")}</span>
+            <span class="sl-brand-mark"><img src="/assets/showlink-logo.svg" alt="ShowLink"></span>
             <span>Show<span style="color:var(--sl-primary)">Link</span></span>
           </div>
           <button class="sl-drawer-close" type="button" aria-label="${t("closeMenu")}" data-showlink-close>
