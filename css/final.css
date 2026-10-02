@@ -18,17 +18,10 @@ body.dashboard-page{margin:0;background:radial-gradient(circle at 8% 0%,rgba(109
 .original-download{background:linear-gradient(135deg,#a855f7,#5748e8);color:#fff;border-color:transparent;box-shadow:0 14px 30px rgba(109,93,252,.24)}
 .original-download small{color:rgba(255,255,255,.8)}
 .original-download.is-ready{cursor:pointer}.original-download.is-locked{opacity:.62;cursor:not-allowed}
-.final-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
-.final-stats>div{padding:15px;border:1px solid var(--border);border-radius:15px;background:var(--bg);text-align:center}
-.final-stats strong{display:block;font-size:17px}.final-stats span{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase}
+
 .task-copy{font-size:14px;line-height:1.8}.task-copy h2{font-size:19px}.task-copy p{margin:0 0 12px}
 .ad-slot{margin:20px 0;border-radius:16px;background:transparent;display:flex;flex-direction:column;align-items:center;gap:7px;color:var(--muted);font-size:10px}
 .ad-banner-placeholder{width:100%;min-height:80px;display:grid;place-items:center;border:1px solid transparent;color:transparent}
 .ad-468 .ad-banner-placeholder{max-width:468px}.ad-300 .ad-banner-placeholder{max-width:300px;min-height:160px}
-.join-float{position:fixed;right:18px;bottom:18px;z-index:9999;width:min(360px,calc(100vw - 36px));display:flex;gap:11px;padding:14px;border:1px solid var(--border);border-radius:18px;background:var(--card);box-shadow:0 18px 50px rgba(0,0,0,.2);transform:translateY(20px);opacity:0;pointer-events:none;transition:.22s ease}
-.join-float.show{transform:translateY(0);opacity:1;pointer-events:auto}
-.join-close{position:absolute;right:7px;top:5px;border:0;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}
-.join-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--soft);color:#229ed9;font-size:21px;flex:0 0 auto}
-.join-copy{display:flex;flex-direction:column;gap:4px;padding-right:18px}.join-copy strong{font-size:13px}.join-copy span{font-size:11px;color:var(--muted);line-height:1.45}
-.join-copy a{display:inline-flex;width:max-content;margin-top:3px;padding:7px 10px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;text-decoration:none;font-size:11px;font-weight:800}
-@media(max-width:680px){.task-main{padding:28px 10px 60px}.task-card{padding:22px 17px;border-radius:20px}.task-card h1{font-size:25px}.task-card>p{font-size:12.5px}.final-stats{gap:7px}.final-stats>div{padding:12px 7px}.final-stats strong{font-size:15px}.download-btn{min-height:54px}.join-float{right:10px;bottom:10px;width:calc(100vw - 20px)}}
+.join-float{position:fixed;left:50%;top:50%;z-index:9999;width:min(390px,calc(100vw - 28px));display:flex;gap:12px;padding:20px;border:1px solid var(--border);border-radius:22px;background:var(--card);box-shadow:0 24px 80px rgba(0,0,0,.3);transform:translate(-50%,-46%) scale(.96);opacity:0;pointer-events:none;transition:.22s ease}.join-float.show{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}.join-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft);color:#229ed9;font-size:23px;flex:0 0 auto}.join-copy{display:flex;flex-direction:column;gap:5px;padding-right:4px}.join-copy strong{font-size:14px}.join-copy span{font-size:11px;color:var(--muted);line-height:1.45}.join-actions{display:flex;gap:8px;margin-top:6px}.join-actions a,.join-actions button{border:0;border-radius:10px;padding:8px 12px;font:inherit;font-size:11px;font-weight:800;cursor:pointer;text-decoration:none}.join-actions a{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}.join-actions button{background:var(--soft);color:var(--text)}
+@media(max-width:680px){.task-main{padding:28px 10px 60px}.task-card{padding:22px 17px;border-radius:20px}.task-card h1{font-size:25px}.task-card>p{font-size:12.5px}download-btn{min-height:54px}.join-float{right:10px;bottom:10px;width:calc(100vw - 20px)}}
