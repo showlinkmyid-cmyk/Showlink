@@ -17,6 +17,43 @@ en:{
 'sl.warningTitle':'Warning','sl.warning':'Check the title, description, and content before publishing. Users can see published information.',
 'sl.createBtn':'Create Shortlink','sl.ready':'Fill in the details and publish.'
 }};
+
+
+async function loadShortlinkPaymentLinks(){
+  const select=document.getElementById('payment_link_id');
+  if(!select) return;
+  const empty=document.getElementById('payment-link-empty');
+  const card=document.querySelector('.sl-direct-access');
+  try{
+    card?.setAttribute('aria-busy','true');
+    const sb=await window.ShowLinkSupabase.load();
+    const {data:sessionData,error:sessionError}=await sb.auth.getSession();
+    if(sessionError) throw sessionError;
+    const uid=sessionData?.session?.user?.id;
+    if(!uid) return;
+    const {data,error}=await sb.from('payment_links')
+      .select('id,slug,title,status,price')
+      .eq('owner_id',uid)
+      .eq('status','active')
+      .order('created_at',{ascending:false});
+    if(error) throw error;
+    for(const row of (data||[])){
+      const option=document.createElement('option');
+      option.value=row.id;
+      option.textContent=row.title
+        ? `${row.title}  ·  /p/${row.slug}${row.price!=null ? `  ·  Rp ${Number(row.price).toLocaleString('id-ID')}` : ''}`
+        : `/p/${row.slug}`;
+      select.appendChild(option);
+    }
+    if(empty) empty.hidden=Boolean(data?.length);
+  }catch(error){
+    console.warn('[ShowLink] Failed to load active Payment Links:',error);
+    if(empty) empty.hidden=false;
+  }finally{
+    card?.removeAttribute('aria-busy');
+  }
+}
+
 function apply(){
  const lang=localStorage.getItem('showlink-language')==='en'?'en':'id';
  document.querySelectorAll('[data-i18n]').forEach(el=>{
@@ -31,5 +68,5 @@ document.addEventListener('click',e=>{
  if(e.target.closest('[data-lang-option]')) setTimeout(apply,0);
 });
 window.addEventListener('storage',e=>{if(e.key==='showlink-language')apply();});
-document.addEventListener('DOMContentLoaded',apply);
+document.addEventListener('DOMContentLoaded',()=>{ apply(); loadShortlinkPaymentLinks(); });
 })();
