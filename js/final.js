@@ -52,38 +52,44 @@
   function readSavedDestination() {
     if (!slug) return '';
 
-    try {
-      for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i) || '';
-        if (!key.startsWith('showlink-shortlink-choice:')) continue;
+    const keys = [
+      'showlink-shortlink-content:' + slug
+    ];
 
+    try {
+      for (const key of keys) {
         const raw = sessionStorage.getItem(key);
         if (!raw) continue;
         const item = JSON.parse(raw);
-
-        if (String(item?.slug || '').trim() !== slug) continue;
-
         const destination = item?.destination_url || item?.url || item?.destinationUrl || '';
-        if (destination) {
-          try {
-            sessionStorage.setItem(
-              'showlink-shortlink-content:' + slug,
-              JSON.stringify({ url: destination })
-            );
-          } catch (_) {}
-          return destination;
-        }
+        if (destination) return destination;
       }
     } catch (_) {}
 
     try {
-      const old = JSON.parse(
-        sessionStorage.getItem('showlink-shortlink-content:' + slug) || '{}'
-      );
-      return old?.url || old?.destination_url || '';
-    } catch (_) {
-      return '';
-    }
+      const raw = localStorage.getItem('showlink-shortlink-content:' + slug);
+      if (raw) {
+        const item = JSON.parse(raw);
+        const destination = item?.destination_url || item?.url || item?.destinationUrl || '';
+        if (destination) return destination;
+      }
+    } catch (_) {}
+
+    // Backward compatibility with the original choice:<id> storage.
+    try {
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i) || '';
+        if (!key.startsWith('showlink-shortlink-choice:')) continue;
+        const raw = sessionStorage.getItem(key);
+        if (!raw) continue;
+        const item = JSON.parse(raw);
+        if (String(item?.slug || '').trim() !== slug) continue;
+        const destination = item?.destination_url || item?.url || item?.destinationUrl || '';
+        if (destination) return destination;
+      }
+    } catch (_) {}
+
+    return '';
   }
 
   async function fetchDestinationFromSupabase() {
@@ -105,10 +111,9 @@
       if (!destination) return '';
 
       try {
-        sessionStorage.setItem(
-          'showlink-shortlink-content:' + slug,
-          JSON.stringify({ url: destination })
-        );
+        const payload = JSON.stringify({ url: destination, destination_url: destination });
+        sessionStorage.setItem('showlink-shortlink-content:' + slug, payload);
+        localStorage.setItem('showlink-shortlink-content:' + slug, payload);
       } catch (_) {}
 
       return destination;
@@ -130,9 +135,16 @@
       }, { passive: true });
     });
 
-    button.addEventListener('click', function (event) {
-      if (!ready || !button.href || button.getAttribute('aria-disabled') === 'true') {
+    button.addEventListener('click', async function (event) {
+      let href = normalizeUrl(button.getAttribute('href') || '');
+      if (!href || href === window.location.href + '#') {
         event.preventDefault();
+        let fallback = readSavedDestination();
+        if (!fallback) fallback = await fetchDestinationFromSupabase();
+        if (fallback && setOriginalUrl(fallback)) {
+          window.location.assign(normalizeUrl(fallback));
+          track('original_click', null);
+        }
         return;
       }
       track('original_click', null);

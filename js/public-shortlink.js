@@ -51,13 +51,30 @@
 
   function saveFlow(data, plan) {
     try {
-      sessionStorage.setItem(stateKey(data.id), JSON.stringify({
+      const payload = {
         slug: data.slug,
         title: data.title,
         content_text: data.content_text || '',
         destination_url: data.destination_url || '',
         plan
-      }));
+      };
+      // Keep both keys: the choice key is used by the flow, while the
+      // slug-based content key is the canonical fallback used by Final.
+      sessionStorage.setItem(stateKey(data.id), JSON.stringify(payload));
+      if (data.slug && data.destination_url) {
+        sessionStorage.setItem(
+          'showlink-shortlink-content:' + String(data.slug).trim(),
+          JSON.stringify({ url: data.destination_url, destination_url: data.destination_url })
+        );
+      }
+      // localStorage is only a fallback for browsers that recreate the
+      // session during the multi-page flow.
+      if (data.slug && data.destination_url) {
+        localStorage.setItem(
+          'showlink-shortlink-content:' + String(data.slug).trim(),
+          JSON.stringify({ url: data.destination_url, destination_url: data.destination_url })
+        );
+      }
     } catch (_) {}
   }
 
