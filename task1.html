@@ -2,30 +2,66 @@
 <html lang="id" data-showlink-page="shortlink-task">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#6d5dfc">
-<title>Task 1 — ShowLink</title>
+<meta name="theme-color" content="#6d5dfc"><title>Task 1 — ShowLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<link rel="stylesheet" href="/css/showlink-components.css"><link rel="stylesheet" href="/css/navbar.css"><link rel="stylesheet" href="/css/footer.css">
-<link rel="stylesheet" href="/css/task1.css">
+<link rel="stylesheet" href="/css/showlink-components.css"><link rel="stylesheet" href="/css/navbar.css"><link rel="stylesheet" href="/css/footer.css"><link rel="stylesheet" href="/css/task1.css">
 <script src="/js/supabase-config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/supabase-client.js"></script>
 <script>(function(){try{var t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}}catch(e){}})();</script>
-<link rel="icon" type="image/svg+xml" href="/assets/showlink-favicon.svg"><link rel="icon" type="image/png" sizes="512x512" href="/assets/showlink-favicon.png"><link rel="apple-touch-icon" href="/assets/showlink-favicon.png"></head><body class="dashboard-page"><div data-showlink-navbar></div>
-
+<link rel="icon" type="image/svg+xml" href="/assets/showlink-favicon.svg"><link rel="icon" type="image/png" sizes="512x512" href="/assets/showlink-favicon.png"><link rel="apple-touch-icon" href="/assets/showlink-favicon.png">
+</head>
+<body class="dashboard-page"><div data-showlink-navbar></div>
 <main class="task-main"><div class="task-wrap"><section class="task-card">
-<span class="task-kicker">SHOWLINK · TASK 1</span><h1 id="task-title">Selesaikan Task 1</h1>
-<p>Selesaikan seluruh instruksi di halaman ini untuk melanjutkan.</p>
-<section class="task-copy">
-<div class="ad-slot">Adsterra Task 1</div>
-<h2>Informasi &amp; Misi Task 1</h2>
-<p>Semua teks, instruksi, gambar, dan kode iklan Adsterra untuk Task 1 dapat ditempatkan langsung di file <strong>task1.html</strong>.</p>
-<div class="ad-slot">Adsterra Task 1</div>
-<p>Area ini dapat diperpanjang sesuai kebutuhan tanpa memengaruhi Task lainnya.</p>
-<div class="ad-slot">Adsterra Task 1</div>
-</section>
-<div class="task-action"><div class="task-progress"><span>Task 1</span><span id="task-count">1 / 3</span></div>
-<button id="task-next" class="task-button"><i class="fa-solid fa-arrow-right"></i> Saya sudah selesai — Lanjut</button></div>
-</section></div></main><div data-showlink-footer></div>
+<span class="task-kicker">SHOWLINK · TASK 1</span>
+<h1 id="task-title">Selesaikan Task 1</h1>
+<p id="task-intro">Baca artikel, ikuti tombol akses, lalu lanjutkan ke Task 2.</p>
+
+<div class="ad-slot adsterra-slot"><span>ADSTERRA</span><small>Tempatkan kode iklan Adsterra di area ini.</small></div>
+
+<article class="health-article">
+<h2 id="article-title">Panduan Kesehatan: Kebiasaan Sederhana untuk Menjaga Tubuh Tetap Sehat</h2>
+<p id="article-lead">Menjaga kesehatan sehari-hari tidak selalu membutuhkan perubahan besar. Kebiasaan kecil yang dilakukan secara konsisten dapat membantu mendukung kebugaran, kualitas tidur, energi, dan kesejahteraan secara umum.</p>
+
+<h3 id="h1">1. Utamakan pola makan yang beragam</h3>
+<p id="p1">Usahakan menu harian terdiri dari beragam makanan, seperti sayuran, buah, sumber protein, biji-bijian atau sumber karbohidrat, serta lemak sehat. Variasi makanan membantu tubuh memperoleh berbagai zat gizi yang dibutuhkan untuk menjalankan fungsi normalnya.</p>
+<p id="p2">Batasi makanan dan minuman yang tinggi gula tambahan, garam, serta lemak jenuh. Kebutuhan setiap orang dapat berbeda, sehingga pola makan sebaiknya disesuaikan dengan kondisi dan kebutuhan masing-masing.</p>
+
+<div class="download-unit">
+<img class="download-image" src="/assets/download-task1.png" alt="Download" id="download-image-top">
+<button class="download-trigger" id="download-top"><i class="fa-solid fa-download"></i><span>Download</span></button>
+<div class="download-progress" id="progress-top" hidden><span class="spinner"></span><span id="progress-text-top">Menyiapkan...</span></div>
+<button class="click-now" id="click-now-top" hidden><i class="fa-solid fa-arrow-down"></i><span>Klik Now</span></button>
+</div>
+
+<div class="ad-slot adsterra-slot"><span>ADSTERRA</span><small>Tempatkan kode iklan Adsterra di area ini.</small></div>
+
+<h3 id="h2">2. Bergerak secara rutin</h3>
+<p id="p3">Aktivitas fisik yang dilakukan secara teratur dapat membantu menjaga kebugaran dan fungsi tubuh. Pilih aktivitas yang sesuai dengan kemampuan, misalnya berjalan, bersepeda, peregangan, atau olahraga lain yang nyaman dilakukan.</p>
+<p id="p4">Jika baru mulai berolahraga, tingkatkan durasi dan intensitas secara bertahap. Berhenti dan cari bantuan medis bila muncul keluhan yang berat atau tidak biasa.</p>
+
+<h3 id="h3">3. Tidur dan istirahat yang cukup</h3>
+<p id="p5">Tidur yang cukup dan jadwal tidur yang konsisten mendukung pemulihan tubuh. Kebiasaan sederhana seperti menjaga waktu tidur, mengurangi penggunaan layar menjelang tidur, dan membuat kamar nyaman dapat membantu membangun rutinitas yang lebih baik.</p>
+
+<div class="ad-slot adsterra-slot"><span>ADSTERRA</span><small>Tempatkan kode iklan Adsterra di area ini.</small></div>
+
+<h3 id="h4">4. Perhatikan hidrasi dan kebersihan</h3>
+<p id="p6">Minumlah air sesuai kebutuhan tubuh dan kondisi aktivitas. Menjaga kebersihan tangan, makanan, serta lingkungan juga merupakan bagian penting dari kebiasaan hidup sehat sehari-hari.</p>
+<p id="p7">Informasi di halaman ini bersifat umum dan bukan pengganti diagnosis atau saran dari tenaga kesehatan.</p>
+</article>
+
+<div class="download-unit bottom-download">
+<img class="download-image" src="/assets/download-task1.png" alt="Download" id="download-image-bottom">
+<button class="download-trigger" id="download-bottom"><i class="fa-solid fa-download"></i><span>Download now</span></button>
+<div class="download-progress" id="progress-bottom" hidden><span class="spinner"></span><span id="progress-text-bottom">Menyiapkan...</span></div>
+<button class="click-now" id="click-now-bottom" hidden><i class="fa-solid fa-arrow-right"></i><span>Klik Now</span></button>
+</div>
+
+<div class="ad-slot adsterra-slot"><span>ADSTERRA</span><small>Tempatkan kode iklan Adsterra di area ini.</small></div>
+
+<div class="task-action"><div class="task-progress"><span id="task-progress-label">Task 1</span><span id="task-count">1 / 3</span></div></div>
+<div class="task-warning"><i class="fa-solid fa-circle-info"></i><span id="warning-text">Selesaikan kedua tombol download untuk melanjutkan.</span></div>
+</section></div></main>
+<div data-showlink-footer></div>
 <script src="/js/task1.js" defer></script><script src="/js/showlink-components.js" defer></script><script src="/js/navbar.js" defer></script><script src="/js/footer.js" defer></script>
 </body></html>
