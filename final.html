@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id" data-showlink-page="shortlink-task">
+<html lang="id" data-showlink-page="shortlink-final">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#6d5dfc">
@@ -11,12 +11,79 @@
 <link rel="stylesheet" href="/css/final.css">
 <script src="/js/supabase-config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/supabase-client.js"></script>
 <script>(function(){try{var t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}}catch(e){}})();</script>
-<link rel="icon" type="image/svg+xml" href="/assets/showlink-favicon.svg"><link rel="icon" type="image/png" sizes="512x512" href="/assets/showlink-favicon.png"><link rel="apple-touch-icon" href="/assets/showlink-favicon.png"></head><body class="dashboard-page"><div data-showlink-navbar></div>
+<link rel="icon" type="image/svg+xml" href="/assets/showlink-favicon.svg"><link rel="icon" type="image/png" sizes="512x512" href="/assets/showlink-favicon.png"><link rel="apple-touch-icon" href="/assets/showlink-favicon.png">
+</head>
+<body class="dashboard-page">
+<div data-showlink-navbar></div>
 
-<main class="task-main"><div class="task-wrap"><section class="task-card">
-<span class="task-kicker">SHOWLINK · FINAL</span><h1>Berhasil</h1><p>Semua tahapan sudah selesai. Konten asli siap dibuka.</p>
-<div class="task-copy"><div id="final-status">Memuat konten asli...</div></div>
-<div class="task-action"><a id="final-open" class="task-button" href="#" style="text-decoration:none">Buka Konten Asli</a></div>
-</section></div></main><div data-showlink-footer></div>
-<script src="/js/final.js" defer></script><script src="/js/showlink-components.js" defer></script><script src="/js/navbar.js" defer></script><script src="/js/footer.js" defer></script>
+<main class="task-main">
+  <div class="task-wrap">
+    <section class="task-card final-card">
+      <span class="task-kicker">SHOWLINK · FINAL</span>
+      <h1>Task selesai 🎉</h1>
+      <p class="final-lead">Silahkan pilih link di bawah untuk membuka konten. Tombol yang bertanda <strong>Asli</strong> adalah link konten asli.</p>
+
+      <div class="final-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>Link iklan dibuka di tab baru. Kamu bebas memilih tombol mana yang ingin dibuka.</span>
+      </div>
+
+      <div class="download-stack" aria-label="Pilihan download">
+        <a class="download-btn ad-download" data-ad-slot="1" href="https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75" target="_blank" rel="noopener noreferrer">
+          <span><i class="fa-solid fa-download"></i> Download (Iklan)</span><small>Sponsored</small>
+        </a>
+
+        <a class="download-btn ad-download" data-ad-slot="2" href="https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75" target="_blank" rel="noopener noreferrer">
+          <span><i class="fa-solid fa-download"></i> Download (Iklan)</span><small>Sponsored</small>
+        </a>
+
+        <a id="final-open" class="download-btn original-download" href="#" aria-disabled="true">
+          <span><i class="fa-solid fa-file-arrow-down"></i> Download (Asli)</span><small>Konten asli</small>
+        </a>
+
+        <a class="download-btn ad-download" data-ad-slot="3" href="https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75" target="_blank" rel="noopener noreferrer">
+          <span><i class="fa-solid fa-download"></i> Download (Iklan)</span><small>Sponsored</small>
+        </a>
+
+        <a class="download-btn ad-download" data-ad-slot="4" href="https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75" target="_blank" rel="noopener noreferrer">
+          <span><i class="fa-solid fa-download"></i> Download (Iklan)</span><small>Sponsored</small>
+        </a>
+      </div>
+
+      <div class="final-stats" aria-live="polite">
+        <div><strong id="live-view-count">—</strong><span>Views</span></div>
+        <div><strong id="live-cpm">—</strong><span>CPM</span></div>
+        <div><strong id="live-estimated">—</strong><span>Estimasi</span></div>
+      </div>
+
+      <div class="task-copy final-content">
+        <h2>Konten asli sudah siap</h2>
+        <p id="final-status">Memuat konten asli...</p>
+        <p>Gunakan tombol <strong>Download (Asli)</strong> di tengah apabila kamu ingin langsung membuka tujuan konten yang sebenarnya.</p>
+      </div>
+
+      <div class="ad-slot ad-468" aria-label="Sponsored banner">
+        <span>Sponsored</span><div class="ad-banner-placeholder">468 × 60</div>
+      </div>
+
+      <div class="ad-slot ad-300" aria-label="Sponsored banner">
+        <span>Sponsored</span><div class="ad-banner-placeholder">300 × 250</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="join-float" class="join-float" role="dialog" aria-live="polite" aria-label="Telegram notification">
+  <button id="join-close" class="join-close" type="button" aria-label="Tutup">×</button>
+  <div class="join-icon"><i class="fa-brands fa-telegram"></i></div>
+  <div class="join-copy">
+    <strong>Gabung Group Telegram</strong>
+    <span>Dapatkan update dan info terbaru dari ShowLink.</span>
+    <a href="https://t.me/Jsshowfile" target="_blank" rel="noopener noreferrer" id="join-telegram">Join @Jsshowfile</a>
+  </div>
+</div>
+
+<div data-showlink-footer></div>
+<script src="/js/final.js" defer></script>
+<script src="/js/showlink-components.js" defer></script><script src="/js/navbar.js" defer></script><script src="/js/footer.js" defer></script>
 </body></html>
