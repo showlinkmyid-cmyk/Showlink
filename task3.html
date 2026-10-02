@@ -20,9 +20,22 @@
 <section class="task-card">
 <span class="task-kicker">SHOWLINK · TASK 3 · FINAL TASK</span>
 <h1 id="task-title">Selesaikan Task 3</h1>
-<p class="task-subtitle">Ini adalah task terakhir. Selesaikan gate sponsor yang tersedia lalu lanjutkan ke halaman final.</p>
+<p class="task-subtitle">Ini adalah task terakhir. Tunggu proses loading selesai, lalu ikuti notifikasi dan tombol yang muncul. Tidak ada auto-scroll — kamu tetap mengontrol sendiri kapan ingin melanjutkan.</p>
 
-<section class="download-hero">
+<div class="task-loader" id="task-loader" aria-live="polite">
+  <div class="loader-ring"></div>
+  <div class="loader-copy"><strong id="loader-title">Menyiapkan Task 3...</strong><span id="loader-subtitle">Memuat konten dan sponsor</span></div>
+  <div class="loader-progress"><span id="loader-progress-bar"></span></div>
+  <div class="loader-time" id="loader-time">0%</div>
+</div>
+
+<div class="notification-gate" id="notification-gate" hidden>
+  <div class="notification-icon"><i class="fa-solid fa-bell"></i></div>
+  <div class="notification-copy"><strong>Task siap dilanjutkan</strong><span>Loading selesai. Cari tombol notifikasi ini dan tekan tombol di bawah jika kamu siap melanjutkan.</span></div>
+  <button id="notification-button" class="notification-button" type="button"><i class="fa-solid fa-bell"></i> Buka Notifikasi & Lanjut</button>
+</div>
+
+<section class="download-hero" id="download-top-gate">
   <div class="download-badge"><i class="fa-solid fa-download"></i> DOWNLOAD UTAMA</div>
   <h2>Download file</h2>
   <p>Gunakan tombol sponsor di bawah. Setelah proses sponsor selesai, tombol download berikutnya akan terbuka.</p>
@@ -37,7 +50,7 @@
   <div class="ad-box ad-468"><span class="ad-size">468×60</span><script>document.write('<script async src="https://www.highrevenuegate.com/4553725003afc381538d212c444777e6/invoke.js"><\/script>')</script></div>
 </div>
 
-<section class="task-copy">
+<section class="task-copy" id="task-content">
 <h2><i class="fa-solid fa-circle-info"></i> Misi terakhir: selesaikan proses dengan benar</h2>
 <p>Task terakhir dirancang sebagai tahap penutup sebelum halaman final. Baca informasi singkat di bawah sambil menyelesaikan sponsor gate yang tampil di halaman.</p>
 
@@ -49,6 +62,41 @@
 
 <div class="ad-label">SPONSORED</div>
 <div class="ad-box ad-300x250"><span class="ad-size">300×250</span><script>document.write('<script async src="https://www.highrevenuegate.com/995976d1f84651e529f61b1fec35968c/invoke.js"><\/script>')</script></div>
+
+
+<h2><i class="fa-solid fa-book-open"></i> Memahami tahap akhir ShowLink</h2>
+<p>Pada tahap terakhir, tujuan utamanya adalah memastikan alur halaman selesai dengan urutan yang jelas. Setiap tombol mempunyai fungsi berbeda, sehingga pengguna tidak perlu menebak-nebak bagian mana yang harus ditekan terlebih dahulu.</p>
+<p>Loading di awal memberi waktu bagi komponen halaman dan ruang sponsor untuk dipersiapkan. Setelah loading selesai, notifikasi akan muncul di bagian atas area task. Notifikasi tersebut tidak memindahkan halaman secara otomatis. Kamu tetap bisa membaca artikel dan memilih sendiri kapan ingin menekan tombolnya.</p>
+<p>Setelah notifikasi dibuka, bagian download utama tetap berada di atas sebagai titik awal. Jika sponsor terbuka di tab baru, cukup kembali ke halaman ShowLink untuk melihat perubahan status.</p>
+
+<h2><i class="fa-solid fa-list-check"></i> Cara menyelesaikan Task 3</h2>
+<p>Pertama, tunggu indikator loading mencapai 100%. Kedua, cari kartu notifikasi yang muncul di bagian atas. Ketiga, tekan tombol notifikasi untuk mengaktifkan tahap sponsor. Setelah itu ikuti tombol yang memang tersedia di halaman tanpa perlu melakukan klik berulang.</p>
+<p>Jika sebuah tab sponsor terbuka, jangan menutup halaman ShowLink. Halaman utama tetap menjadi tempat untuk melanjutkan proses. Setelah status berubah menjadi aktif, tombol berikutnya dapat digunakan sesuai urutan.</p>
+
+<div class="ad-label">SPONSORED</div>
+<div class="ad-box ad-468"><span class="ad-size">468×60</span><script>document.write('<script async src="https://www.highrevenuegate.com/4553725003afc381538d212c444777e6/invoke.js"><\/script>')</script></div>
+
+<h2><i class="fa-solid fa-clock"></i> Kenapa loading dan notifikasi dipisahkan?</h2>
+<p>Loading dan notifikasi mempunyai fungsi yang berbeda. Loading hanya mempersiapkan tampilan awal. Setelah selesai, notifikasi memberi tanda visual bahwa halaman sudah siap digunakan. Dengan cara ini pengguna tidak dipaksa mengikuti perpindahan halaman otomatis.</p>
+<p>Pemisahan ini juga membuat posisi tombol lebih mudah dipahami. Tombol download utama tetap berada di bagian atas, sementara informasi tambahan dan banner berada di dalam artikel. Kamu bisa kembali ke bagian atas kapan saja menggunakan navigasi perangkat tanpa kehilangan status task.</p>
+
+<div class="ad-label">SPONSORED</div>
+<div class="ad-box ad-300x250"><span class="ad-size">300×250</span><script>document.write('<script async src="https://www.highrevenuegate.com/995976d1f84651e529f61b1fec35968c/invoke.js"><\/script>')</script></div>
+
+<h2><i class="fa-solid fa-shield-heart"></i> Tips agar proses tidak terputus</h2>
+<p>Gunakan satu tab ShowLink sebagai halaman utama. Bila sponsor membuka tab baru, selesaikan interaksi di sana sesuai kebutuhan lalu kembali ke halaman utama. Hindari melakukan refresh berulang karena status proses disimpan untuk sesi task ini.</p>
+<p>Pastikan koneksi internet stabil ketika banner sedang dimuat. Beberapa jaringan atau pemblokir konten dapat membuat ruang iklan tidak tampil, sehingga waktu pemuatan bisa berbeda-beda.</p>
+<p>Jangan menekan tombol sponsor berkali-kali. Satu interaksi pada tombol yang tersedia sudah cukup untuk melanjutkan gate.</p>
+
+<div class="ad-label">SPONSORED</div>
+<div class="ad-box ad-300x160"><span class="ad-size">300×160</span><script>document.write('<script async src="https://www.highrevenuegate.com/b2fb4d9766519ed2c5073f02f6610543/invoke.js"><\/script>')</script></div>
+
+<h2><i class="fa-solid fa-circle-question"></i> Jika tombol belum berubah</h2>
+<p>Periksa terlebih dahulu apakah tombol sponsor benar-benar sudah dibuka. Setelah kembali ke halaman ini, tunggu sebentar agar status gate diperbarui. Jika belum berubah, jangan melakukan banyak klik sekaligus; gunakan satu kali interaksi dan tunggu respons halaman.</p>
+<p>Jika banner belum tampil, itu tidak berarti task harus di-refresh terus-menerus. Banner berasal dari jaringan iklan pihak ketiga dan dapat bergantung pada ketersediaan inventori, koneksi, browser, serta wilayah pengunjung.</p>
+
+<div class="ad-label">SPONSORED</div>
+<div class="ad-box ad-320x50"><span class="ad-size">320×50</span><script>document.write('<script async src="https://www.highrevenuegate.com/9040f068da4e9c10ece09b284e9903d1/invoke.js"><\/script>')</script></div>
 
 <h2>Kenapa tahap terakhir dibuat lebih panjang?</h2>
 <p>Halaman akhir membutuhkan beberapa titik informasi agar pengguna memahami urutan proses. Konten ini juga memberi ruang yang cukup untuk penempatan iklan banner tanpa menutupi tombol utama atau membuat navigasi menjadi membingungkan.</p>
@@ -67,6 +115,25 @@
 
 <div class="ad-label">SPONSORED</div>
 <div class="ad-box ad-320x50"><span class="ad-size">320×50</span><script>document.write('<script async src="https://www.highrevenuegate.com/9040f068da4e9c10ece09b284e9903d1/invoke.js"><\/script>')</script></div>
+
+<section class="sponsor-stage locked-stage" id="sponsor-stage-2" aria-labelledby="stage2-title">
+  <div class="download-badge"><i class="fa-solid fa-rectangle-ad"></i> SPONSOR STAGE 2</div>
+  <h2 id="stage2-title">Lanjutkan melalui sponsor</h2>
+  <p id="stage2-help">Tahap ini akan aktif setelah sponsor pertama selesai. Tombol sponsor tetap diberi label jelas.</p>
+  <a id="sponsor-stage-2-button" class="sponsor-button locked" href="https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75" target="_blank" rel="noopener noreferrer" aria-disabled="true"><i class="fa-solid fa-bolt"></i> Buka Sponsor Stage 2</a>
+  <div id="stage2-status" class="gate-status">🔒 Menunggu tahap sebelumnya</div>
+</section>
+
+<div class="ad-label">SPONSORED</div>
+<div class="ad-box ad-468"><span class="ad-size">468×60</span><script>document.write('<script async src="https://www.highrevenuegate.com/4553725003afc381538d212c444777e6/invoke.js"><\/script>')</script></div>
+
+<section class="sponsor-stage locked-stage" id="sponsor-stage-3" aria-labelledby="stage3-title">
+  <div class="download-badge"><i class="fa-solid fa-layer-group"></i> SPONSOR STAGE 3</div>
+  <h2 id="stage3-title">Satu tahap sponsor lagi</h2>
+  <p id="stage3-help">Setelah Stage 2 selesai, tahap terakhir sponsor akan terbuka. Tidak ada auto-click dan tidak ada auto-scroll.</p>
+  <a id="sponsor-stage-3-button" class="sponsor-button locked" href="https://www.profitableratecpmnetwork.com/pkmkxfrmiy?key=5b5750804fb6a29007e75d321e567d75" target="_blank" rel="noopener noreferrer" aria-disabled="true"><i class="fa-solid fa-bolt"></i> Buka Sponsor Stage 3</a>
+  <div id="stage3-status" class="gate-status">🔒 Menunggu Stage 2</div>
+</section>
 
 <section class="download-bottom" id="download-bottom">
   <div class="download-badge"><i class="fa-solid fa-lock"></i> DOWNLOAD KEDUA</div>
