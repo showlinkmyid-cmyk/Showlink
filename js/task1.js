@@ -100,3 +100,53 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 window.addEventListener('storage',translate);
 window.addEventListener('showlink:languagechange',translate);
 })();
+
+
+/* Bottom-download gate: locked until the upper "Klik Now" action is completed. */
+(function(){
+  'use strict';
+  function initBottomDownloadGate(){
+    const bottom = document.getElementById('real-download-bottom');
+    const gate = document.getElementById('download-bottom-gate') || document.querySelector('.download-bottom-gate');
+    if (!bottom) return;
+
+    bottom.disabled = true;
+    bottom.setAttribute('aria-disabled','true');
+    bottom.classList.add('locked-bottom');
+    if (gate) gate.setAttribute('aria-disabled','true');
+
+    window.ShowLinkUnlockBottomDownload = function(){
+      bottom.disabled = false;
+      bottom.removeAttribute('aria-disabled');
+      bottom.classList.remove('locked-bottom');
+      if (gate) gate.setAttribute('aria-disabled','false');
+      bottom.innerHTML = '<i class="fa-solid fa-download"></i> Download Asli';
+    };
+
+    /* Support the common upper action IDs used by Task 1. */
+    const upperSelectors = [
+      '#click-now-top',
+      '#click-now',
+      '#download-click-now',
+      '#download-now',
+      '.click-now'
+    ];
+    upperSelectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        el.addEventListener('click', function(){
+          setTimeout(function(){
+            if (typeof window.ShowLinkUnlockBottomDownload === 'function') {
+              window.ShowLinkUnlockBottomDownload();
+            }
+          }, 250);
+        }, {once:false});
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBottomDownloadGate);
+  } else {
+    initBottomDownloadGate();
+  }
+})();
