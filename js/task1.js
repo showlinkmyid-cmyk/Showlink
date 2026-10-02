@@ -79,6 +79,7 @@ function setup(){
  $('download-image-top').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')triggerTop()});
 
  $('click-now-top').addEventListener('click',()=>{
+   openAd();
    $('click-now-top').hidden=true;
    $('click-now-top').style.display='none';
    document.querySelector('.bottom-download').scrollIntoView({behavior:'smooth',block:'center'});
@@ -89,6 +90,7 @@ function setup(){
  $('download-image-bottom').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')triggerBottom()});
 
  $('click-now-bottom').addEventListener('click',()=>{
+   openAd();
    if(!state.completed.includes(n))state.completed.push(n);
    sessionStorage.setItem(key,JSON.stringify(state));
    location.href='/task2.html?slug='+encodeURIComponent(slug)+'&plan='+encodeURIComponent(plan);
