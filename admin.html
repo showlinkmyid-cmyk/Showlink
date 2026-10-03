@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Panel — ShowLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/css/admin.css">
+<script src="/js/supabase-config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/supabase-client.js"></script>
+<script>(function(){try{let t=localStorage.getItem('showlink-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}})();</script>
+</head>
+<body class="admin-page">
+<header class="admin-top"><a class="admin-brand" href="/"><img src="/assets/showlink-logo.svg" alt="ShowLink"><b>Show<span>Link</span></b><em>ADMIN</em></a><div class="admin-top-right"><span id="admin-email">Checking...</span><button id="admin-logout"><i class="fa-solid fa-right-from-bracket"></i></button></div></header>
+<div class="admin-layout">
+<aside class="admin-side">
+<button class="admin-nav active" data-tab="overview"><i class="fa-solid fa-gauge-high"></i>Overview</button>
+<button class="admin-nav" data-tab="users"><i class="fa-solid fa-users"></i>Users</button>
+<button class="admin-nav" data-tab="content"><i class="fa-solid fa-layer-group"></i>Content</button>
+<button class="admin-nav" data-tab="withdrawals"><i class="fa-solid fa-money-bill-transfer"></i>Withdraw</button>
+<button class="admin-nav" data-tab="settings"><i class="fa-solid fa-sliders"></i>Platform</button>
+<button class="admin-nav" data-tab="announcement"><i class="fa-solid fa-bullhorn"></i>Announcement</button>
+</aside>
+<main class="admin-main">
+<div id="admin-alert"></div>
+<section class="admin-tab active" id="tab-overview">
+<div class="admin-heading"><div><span>CONTROL CENTER</span><h1>Admin Overview</h1><p>Semua kontrol utama ShowLink dalam satu panel.</p></div><button class="btn primary" id="refresh-all"><i class="fa-solid fa-rotate"></i> Refresh</button></div>
+<div class="stat-grid" id="stats-grid"></div>
+<div class="panel"><div class="panel-head"><h2>Platform Summary</h2></div><div class="quick-grid" id="quick-summary"></div></div>
+</section>
+<section class="admin-tab" id="tab-users">
+<div class="admin-heading"><div><span>USER MANAGEMENT</span><h1>Users</h1><p>Lihat, upgrade, ban, hapus, dan ubah saldo pengguna.</p></div></div>
+<div class="toolbar"><input id="user-search" placeholder="Cari username / email"><select id="user-plan"><option value="all">Semua plan</option><option value="free">FREE</option><option value="vip">VIP</option><option value="premium">PREMIUM</option></select><button class="btn primary" id="load-users">Cari</button></div>
+<div class="table-wrap"><table><thead><tr><th>User</th><th>Plan</th><th>Status</th><th>Aktif terakhir</th><th>Saldo</th><th>Aksi</th></tr></thead><tbody id="users-body"></tbody></table></div>
+</section>
+<section class="admin-tab" id="tab-content">
+<div class="admin-heading"><div><span>CONTENT MANAGEMENT</span><h1>All Content</h1><p>Edit, pause, block, atau hapus konten Shortlink, PasteLink, dan Payment Link.</p></div></div>
+<div class="toolbar"><select id="content-type"><option value="all">Semua</option><option value="shortlink">Shortlink</option><option value="pastelink">PasteLink</option><option value="payment_link">Payment Link</option></select><input id="content-search" placeholder="Cari slug / judul"><button class="btn primary" id="load-content">Load</button></div>
+<div class="table-wrap"><table><thead><tr><th>Type</th><th>Content</th><th>Status</th><th>Views</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody id="content-body"></tbody></table></div>
+</section>
+<section class="admin-tab" id="tab-withdrawals">
+<div class="admin-heading"><div><span>FINANCE CONTROL</span><h1>Withdrawals</h1><p>Approve, reject, processing, atau batalkan permintaan withdraw.</p></div></div>
+<div class="toolbar"><select id="withdraw-status"><option value="all">Semua</option><option value="pending">Pending</option><option value="processing">Processing</option><option value="paid">Paid</option><option value="rejected">Rejected</option><option value="cancelled">Cancelled</option></select><button class="btn primary" id="load-withdrawals">Load</button></div>
+<div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead><tbody id="withdraw-body"></tbody></table></div>
+</section>
+<section class="admin-tab" id="tab-settings">
+<div class="admin-heading"><div><span>PLATFORM CONTROL</span><h1>Settings</h1><p>CPM, withdraw, maintenance, dan theme platform.</p></div></div>
+<div class="settings-grid">
+<div class="panel"><h2>Monetization</h2><label>Shortlink CPM / 1.000 views<input id="set-cpm" type="number" min="0" step="0.01"></label><button class="btn primary save-settings">Simpan CPM</button></div>
+<div class="panel"><h2>Withdraw Gate</h2><label class="switch-row"><span>Manual Withdraw</span><input id="set-manual" type="checkbox"></label><label class="switch-row"><span>Instant Withdraw</span><input id="set-instant" type="checkbox"></label><button class="btn primary save-settings">Simpan</button></div>
+<div class="panel"><h2>Maintenance</h2><label class="switch-row"><span>Maintenance Mode</span><input id="set-maintenance" type="checkbox"></label><label>Pesan<input id="set-maintenance-msg" type="text"></label><button class="btn danger save-settings">Simpan Maintenance</button></div>
+<div class="panel"><h2>Platform Theme</h2><select id="set-theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select><button class="btn primary save-settings">Simpan Theme</button></div>
+</div>
+</section>
+<section class="admin-tab" id="tab-announcement">
+<div class="admin-heading"><div><span>COMMUNICATION</span><h1>Announcement</h1><p>Kirim notifikasi ke seluruh user yang tidak dibanned.</p></div></div>
+<div class="panel announce"><label>Judul<input id="ann-title" maxlength="200"></label><label>Pesan<textarea id="ann-message" rows="8" maxlength="5000"></textarea></label><label>Link (opsional)<input id="ann-link" placeholder="/dashboard.html"></label><button class="btn primary" id="send-ann"><i class="fa-solid fa-paper-plane"></i> Kirim ke Semua User</button></div>
+</section>
+</main></div>
+<div id="modal-root"></div>
+<script src="/js/admin.js"></script>
+</body></html>
