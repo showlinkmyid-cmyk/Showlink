@@ -120,6 +120,26 @@
   }
 
 
+
+  async function applyPlatformControl(){
+    try{
+      const sb=await window.ShowLinkSupabase?.load?.();
+      if(!sb)return;
+      const {data:s}=await sb.rpc("get_platform_public_settings");
+      const m=s?.maintenance;
+      if(!m?.enabled)return;
+      const {data:ud}=await sb.auth.getUser();
+      const email=ud?.user?.email?.toLowerCase()||"";
+      if(email==="saputrarmx190301@gmail.com")return;
+      const old=document.getElementById("showlink-maintenance-overlay"); if(old)old.remove();
+      const el=document.createElement("div");el.id="showlink-maintenance-overlay";
+      el.innerHTML=`<div class="sl-maint-card"><div class="sl-maint-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div><span>SHOWLINK</span><h2>Platform sedang maintenance</h2><p>${String(m.message||"ShowLink sedang dalam maintenance.").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}</p></div>`;
+      Object.assign(el.style,{position:"fixed",inset:"0",zIndex:"999999",display:"grid",placeItems:"center",padding:"20px",background:"rgba(8,8,18,.86)",backdropFilter:"blur(18px)"});
+      const card=el.firstElementChild;Object.assign(card.style,{width:"min(460px,100%)",padding:"32px",borderRadius:"26px",textAlign:"center",background:"var(--surface,#fff)",color:"var(--text,#171827)",border:"1px solid rgba(255,255,255,.18)",boxShadow:"0 30px 100px rgba(0,0,0,.35)",fontFamily:"Inter,system-ui,sans-serif"});
+      document.body.appendChild(el);
+    }catch(e){}
+  }
+
   function render(){
     const host=document.querySelector("[data-showlink-navbar]");
     if(!host)return;
@@ -210,6 +230,7 @@
     document.body.classList.add("showlink-navbar-page");
     window.dispatchEvent(new CustomEvent("showlink:navbar-rendered"));
     applyPlanFeatureLocks();
+    applyPlatformControl();
 
     const menu=host.querySelector("[data-showlink-menu]");
     menu?.addEventListener("click",()=>{
