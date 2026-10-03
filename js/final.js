@@ -18,91 +18,78 @@
   }
 
   function normalizeUrl(value) {
-    let url = String(value || '').trim();
-    if (!url) return '';
-    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    const candidate = /^www\./i.test(raw) ? 'https://' + raw : raw;
+    if (!/^https?:\/\//i.test(candidate)) return '';
     try {
-      const parsed = new URL(url);
-      return /^https?:$/i.test(parsed.protocol) ? parsed.href : '';
+      const u = new URL(candidate);
+      return /^https?:$/i.test(u.protocol) ? u.href : '';
     } catch (_) { return ''; }
   }
 
-  function setStatus(message) {
-    if (status) status.textContent = message;
-  }
-
-  function setOriginalUrl(value) {
-    const url = normalizeUrl(value);
-    if (!url) return false;
-    resolvedUrl = url;
-    button.setAttribute('href', url);
-    button.removeAttribute('aria-disabled');
-    button.removeAttribute('tabindex');
-    button.classList.remove('is-locked');
-    button.classList.add('is-ready');
-    setStatus('Konten asli siap dibuka.');
-    return true;
-  }
-
-  function readStored() {
+  function readStoredContent() {
     if (!slug) return '';
-    const key = 'showlink-shortlink-content:' + slug;
-
-    for (const storage of [sessionStorage, localStorage]) {
-      try {
-        const raw = storage.getItem(key);
-        if (!raw) continue;
-        const item = JSON.parse(raw);
-        const url = normalizeUrl(item?.destination_url || item?.url || item?.destinationUrl || '');
-        if (url) return url;
-      } catch (_) {}
-    }
-
-    try {
+    const keys = ['showlink-shortlink-content:' + slug];
+    for (const key of keys) {
       for (const storage of [sessionStorage, localStorage]) {
-        for (let i = 0; i < storage.length; i++) {
-          const k = storage.key(i) || '';
-          if (!k.startsWith('showlink-shortlink-choice:')) continue;
-          try {
-            const item = JSON.parse(storage.getItem(k) || '{}');
-            if (String(item?.slug || '').trim() !== slug) continue;
-            const url = normalizeUrl(item?.destination_url || item?.url || '');
-            if (url) return url;
-          } catch (_) {}
-        }
+        try {
+          const raw = storage.getItem(key);
+          if (!raw) continue;
+          const item = JSON.parse(raw);
+          const content = String(item?.content_text || '').trim();
+          if (content) return content;
+        } catch (_) {}
       }
-    } catch (_) {}
+    }
     return '';
   }
 
-  async function readSupabase() {
+  async function readSupabaseContent() {
     if (!slug || !window.ShowLinkSupabase?.load) return '';
     try {
       const sb = await window.ShowLinkSupabase.load();
       const result = await sb.rpc('get_public_shortlink', { p_slug: slug });
       if (result?.error) return '';
       let data = result.data;
-      if (typeof data === 'string') {
-        try { data = JSON.parse(data); } catch (_) {}
-      }
+      if (typeof data === 'string') { try { data = JSON.parse(data); } catch (_) {} }
       if (Array.isArray(data)) data = data[0] || null;
       if (!data || data.ok === false) return '';
-      const url = normalizeUrl(data.destination_url || data.destinationUrl || '');
-      if (!url) return '';
-      const payload = JSON.stringify({url:url,destination_url:url});
-      try { sessionStorage.setItem('showlink-shortlink-content:' + slug, payload); } catch (_) {}
-      try { localStorage.setItem('showlink-shortlink-content:' + slug, payload); } catch (_) {}
-      return url;
+      const content = String(data.content_text || '').trim();
+      if (!content) return '';
+      try { sessionStorage.setItem('showlink-shortlink-content:' + slug, JSON.stringify({content_text:content,destination_url:data.destination_url || ''})); } catch (_) {}
+      try { localStorage.setItem('showlink-shortlink-content:' + slug, JSON.stringify({content_text:content,destination_url:data.destination_url || ''})); } catch (_) {}
+      return content;
     } catch (_) { return ''; }
   }
 
+  function renderOriginalContent(content) {
+    const box = document.getElementById('original-content');
+    if (box) {
+      box.hidden = false;
+      box.querySelector('.original-content-value').textContent = content;
+    }
+  }
+
+  async function resolveContent() {
+    let content = String(contentParam || '').trim();
+    if (!content) content = readStoredContent();
+    if (!content) content = await readSupabaseContent();
+    return content;
+  }
+
   async function resolve() {
-    if (setOriginalUrl(targetParam)) return resolvedUrl;
-    const stored = readStored();
-    if (setOriginalUrl(stored)) return resolvedUrl;
-    const remote = await readSupabase();
-    if (setOriginalUrl(remote)) return resolvedUrl;
-    return '';
+    const content = await resolveContent();
+    if (content) {
+      renderOriginalContent(content);
+      const url = normalizeUrl(content);
+      if (url) setOriginalUrl(url);
+      return url;
+    }
+    // Backward compatibility for older records that only contain destination_url.
+    const url = normalizeUrl(targetParam);
+    if (url) setOriginalUrl(url);
+    return url;
   }
 
   button.removeAttribute('aria-disabled');
@@ -128,13 +115,14 @@
 
     event.preventDefault();
     setStatus('Menyiapkan konten...');
-    const destination = await resolve();
-    if (destination) {
-      track('original_click', destination);
-      window.location.assign(destination);
-      return;
-    }
-    setStatus('Konten asli belum dapat dimuat.');
+    const content = await resolveContent();
+    if (!content) { setStatus('Konten asli belum dapat dimuat.'); return; }
+    const destination = normalizeUrl(content);
+    if (destination) { track('original_click', destination); window.location.assign(destination); return; }
+    const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (slug || 'showlink-content') + '.txt';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    setStatus('Konten asli berhasil disiapkan.');
   });
 
   const join = document.getElementById('join-float');

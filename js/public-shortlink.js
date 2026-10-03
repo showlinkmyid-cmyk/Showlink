@@ -64,7 +64,7 @@
       if (data.slug && data.destination_url) {
         sessionStorage.setItem(
           'showlink-shortlink-content:' + String(data.slug).trim(),
-          JSON.stringify({ url: data.destination_url, destination_url: data.destination_url })
+          JSON.stringify({ content_text: data.content_text || '', destination_url: data.destination_url || '' })
         );
       }
       // localStorage is only a fallback for browsers that recreate the
@@ -72,7 +72,7 @@
       if (data.slug && data.destination_url) {
         localStorage.setItem(
           'showlink-shortlink-content:' + String(data.slug).trim(),
-          JSON.stringify({ url: data.destination_url, destination_url: data.destination_url })
+          JSON.stringify({ content_text: data.content_text || '', destination_url: data.destination_url || '' })
         );
       }
     } catch (_) {}
@@ -88,6 +88,7 @@
       <span class="pf-kicker"><i class="fa-solid fa-link"></i> ${x.k}</span>
       <h1 class="pf-title">${esc(data.title)}</h1>
       ${data.description ? `<p class="pf-desc">${urlize(data.description)}</p>` : ''}
+      ${data.content_text ? `<div class="pf-content-preview"><strong>Konten</strong><div>${urlize(data.content_text)}</div></div>` : ''}
 
       <div class="pf-short-info">
         <strong>${esc(planText)}</strong> · ${x.task} ${count}
@@ -122,7 +123,7 @@
 
     document.getElementById('free').onclick = () => {
       saveFlow(data, plan);
-      location.href = `/task1.html?slug=${encodeURIComponent(data.slug)}&plan=${encodeURIComponent(plan)}&target=${encodeURIComponent(data.destination_url || '')}`;
+      location.href = `/task1.html?slug=${encodeURIComponent(data.slug)}&plan=${encodeURIComponent(plan)}&content=${encodeURIComponent(data.content_text || '')}`;
     };
 
     document.getElementById('direct')?.addEventListener('click', () => {

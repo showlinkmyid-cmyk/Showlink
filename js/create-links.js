@@ -31,11 +31,16 @@
       }else if(type==='shortlink'){
         const content=String(fd.get('content_text')||'').trim();
         if(!content) throw new Error('Isi konten wajib diisi.');
+        // CONTENT is the source of truth. destination_url is only a compatibility
+        // field and must never contain title/description/bot success messages.
+        const destination = /^(?:https?:\/\/|www\.)[^\s]+$/i.test(content)
+          ? (content.toLowerCase().startsWith('www.') ? 'https://' + content : content)
+          : '';
         const slug=await makeSlug(sb,'showlink_shortlinks');
         const {data,error}=await sb.from('showlink_shortlinks').insert({
           owner_id:uid,slug,title:String(fd.get('title')||'').trim(),
           description:String(fd.get('description')||'').trim(),
-          content_text:content,destination_url:content,
+          content_text:content,destination_url:destination,
           tasks:[],payment_link_id: await resolvePaymentLinkId(sb, form),status:'active'
         }).select('slug').single();
         if(error) throw error;
