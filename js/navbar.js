@@ -15,7 +15,7 @@
   let authUser=null;
   const stored=()=>{try{const x=localStorage.getItem("showlink_user");return x?JSON.parse(x):null}catch{return null}};
   const logged=()=>!!authUser||!!stored();
-  const t=k=>window.ShowLinkLanguage?.t?.(k)||k;
+  const t=k=>window.ShowLinkLanguage?.t?.(k)||({myLinks:"Link saya"}[k]||k);
   const icon=(cls,name)=>`<i class="fa-solid ${name}${cls?` ${cls}`:""}" aria-hidden="true"></i>`;
 
   const link=(href,ic,key,badge="")=>
@@ -25,22 +25,24 @@
     </a>`;
 
   function authMarkup(){
-    const badge1=`<span class="sl-new-badge sl-new-green"><i class="fa-solid fa-fire"></i> New</span>`;
-    const badge2=`<span class="sl-new-badge sl-new-yellow"><i class="fa-solid fa-fire"></i> New</span>`;
+    const badgeNew=`<span class="sl-new-badge sl-new-green"><i class="fa-solid fa-sparkles"></i> New</span>`;
+    const badgeBeta=`<span class="sl-new-badge sl-new-yellow"><i class="fa-solid fa-flask"></i> Beta</span>`;
+    const badgeSoon=`<span class="sl-new-badge sl-new-gray"><i class="fa-solid fa-clock"></i> Coming soon</span>`;
     return `
       ${link(C.dashboard,{cls:"sl-icon-blue",name:"fa-gauge-high"},"dashboard")}
       <div class="sl-nav-dropdown">
         <button class="sl-nav-link sl-nav-dropdown-toggle" type="button" aria-expanded="false">
-          ${icon("sl-icon-purple","fa-layer-group")}
-          <span data-i18n="manageLinks">${t("manageLinks")}</span>
+          ${icon("sl-icon-purple","fa-plus-circle")}
+          <span>Buat Link</span>
           ${icon("sl-dropdown-chevron","fa-chevron-down")}
         </button>
         <div class="sl-nav-dropdown-menu">
-          ${link(C.shortlink,{cls:"sl-icon-green",name:"fa-link"},"shortlink",badge1)}
-          ${link(C.paymentLink,{cls:"sl-icon-yellow",name:"fa-credit-card"},"paymentLink",badge2)}
-          ${link(C.sub4unlock,{cls:"sl-icon-orange",name:"fa-unlock-keyhole"},"sub4unlock")}
+          ${link(C.shortlink,{cls:"sl-icon-green",name:"fa-link"},"shortlink",badgeNew)}
+          ${link(C.paymentLink,{cls:"sl-icon-yellow",name:"fa-credit-card"},"paymentLink",badgeBeta)}
+          ${link(C.sub4unlock,{cls:"sl-icon-orange",name:"fa-unlock-keyhole"},"sub4unlock",badgeSoon)}
         </div>
       </div>
+      ${link(C.manage,{cls:"sl-icon-purple",name:"fa-link"},"myLinks")}
       ${link(C.notifications,{cls:"sl-icon-pink",name:"fa-bell"},"notifications")}
       ${link(C.payment,{cls:"sl-icon-green",name:"fa-wallet"},"payment")}
       ${link(C.profile,{cls:"sl-icon-blue",name:"fa-user"},"profile")}
