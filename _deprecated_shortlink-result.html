@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="id" data-showlink-page="shortlink-result">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6d5dfc">
+<title>Shortlink Terbuka — ShowLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/css/showlink-components.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+<link rel="stylesheet" href="/css/public-flow.css">
+<link rel="stylesheet" href="/css/shortlink-result.css">
+<script src="/js/supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(function(){
+  try{
+    var t=localStorage.getItem('showlink-theme');
+    if(t==='dark'||t==='light'){
+      document.documentElement.dataset.theme=t;
+      document.documentElement.style.colorScheme=t;
+    }
+  }catch(e){}
+})();
+</script>
+<link rel="icon" type="image/svg+xml" href="/assets/showlink-favicon.svg">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/showlink-favicon.png">
+<link rel="apple-touch-icon" href="/assets/showlink-favicon.png">
+</head>
+<body>
+<div data-showlink-navbar></div>
+
+<div class="sl-promo-ticker" role="note" aria-label="Ajakan menggunakan ShowLink">
+  <div class="sl-promo-track">
+    <span><i class="fa-solid fa-bolt"></i> Gunakan ShowLink untuk membagikan link dengan lebih praktis</span>
+    <span><i class="fa-solid fa-chart-line"></i> Potensi CPM pendapatan tinggi*</span>
+    <span><i class="fa-solid fa-rocket"></i> Mulai buat Shortlink kamu sekarang</span>
+    <span><i class="fa-solid fa-bolt"></i> Gunakan ShowLink untuk membagikan link dengan lebih praktis</span>
+    <span><i class="fa-solid fa-chart-line"></i> Potensi CPM pendapatan tinggi*</span>
+    <span><i class="fa-solid fa-rocket"></i> Mulai buat Shortlink kamu sekarang</span>
+  </div>
+</div>
+
+<main class="pf-shell">
+  <section class="pf-card result-card">
+    <div class="pf-body" id="result-app">
+      <div class="pf-loader">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <div>Menyiapkan hasil Shortlink…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-showlink-footer></div>
+
+<script src="/js/shortlink-result.js" defer></script>
+<script src="/js/showlink-components.js" defer></script>
+<script src="/js/navbar.js" defer></script>
+<script src="/js/footer.js" defer></script>
+</body>
+</html>
