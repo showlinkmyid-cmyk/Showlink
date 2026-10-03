@@ -5,6 +5,20 @@
 
 BEGIN;
 
+-- Ensure the Dashboard has a real CPM value even on a fresh database.
+-- Rp125 CPM is the weekday midpoint of the configured Rp100–150 reference band.
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  key text PRIMARY KEY,
+  value jsonb NOT NULL DEFAULT '{}'::jsonb,
+  is_public boolean NOT NULL DEFAULT false,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+INSERT INTO public.site_settings (key,value,is_public)
+VALUES ('shortlink_cpm', jsonb_build_object('value',125), true)
+ON CONFLICT (key) DO NOTHING;
+
+
 CREATE TABLE IF NOT EXISTS public.showlink_shortlink_final_stats (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   shortlink_id uuid NOT NULL REFERENCES public.showlink_shortlinks(id) ON DELETE CASCADE,
@@ -156,5 +170,73 @@ LEFT JOIN public.showlink_shortlink_final_stats a ON a.shortlink_id=s.id;
 -- This avoids inheriting the view owner's privileges.
 ALTER VIEW public.showlink_shortlink_final_dashboard
 SET (security_invoker = true);
+
+
+-- ============================================================
+-- ADMIN CPM CONTROL
+-- Allows an authenticated ShowLink admin to read/update the
+-- Shortlink CPM without editing SQL or redeploying the site.
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.get_shortlink_cpm_admin()
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_cpm numeric(18,4) := 125;
+BEGIN
+  IF NOT public.is_current_user_admin() THEN
+    RETURN jsonb_build_object('ok',false,'error','admin_required');
+  END IF;
+
+  SELECT COALESCE((value->>'value')::numeric,125)
+    INTO v_cpm
+  FROM public.site_settings
+  WHERE key='shortlink_cpm'
+  LIMIT 1;
+
+  RETURN jsonb_build_object('ok',true,'cpm',v_cpm);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.set_shortlink_cpm_admin(p_cpm numeric)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_cpm numeric(18,4);
+BEGIN
+  IF NOT public.is_current_user_admin() THEN
+    RETURN jsonb_build_object('ok',false,'error','admin_required');
+  END IF;
+
+  IF p_cpm IS NULL OR p_cpm < 0 OR p_cpm > 1000000 THEN
+    RETURN jsonb_build_object('ok',false,'error','invalid_cpm');
+  END IF;
+
+  v_cpm := round(p_cpm,4);
+
+  INSERT INTO public.site_settings(key,value,is_public,updated_at)
+  VALUES('shortlink_cpm',jsonb_build_object('value',v_cpm),true,now())
+  ON CONFLICT(key) DO UPDATE
+    SET value=jsonb_build_object('value',v_cpm),
+        is_public=true,
+        updated_at=now();
+
+  -- Keep every existing Shortlink's current CPM in sync immediately.
+  UPDATE public.showlink_shortlink_final_stats
+  SET cpm=v_cpm,
+      estimated_revenue=(views*v_cpm)/1000,
+      updated_at=now();
+
+  RETURN jsonb_build_object('ok',true,'cpm',v_cpm);
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.get_shortlink_cpm_admin() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.set_shortlink_cpm_admin(numeric) TO authenticated;
 
 COMMIT;

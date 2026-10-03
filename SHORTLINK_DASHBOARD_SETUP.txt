@@ -1,0 +1,22 @@
+SHOWLINK SHORTLINK DASHBOARD ANALYTICS
+
+What was wired:
+1. Final page records one page_view after all required tasks pass.
+2. The existing track_shortlink_final_event RPC stores the view and estimated CPM revenue.
+3. Dashboard reads showlink_shortlink_final_dashboard for the logged-in owner.
+4. Dashboard shows Total Shortlink, View valid, and Estimasi pendapatan from the database.
+5. Reloading Final in the same browser session does not double-count the same Final view.
+6. Opening the original content is recorded as original_click.
+
+SQL:
+Run SHORTLINK_FINAL_FLOW.sql first if the Shortlink schema is not already installed.
+Then run SHORTLINK_FINAL_ANALYTICS_CPM.sql.
+SHORTLINK_DASHBOARD_WIRING_PATCH.sql is an idempotent final safety patch.
+
+CPM:
+The analytics migration uses site_settings.shortlink_cpm. A default of Rp125 CPM is inserted only when the setting does not already exist.
+Change that setting in Supabase if you want another CPM reference.
+
+Important:
+The dashboard's current aggregate schema provides cumulative views and cumulative estimated earnings.
+The daily/monthly earnings cards are not fabricated from cumulative data; they remain zero until a dated event ledger is added.
