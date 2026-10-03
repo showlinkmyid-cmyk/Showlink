@@ -2,11 +2,23 @@
   'use strict';
 
   const params = new URLSearchParams(window.location.search);
-  const slug = (params.get('slug') || params.get('code') || '').trim();
+  let slug = (params.get('slug') || params.get('code') || '').trim();
+
+  // Extra fallback: if a browser/proxy dropped the query string, try the
+  // previous page URL when it contains a shortlink slug.
+  if (!slug) {
+    try {
+      const ref = document.referrer || '';
+      const m = ref.match(/\/s\/([^/?#]+)/i);
+      if (m) slug = decodeURIComponent(m[1]);
+    } catch (_) {}
+  }
+
   const button = document.getElementById('final-open');
   const status = document.getElementById('final-status');
-
   if (!button) return;
+
+  let resolvedUrl = '';
 
   function track(eventName, value) {
     try {
@@ -22,31 +34,43 @@
     try {
       const parsed = new URL(url);
       return /^https?:$/i.test(parsed.protocol) ? parsed.href : '';
-    } catch (_) { return ''; }
+    } catch (_) {
+      return '';
+    }
   }
 
   function setStatus(message) {
     if (status) status.textContent = message;
   }
 
+  // IMPORTANT: never permanently disable the original button.
+  // The click handler below can resolve the destination if it was not ready
+  // when the page first loaded.
   function setOriginalUrl(url) {
     const normalized = normalizeUrl(url);
-    if (!normalized) {
-      button.removeAttribute('href');
-      button.classList.add('is-locked');
-      button.classList.remove('is-ready');
-      button.setAttribute('aria-disabled', 'true');
-      setStatus('Silakan pilih tombol download yang tersedia.');
-      return false;
-    }
+    if (!normalized) return false;
 
+    resolvedUrl = normalized;
     button.href = normalized;
     button.classList.remove('is-locked');
     button.classList.add('is-ready');
     button.removeAttribute('aria-disabled');
     button.removeAttribute('tabindex');
-    setStatus('Silakan pilih tombol download di atas.');
     return true;
+  }
+
+  function readObject(raw) {
+    try {
+      const item = JSON.parse(raw || '{}');
+      return normalizeUrl(
+        item?.destination_url ||
+        item?.url ||
+        item?.destinationUrl ||
+        ''
+      );
+    } catch (_) {
+      return '';
+    }
   }
 
   function readSavedDestination() {
@@ -56,36 +80,30 @@
       'showlink-shortlink-content:' + slug
     ];
 
-    try {
-      for (const key of keys) {
-        const raw = sessionStorage.getItem(key);
-        if (!raw) continue;
-        const item = JSON.parse(raw);
-        const destination = item?.destination_url || item?.url || item?.destinationUrl || '';
-        if (destination) return destination;
-      }
-    } catch (_) {}
+    for (const key of keys) {
+      try {
+        const v = readObject(sessionStorage.getItem(key));
+        if (v) return v;
+      } catch (_) {}
+      try {
+        const v = readObject(localStorage.getItem(key));
+        if (v) return v;
+      } catch (_) {}
+    }
 
-    try {
-      const raw = localStorage.getItem('showlink-shortlink-content:' + slug);
-      if (raw) {
-        const item = JSON.parse(raw);
-        const destination = item?.destination_url || item?.url || item?.destinationUrl || '';
-        if (destination) return destination;
-      }
-    } catch (_) {}
-
-    // Backward compatibility with the original choice:<id> storage.
+    // Backward compatibility with choice:<id>.
     try {
       for (let i = 0; i < sessionStorage.length; i++) {
         const key = sessionStorage.key(i) || '';
         if (!key.startsWith('showlink-shortlink-choice:')) continue;
         const raw = sessionStorage.getItem(key);
         if (!raw) continue;
-        const item = JSON.parse(raw);
-        if (String(item?.slug || '').trim() !== slug) continue;
-        const destination = item?.destination_url || item?.url || item?.destinationUrl || '';
-        if (destination) return destination;
+        try {
+          const item = JSON.parse(raw);
+          if (String(item?.slug || '').trim() !== slug) continue;
+          const v = normalizeUrl(item?.destination_url || item?.url || '');
+          if (v) return v;
+        } catch (_) {}
       }
     } catch (_) {}
 
@@ -107,14 +125,20 @@
       if (Array.isArray(data)) data = data[0] || null;
       if (!data || data.ok === false) return '';
 
-      const destination = data.destination_url || data.destinationUrl || '';
+      const destination = normalizeUrl(
+        data.destination_url ||
+        data.destinationUrl ||
+        ''
+      );
       if (!destination) return '';
 
-      try {
-        const payload = JSON.stringify({ url: destination, destination_url: destination });
-        sessionStorage.setItem('showlink-shortlink-content:' + slug, payload);
-        localStorage.setItem('showlink-shortlink-content:' + slug, payload);
-      } catch (_) {}
+      const payload = JSON.stringify({
+        url: destination,
+        destination_url: destination
+      });
+
+      try { sessionStorage.setItem('showlink-shortlink-content:' + slug, payload); } catch (_) {}
+      try { localStorage.setItem('showlink-shortlink-content:' + slug, payload); } catch (_) {}
 
       return destination;
     } catch (_) {
@@ -122,36 +146,55 @@
     }
   }
 
-  async function init() {
+  async function resolveDestination() {
     let destination = readSavedDestination();
     if (!destination) destination = await fetchDestinationFromSupabase();
-
-    const ready = setOriginalUrl(destination);
-    track('page_view', null);
-
-    document.querySelectorAll('.ad-download').forEach(function (adButton) {
-      adButton.addEventListener('click', function () {
-        track('ad_click', adButton.dataset.adSlot || null);
-      }, { passive: true });
-    });
-
-    button.addEventListener('click', async function (event) {
-      let href = normalizeUrl(button.getAttribute('href') || '');
-      if (!href || href === window.location.href + '#') {
-        event.preventDefault();
-        let fallback = readSavedDestination();
-        if (!fallback) fallback = await fetchDestinationFromSupabase();
-        if (fallback && setOriginalUrl(fallback)) {
-          window.location.assign(normalizeUrl(fallback));
-          track('original_click', null);
-        }
-        return;
-      }
-      track('original_click', null);
-    });
+    if (destination) setOriginalUrl(destination);
+    return destination;
   }
 
-  init();
+  // Start active by default. This prevents an initialization race from
+  // producing the grey "locked" button seen on mobile.
+  button.classList.remove('is-locked');
+  button.classList.add('is-ready');
+  button.removeAttribute('aria-disabled');
+
+  // Resolve in background.
+  resolveDestination();
+  track('page_view', null);
+
+  document.querySelectorAll('.ad-download').forEach(function (adButton) {
+    adButton.addEventListener('click', function () {
+      track('ad_click', adButton.dataset.adSlot || null);
+    }, { passive: true });
+  });
+
+  button.addEventListener('click', async function (event) {
+    const current = normalizeUrl(resolvedUrl || button.getAttribute('href') || '');
+
+    if (current) {
+      event.preventDefault();
+      track('original_click', null);
+      window.location.assign(current);
+      return;
+    }
+
+    // Resolve on the actual click. This is the final fallback and does not
+    // depend on sessionStorage being available.
+    event.preventDefault();
+    button.classList.remove('is-locked');
+    button.classList.add('is-ready');
+    setStatus('Menyiapkan konten...');
+
+    const destination = await resolveDestination();
+    if (destination) {
+      track('original_click', null);
+      window.location.assign(destination);
+      return;
+    }
+
+    setStatus('Konten asli belum dapat dimuat. Coba tekan lagi.');
+  });
 
   const join = document.getElementById('join-float');
   const done = document.getElementById('join-done');
