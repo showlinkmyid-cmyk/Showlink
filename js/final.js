@@ -172,15 +172,14 @@
   button.addEventListener('click', async function (event) {
     const current = normalizeUrl(resolvedUrl || button.getAttribute('href') || '');
 
+    // If the destination is already resolved, let the browser follow the
+    // real href normally. Do not cancel the anchor click.
     if (current) {
-      event.preventDefault();
-      track('original_click', null);
-      window.location.assign(current);
+      track('original_click', current);
       return;
     }
 
-    // Resolve on the actual click. This is the final fallback and does not
-    // depend on sessionStorage being available.
+    // Only intercept when there is genuinely no destination yet.
     event.preventDefault();
     button.classList.remove('is-locked');
     button.classList.add('is-ready');
@@ -188,12 +187,12 @@
 
     const destination = await resolveDestination();
     if (destination) {
-      track('original_click', null);
-      window.location.assign(destination);
+      track('original_click', destination);
+      window.location.href = destination;
       return;
     }
 
-    setStatus('Konten asli belum dapat dimuat. Coba tekan lagi.');
+    setStatus('Konten asli belum dapat dimuat.');
   });
 
   const join = document.getElementById('join-float');
