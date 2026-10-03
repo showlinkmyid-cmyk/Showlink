@@ -1,0 +1,83 @@
+/* Shortlink result: navbar-safe spacing + clean moving promotion banner */
+:root{--sl-nav-clear:92px}
+body[data-showlink-page="shortlink-result"]{overflow-x:hidden}
+body[data-showlink-page="shortlink-result"] .pf-shell{
+  position:relative;
+  z-index:1;
+  width:min(760px,calc(100% - 28px));
+  margin:calc(var(--sl-nav-clear) + 22px) auto 48px;
+}
+.result-card{overflow:hidden}
+.result-unlocked{
+  margin-top:20px;
+  border-radius:20px;
+  padding:20px;
+  background:rgba(255,255,255,.065);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 12px 36px rgba(0,0,0,.08);
+}
+.result-badge{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+.result-content{
+  line-height:1.75;
+  word-break:break-word;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.result-content a{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+/* Running invitation text */
+.sl-promo-ticker{
+  position:relative;
+  z-index:5;
+  width:100%;
+  margin-top:10px;
+  overflow:hidden;
+  border-top:1px solid rgba(124,92,255,.18);
+  border-bottom:1px solid rgba(124,92,255,.18);
+  background:rgba(109,93,252,.075);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.sl-promo-track{
+  display:flex;
+  width:max-content;
+  gap:42px;
+  padding:10px 0;
+  white-space:nowrap;
+  animation:slTicker 26s linear infinite;
+}
+.sl-promo-track span{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+.sl-promo-track i{opacity:.85}
+@keyframes slTicker{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+@media (max-width:600px){
+  :root{--sl-nav-clear:82px}
+  body[data-showlink-page="shortlink-result"] .pf-shell{
+    width:calc(100% - 20px);
+    margin-top:calc(var(--sl-nav-clear) + 16px);
+  }
+  .result-unlocked{padding:16px;border-radius:17px}
+  .sl-promo-track{gap:28px;padding:9px 0;animation-duration:22s}
+  .sl-promo-track span{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sl-promo-track{animation:none;transform:none}
+}
