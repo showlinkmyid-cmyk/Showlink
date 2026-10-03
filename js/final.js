@@ -2,18 +2,8 @@
   'use strict';
 
   const params = new URLSearchParams(window.location.search);
-  let slug = (params.get('slug') || params.get('code') || '').trim();
-
-  // Extra fallback: if a browser/proxy dropped the query string, try the
-  // previous page URL when it contains a shortlink slug.
-  if (!slug) {
-    try {
-      const ref = document.referrer || '';
-      const m = ref.match(/\/s\/([^/?#]+)/i);
-      if (m) slug = decodeURIComponent(m[1]);
-    } catch (_) {}
-  }
-
+  const slug = (params.get('slug') || params.get('code') || '').trim();
+  const targetParam = (params.get('target') || '').trim();
   const button = document.getElementById('final-open');
   const status = document.getElementById('final-status');
   if (!button) return;
@@ -34,164 +24,116 @@
     try {
       const parsed = new URL(url);
       return /^https?:$/i.test(parsed.protocol) ? parsed.href : '';
-    } catch (_) {
-      return '';
-    }
+    } catch (_) { return ''; }
   }
 
   function setStatus(message) {
     if (status) status.textContent = message;
   }
 
-  // IMPORTANT: never permanently disable the original button.
-  // The click handler below can resolve the destination if it was not ready
-  // when the page first loaded.
-  function setOriginalUrl(url) {
-    const normalized = normalizeUrl(url);
-    if (!normalized) return false;
-
-    resolvedUrl = normalized;
-    button.href = normalized;
-    button.classList.remove('is-locked');
-    button.classList.add('is-ready');
+  function setOriginalUrl(value) {
+    const url = normalizeUrl(value);
+    if (!url) return false;
+    resolvedUrl = url;
+    button.setAttribute('href', url);
     button.removeAttribute('aria-disabled');
     button.removeAttribute('tabindex');
+    button.classList.remove('is-locked');
+    button.classList.add('is-ready');
+    setStatus('Konten asli siap dibuka.');
     return true;
   }
 
-  function readObject(raw) {
-    try {
-      const item = JSON.parse(raw || '{}');
-      return normalizeUrl(
-        item?.destination_url ||
-        item?.url ||
-        item?.destinationUrl ||
-        ''
-      );
-    } catch (_) {
-      return '';
-    }
-  }
-
-  function readSavedDestination() {
+  function readStored() {
     if (!slug) return '';
+    const key = 'showlink-shortlink-content:' + slug;
 
-    const keys = [
-      'showlink-shortlink-content:' + slug
-    ];
-
-    for (const key of keys) {
+    for (const storage of [sessionStorage, localStorage]) {
       try {
-        const v = readObject(sessionStorage.getItem(key));
-        if (v) return v;
-      } catch (_) {}
-      try {
-        const v = readObject(localStorage.getItem(key));
-        if (v) return v;
+        const raw = storage.getItem(key);
+        if (!raw) continue;
+        const item = JSON.parse(raw);
+        const url = normalizeUrl(item?.destination_url || item?.url || item?.destinationUrl || '');
+        if (url) return url;
       } catch (_) {}
     }
 
-    // Backward compatibility with choice:<id>.
     try {
-      for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i) || '';
-        if (!key.startsWith('showlink-shortlink-choice:')) continue;
-        const raw = sessionStorage.getItem(key);
-        if (!raw) continue;
-        try {
-          const item = JSON.parse(raw);
-          if (String(item?.slug || '').trim() !== slug) continue;
-          const v = normalizeUrl(item?.destination_url || item?.url || '');
-          if (v) return v;
-        } catch (_) {}
+      for (const storage of [sessionStorage, localStorage]) {
+        for (let i = 0; i < storage.length; i++) {
+          const k = storage.key(i) || '';
+          if (!k.startsWith('showlink-shortlink-choice:')) continue;
+          try {
+            const item = JSON.parse(storage.getItem(k) || '{}');
+            if (String(item?.slug || '').trim() !== slug) continue;
+            const url = normalizeUrl(item?.destination_url || item?.url || '');
+            if (url) return url;
+          } catch (_) {}
+        }
       }
     } catch (_) {}
-
     return '';
   }
 
-  async function fetchDestinationFromSupabase() {
+  async function readSupabase() {
     if (!slug || !window.ShowLinkSupabase?.load) return '';
-
     try {
       const sb = await window.ShowLinkSupabase.load();
       const result = await sb.rpc('get_public_shortlink', { p_slug: slug });
       if (result?.error) return '';
-
-      let data = result?.data;
+      let data = result.data;
       if (typeof data === 'string') {
         try { data = JSON.parse(data); } catch (_) {}
       }
       if (Array.isArray(data)) data = data[0] || null;
       if (!data || data.ok === false) return '';
-
-      const destination = normalizeUrl(
-        data.destination_url ||
-        data.destinationUrl ||
-        ''
-      );
-      if (!destination) return '';
-
-      const payload = JSON.stringify({
-        url: destination,
-        destination_url: destination
-      });
-
+      const url = normalizeUrl(data.destination_url || data.destinationUrl || '');
+      if (!url) return '';
+      const payload = JSON.stringify({url:url,destination_url:url});
       try { sessionStorage.setItem('showlink-shortlink-content:' + slug, payload); } catch (_) {}
       try { localStorage.setItem('showlink-shortlink-content:' + slug, payload); } catch (_) {}
-
-      return destination;
-    } catch (_) {
-      return '';
-    }
+      return url;
+    } catch (_) { return ''; }
   }
 
-  async function resolveDestination() {
-    let destination = readSavedDestination();
-    if (!destination) destination = await fetchDestinationFromSupabase();
-    if (destination) setOriginalUrl(destination);
-    return destination;
+  async function resolve() {
+    if (setOriginalUrl(targetParam)) return resolvedUrl;
+    const stored = readStored();
+    if (setOriginalUrl(stored)) return resolvedUrl;
+    const remote = await readSupabase();
+    if (setOriginalUrl(remote)) return resolvedUrl;
+    return '';
   }
 
-  // Start active by default. This prevents an initialization race from
-  // producing the grey "locked" button seen on mobile.
+  button.removeAttribute('aria-disabled');
+  button.removeAttribute('tabindex');
   button.classList.remove('is-locked');
   button.classList.add('is-ready');
-  button.removeAttribute('aria-disabled');
 
-  // Resolve in background.
-  resolveDestination();
+  resolve();
   track('page_view', null);
 
   document.querySelectorAll('.ad-download').forEach(function (adButton) {
     adButton.addEventListener('click', function () {
       track('ad_click', adButton.dataset.adSlot || null);
-    }, { passive: true });
+    });
   });
 
   button.addEventListener('click', async function (event) {
-    const current = normalizeUrl(resolvedUrl || button.getAttribute('href') || '');
-
-    // If the destination is already resolved, let the browser follow the
-    // real href normally. Do not cancel the anchor click.
+    const current = normalizeUrl(button.getAttribute('href') || resolvedUrl);
     if (current) {
       track('original_click', current);
       return;
     }
 
-    // Only intercept when there is genuinely no destination yet.
     event.preventDefault();
-    button.classList.remove('is-locked');
-    button.classList.add('is-ready');
     setStatus('Menyiapkan konten...');
-
-    const destination = await resolveDestination();
+    const destination = await resolve();
     if (destination) {
       track('original_click', destination);
-      window.location.href = destination;
+      window.location.assign(destination);
       return;
     }
-
     setStatus('Konten asli belum dapat dimuat.');
   });
 

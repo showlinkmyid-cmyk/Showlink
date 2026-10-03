@@ -122,7 +122,7 @@
 
     document.getElementById('free').onclick = () => {
       saveFlow(data, plan);
-      location.href = `/task1.html?slug=${encodeURIComponent(data.slug)}&plan=${encodeURIComponent(plan)}`;
+      location.href = `/task1.html?slug=${encodeURIComponent(data.slug)}&plan=${encodeURIComponent(plan)}&target=${encodeURIComponent(data.destination_url || '')}`;
     };
 
     document.getElementById('direct')?.addEventListener('click', () => {

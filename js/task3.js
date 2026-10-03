@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-const p=new URLSearchParams(location.search),slug=p.get('slug')||p.get('code')||'';
+const p=new URLSearchParams(location.search),slug=p.get('slug')||p.get('code')||'',target=p.get('target')||'';
 const plan=(p.get('plan')||localStorage.getItem('showlink-plan')||'free').toLowerCase();
 const n=3,required={free:3,vip:2,premium:1}[plan]||3;
 const key='showlink-shortlink-progress:'+slug;
@@ -19,7 +19,7 @@ let loaded=false,notified=false;
 if(title)title.textContent=(localStorage.getItem('showlink-lang')==='en'?'Complete Task ':'Selesaikan Task ')+n;
 if(count)count.textContent=n+' / '+required;
 if(!slug){if(next)next.disabled=true;return;}
-if(n>1&&!state.completed.includes(n-1)){location.replace('/task'+(n-1)+'.html?slug='+encodeURIComponent(slug)+'&plan='+encodeURIComponent(plan));return;}
+if(n>1&&!state.completed.includes(n-1)){location.replace('/task'+(n-1)+'.html?slug='+encodeURIComponent(slug)+'&plan='+encodeURIComponent(plan)+'&target='+encodeURIComponent(target));return;}
 
 function unlockLink(el,status,helpEl,message){
  if(!el)return;
@@ -84,6 +84,6 @@ if(next)next.addEventListener('click',function(){
  if(next.disabled)return;
  if(!state.completed.includes(n))state.completed.push(n);
  sessionStorage.setItem(key,JSON.stringify(state));
- location.href='/final.html?slug='+encodeURIComponent(slug)+'&plan='+encodeURIComponent(plan);
+ location.href='/final.html?slug='+encodeURIComponent(slug)+'&plan='+encodeURIComponent(plan)+'&target='+encodeURIComponent(target);
 });
 })();
