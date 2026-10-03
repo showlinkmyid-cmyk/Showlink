@@ -68,18 +68,52 @@ async function loadProfile(sb,user){
  * No guessed table is queried here. Once the project's canonical SQL is supplied,
  * this function can map exact rows/RPCs into the metrics below.
  */
-async function loadDashboardData(){
+async function loadDashboardData(sb,user){
  const data={
   available_balance:0,short_pending:0,short_today:0,short_month:0,short_total:0,short_views:0,short_earnings:0,
   pay_pending:0,pay_today:0,pay_month:0,pay_total:0,pay_clicks:0,pay_earnings:0,pay_sales:0,
   sub_today:0,sub_month:0,sub_total:0,sub_clicks:0,sub_clicks_month:0,sub_links_active:0,sub_locked:0,sub_unlocked:0,sub_users:0,
   income_total:0,income_short_pct:0,income_pay_pct:0
  };
- Object.entries(data).forEach(([k,v])=>setMetric(k,v));
- ["short_today","short_month","short_total","pay_today","pay_month","pay_total","sub_today","sub_month","sub_total"].forEach(k=>setTrend(k,0));
- updateDonuts(0,0,0);
-}
 
+ try{
+   // Wallet is read only for the authenticated owner.
+   const wallet=await sb.from('wallets')
+     .select('available_balance,pending_balance')
+     .eq('user_id',user.id)
+     .maybeSingle();
+   if(!wallet.error && wallet.data){
+     data.available_balance=Number(wallet.data.available_balance||0);
+     data.short_pending=Number(wallet.data.pending_balance||0);
+   }
+
+   // This view is populated by Final after all required tasks are completed.
+   // RLS/security_invoker limits rows to the authenticated owner.
+   const stats=await sb.from('showlink_shortlink_final_dashboard')
+     .select('shortlink_id,views,ad_clicks,original_clicks,telegram_clicks,cpm,estimated_revenue,created_at,updated_at')
+     .eq('owner_id',user.id);
+
+   if(stats.error) throw stats.error;
+
+   const rows=stats.data||[];
+   data.short_total=rows.length;
+   data.short_views=rows.reduce((sum,r)=>sum+Number(r.views||0),0);
+   data.short_earnings=rows.reduce((sum,r)=>sum+Number(r.estimated_revenue||0),0);
+
+   // The current aggregate schema stores cumulative Final statistics.
+   // Therefore total earnings/views are authoritative here; daily/monthly
+   // cards remain zero until an event ledger is added.
+   data.short_today=0;
+   data.short_month=data.short_earnings;
+   data.income_total=data.short_earnings+data.pay_earnings;
+ }catch(err){
+   console.warn('[ShowLink] Shortlink dashboard data:',err);
+ }
+
+ Object.entries(data).forEach(([k,v])=>setMetric(k,v));
+ ["short_today","short_month","short_total"].forEach(k=>setTrend(k,0));
+ updateDonuts(data.short_earnings,data.pay_earnings,data.sub_today);
+}
 function updateDonuts(short,pay,sub){
  const total=Number(short)+Number(pay);
  const sp=total?Math.round(short/total*100):0, pp=total?100-sp:0;
@@ -94,7 +128,7 @@ async function guard(){
   const {data,error}=await sb.auth.getSession();
   if(error||!data.session){location.replace("/login.html");return}
   await loadProfile(sb,data.session.user);
-  await loadDashboardData();
+  await loadDashboardData(sb,data.session.user);
  }catch(e){console.error(e);location.replace("/login.html")}
 }
 
