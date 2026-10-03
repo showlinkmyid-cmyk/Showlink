@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="id" data-showlink-page="shortlink-final">
+<html lang="id" data-showlink-page="shortlink-result">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#6d5dfc">
-<title>Final — ShowLink</title>
+<title>Hasil Shortlink — ShowLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="/css/showlink-components.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<link rel="stylesheet" href="/css/final.css">
+<link rel="stylesheet" href="/css/public-flow.css">
+<link rel="stylesheet" href="/css/shortlink-result.css">
 <script src="/js/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/js/supabase-client.js"></script>
@@ -31,37 +32,23 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/showlink-favicon.png">
 <link rel="apple-touch-icon" href="/assets/showlink-favicon.png">
 </head>
-<body class="dashboard-page">
+<body>
 <div data-showlink-navbar></div>
 
-<main class="task-main">
-  <div class="task-wrap">
-    <section class="task-card final-card">
-      <span class="task-kicker">SHOWLINK · FINAL</span>
-      <h1>Task selesai 🎉</h1>
-      <p>Semua tahapan sudah selesai. Lanjut untuk membuka hasil Shortlink.</p>
-
-      <div class="task-copy">
-        <div id="final-status" aria-live="polite">Semua task berhasil diselesaikan.</div>
+<main class="pf-shell">
+  <section class="pf-card result-card">
+    <div class="pf-body" id="result-app">
+      <div class="pf-loader">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <div>Menyiapkan hasil Shortlink…</div>
       </div>
-
-      <div class="task-action">
-        <div class="task-progress">
-          <span>FINAL</span>
-          <span id="final-count">Selesai</span>
-        </div>
-        <button id="final-open" class="task-button" type="button">
-          <i class="fa-solid fa-arrow-right"></i>
-          Buka Hasil Shortlink
-        </button>
-      </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </main>
 
 <div data-showlink-footer></div>
 
-<script src="/js/final.js" defer></script>
+<script src="/js/shortlink-result.js" defer></script>
 <script src="/js/showlink-components.js" defer></script>
 <script src="/js/navbar.js" defer></script>
 <script src="/js/footer.js" defer></script>
