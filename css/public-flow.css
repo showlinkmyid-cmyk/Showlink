@@ -138,3 +138,33 @@ html[data-theme="dark"] .pf-short-info{color:#d0c8ff}
 @media (max-width:600px){
   .showlink-unlocked-content{padding:16px;border-radius:17px}
 }
+
+/* Unified Public Shortlink unlocked state */
+.showlink-unlocked-content{
+  margin-top:20px;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid rgba(124,92,255,.18);
+  background:rgba(255,255,255,.055);
+  box-shadow:0 12px 36px rgba(0,0,0,.06);
+}
+.showlink-unlocked-badge{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:14px;
+  font-weight:800;
+}
+.showlink-content-text{
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-height:1.75;
+}
+.showlink-content-text a{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+@media (max-width:600px){
+  .showlink-unlocked-content{padding:16px;border-radius:17px}
+}
