@@ -1,6 +1,14 @@
 (function(){
 'use strict';
 const p=new URLSearchParams(location.search),slug=p.get('slug')||p.get('code')||'',target=p.get('target')||'';
+const flowContent=(()=>{try{return new URLSearchParams(location.search).get('content')||''}catch(e){return ''}})();
+try{
+  if(flowContent&&slug){
+    const payload=JSON.stringify({content_text:flowContent});
+    sessionStorage.setItem('showlink-shortlink-content:'+slug,payload);
+    localStorage.setItem('showlink-shortlink-content:'+slug,payload);
+  }
+}catch(e){}
 const plan=(p.get('plan')||localStorage.getItem('showlink-plan')||'free').toLowerCase();
 const n=1,required={free:3,vip:2,premium:1}[plan]||3;
 const key='showlink-shortlink-progress:'+slug;

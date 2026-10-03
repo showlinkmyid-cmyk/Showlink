@@ -61,19 +61,29 @@
       // Keep both keys: the choice key is used by the flow, while the
       // slug-based content key is the canonical fallback used by Final.
       sessionStorage.setItem(stateKey(data.id), JSON.stringify(payload));
-      if (data.slug && data.destination_url) {
-        sessionStorage.setItem(
-          'showlink-shortlink-content:' + String(data.slug).trim(),
-          JSON.stringify({ content_text: data.content_text || '', destination_url: data.destination_url || '' })
-        );
-      }
-      // localStorage is only a fallback for browsers that recreate the
-      // session during the multi-page flow.
-      if (data.slug && data.destination_url) {
-        localStorage.setItem(
-          'showlink-shortlink-content:' + String(data.slug).trim(),
-          JSON.stringify({ content_text: data.content_text || '', destination_url: data.destination_url || '' })
-        );
+      // CONTENT is the canonical payload. It may be multiline text and may
+      // contain a URL plus other fields (for example Group/Code/metadata).
+      // Never require destination_url to be present before saving it.
+      if (data.slug) {
+        const contentPayload = JSON.stringify({
+          slug: data.slug,
+          title: data.title || '',
+          description: data.description || '',
+          content_text: data.content_text || '',
+          destination_url: data.destination_url || ''
+        });
+        try {
+          sessionStorage.setItem(
+            'showlink-shortlink-content:' + String(data.slug).trim(),
+            contentPayload
+          );
+        } catch (_) {}
+        try {
+          localStorage.setItem(
+            'showlink-shortlink-content:' + String(data.slug).trim(),
+            contentPayload
+          );
+        } catch (_) {}
       }
     } catch (_) {}
   }
@@ -123,7 +133,7 @@
 
     document.getElementById('free').onclick = () => {
       saveFlow(data, plan);
-      location.href = `/task1.html?slug=${encodeURIComponent(data.slug)}&plan=${encodeURIComponent(plan)}&content=${encodeURIComponent(data.content_text || '')}`;
+      location.href = `/task1.html?slug=${encodeURIComponent(data.slug)}&plan=${encodeURIComponent(plan)}`;
     };
 
     document.getElementById('direct')?.addEventListener('click', () => {
