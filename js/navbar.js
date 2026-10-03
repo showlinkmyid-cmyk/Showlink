@@ -275,7 +275,7 @@
       }catch{}
       localStorage.removeItem("showlink_user");
       window.dispatchEvent(new CustomEvent("showlink:auth-change",{detail:{user:null}}));
-      location.replace(C.login);
+      location.replace(C.home);
     });
   }
 
