@@ -190,7 +190,8 @@
 
     if (content) {
       resolvedContent = content;
-      linkifyContent(content);
+      // Keep the original content hidden until the user clicks Download (Asli).
+      // It is revealed by the click handler below.
       const directUrl = setOriginalDownloadMode(content);
       if (status) {
         status.textContent = directUrl
@@ -238,6 +239,10 @@
       if (status) status.textContent = 'Konten asli belum dapat dimuat.';
       return;
     }
+
+    // Only reveal the raw content AFTER the user explicitly clicks
+    // Download (Asli). Never expose it automatically on Final load.
+    linkifyContent(content);
 
     // If the content is multiline, Download (Asli) downloads the EXACT raw
     // content instead of incorrectly treating it as a URL.
