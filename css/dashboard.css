@@ -53,3 +53,14 @@ html[data-theme=dark]{--bg:#111118;--surface:#1b1b26;--surface2:#252534;--text:#
 }
 
 @media(max-width:700px){.metric-grid.four,.metric-grid.three,.wrapped-body{grid-template-columns:1fr}}
+
+/* Dashboard data-driven cleanup: CPM weekly panel removed.
+   Keep the remaining income distribution card balanced on desktop. */
+.analytics-grid .donut-card {
+  grid-column: 1 / -1;
+}
+@media (max-width: 700px) {
+  .analytics-grid .donut-card {
+    grid-column: auto;
+  }
+}
