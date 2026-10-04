@@ -82,8 +82,42 @@ async function loadDashboardData(sb,u){
  renderCharts(d._series);
 }
 
+async function getDashboardSession(sb){
+  let lastError=null;
+  for(let attempt=0;attempt<4;attempt++){
+    try{
+      const {data,error}=await sb.auth.getSession();
+      if(data?.session) return data.session;
+      if(error) lastError=error;
+    }catch(e){lastError=e;}
+    await new Promise(r=>setTimeout(r,250*(attempt+1)));
+  }
+  if(lastError) console.warn("[ShowLink Dashboard] Session check retry exhausted:",lastError);
+  return null;
+}
+
 async function guard(){
- try{const sb=await window.ShowLinkSupabase.load(),{data,error}=await sb.auth.getSession();if(error||!data.session){location.replace("/login.html");return}await loadProfile(sb,data.session.user);await loadDashboardData(sb,data.session.user)}catch(e){console.error(e);location.replace("/login.html")}
+  try{
+    const sb=await window.ShowLinkSupabase.load();
+    let session=await getDashboardSession(sb);
+    if(!session){
+      session=await new Promise(resolve=>{
+        let done=false;
+        const finish=s=>{if(done)return;done=true;resolve(s||null);};
+        try{sb.auth.onAuthStateChange((_event,s)=>{if(s) finish(s);});}catch(e){console.warn("[ShowLink Dashboard] Auth listener:",e);}
+        setTimeout(()=>finish(null),3000);
+      });
+    }
+    if(!session){
+      location.replace("/login.html?redirect="+encodeURIComponent(location.pathname+location.search));
+      return;
+    }
+    await loadProfile(sb,session.user);
+    await loadDashboardData(sb,session.user);
+  }catch(e){
+    console.error("[ShowLink Dashboard] Initialization failed:",e);
+    // Database/network errors must not sign the user out or force a login redirect.
+  }
 }
 function applyTheme(v){v=v==="dark"?"dark":"light";document.documentElement.dataset.theme=v;document.documentElement.style.colorScheme=v;localStorage.setItem("showlink-theme",v);window.showlinkRefreshComponents?.()}
 document.addEventListener("DOMContentLoaded",()=>{translate();window.addEventListener("showlink:theme",e=>applyTheme(e.detail?.theme||theme()));window.addEventListener("showlink:language",e=>{localStorage.setItem("showlink-language",e.detail?.language||lang());translate()});guard()});
